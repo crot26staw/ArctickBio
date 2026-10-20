@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>АрктикБиоМарин — морской коллаген из дикой трески Баренцева моря</title>
+  <meta name="description" content="АрктикБиоМарин — природный морской коллаген из дикой трески Баренцева моря с северными ягодами. Поддержка кожи, суставов и волос.">
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="preload" href="./assets/fonts/Involve-VF.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./scss/main.scss">
+</head>
+<body class="page">
+  <include src="partials/header.html"></include>
+
+  <main class="main">
+    <include src="partials/home/hero.html"></include>
+    <!-- Стик «перелетает» из блока about в пачку product-scene при скролле (js/modules/sachet-journey.js) -->
+    <div class="sachet-journey" data-js-sachet-journey>
+      <include src="partials/home/about.html"></include>
+      <include src="partials/home/product-scene.html"></include>
+      <div class="sachet-journey__sachet" data-js-sachet-journey-item>
+        <img src="./assets/images/sachet.webp" alt="" width="820" height="1024" loading="lazy" data-js-sachet-journey-img>
+      </div>
+    </div>
+    <include src="partials/home/catalog.html"></include>
+    <include src="partials/home/compound.html"></include>
+    <include src="partials/home/video.html"></include>
+    <include src="partials/home/research.html"></include>
+    <include src="partials/home/production.html"></include>
+    <include src="partials/home/comparison.html"></include>
+    <include src="partials/home/usage.html"></include>
+    <include src="partials/home/benefits.html"></include>
+    <include src="partials/home/catalog.html"></include>
+    <include src="partials/home/faq.html"></include>
+    <include src="partials/home/reviews.html"></include>
+  </main>
+
+  <include src="partials/footer.html"></include>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

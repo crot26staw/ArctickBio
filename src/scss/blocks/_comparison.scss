@@ -1,0 +1,122 @@
+@use '../base' as *;
+
+.comparison {
+  display: flex;
+  flex-direction: column;
+  gap: rem(50);
+  padding-top: rem(120);
+  overflow: hidden;
+  background-color: var(--color-bg-light);
+
+  &__title {
+    color: var(--color-title);
+  }
+
+  &__content {
+    display: flex;
+    gap: rem(50);
+    align-items: flex-start;
+  }
+
+  &__img {
+    flex-shrink: 0;
+    width: rem(399);
+    height: rem(541);
+    object-fit: cover;
+    border-radius: var(--radius-l);
+  }
+
+  &__table-wrap {
+    position: relative;
+    flex: 1 0 0;
+    min-width: 1px;
+
+    // Подсветка колонки АрктикБиоМарин
+    &::before {
+      content: '';
+      position: absolute;
+      top: calc(50% + #{rem(2)});
+      left: calc(50% - #{rem(84.5)});
+      width: rem(353);
+      height: rem(579);
+      background-color: #e9f0fb;
+      border-radius: var(--radius-m);
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &__table {
+    position: relative;
+    width: 100%;
+    table-layout: fixed;
+
+    th,
+    td {
+      padding: 0;
+      font-weight: 400;
+      vertical-align: middle;
+    }
+
+    thead tr {
+      height: rem(72);
+      border-bottom: 1px solid var(--color-border-default);
+    }
+
+    tbody tr {
+      height: rem(120);
+
+      & + tr {
+        border-top: 1px solid var(--color-border-muted);
+      }
+    }
+  }
+
+  &__col-feature {
+    width: rem(180);
+  }
+
+  &__head {
+    @include body-l;
+    color: var(--color-title);
+    text-align: center;
+
+    &--feature {
+      padding-right: rem(12) !important;
+      text-align: left;
+    }
+  }
+
+  &__head-img {
+    width: rem(53.496);
+    height: rem(44);
+    margin-inline: auto;
+    object-fit: fill;
+  }
+
+  &__feature {
+    @include body-l;
+    padding-right: rem(12) !important;
+    color: var(--color-fg);
+    text-align: left;
+  }
+
+  &__cell {
+    padding-inline: rem(32) !important;
+    color: var(--color-fg-muted);
+    text-align: center;
+  }
+
+  &__cell-inner {
+    display: flex;
+    flex-direction: column;
+    gap: rem(10);
+    align-items: center;
+  }
+
+  &__cell-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(36);
+  }
+}

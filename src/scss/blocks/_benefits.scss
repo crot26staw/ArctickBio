@@ -1,0 +1,54 @@
+@use '../base' as *;
+
+.benefits {
+  position: relative;
+  height: rem(800);
+  overflow: hidden;
+  color: var(--color-white);
+  background-color: var(--color-black);
+
+  &__bg {
+    @include cover-img;
+  }
+
+  &__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding-top: rem(120);
+    padding-bottom: rem(50);
+  }
+
+  &__list {
+    display: flex;
+    gap: rem(16);
+    width: 100%;
+    height: rem(338);
+  }
+}
+
+.benefit-card {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: rem(24);
+  align-items: center;
+  min-width: 1px;
+  padding: rem(83) rem(8);
+  text-align: center;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.3));
+  backdrop-filter: blur(14.05px);
+
+  &__icon {
+    width: rem(80);
+    height: rem(80);
+  }
+
+  &__title {
+    @include h3;
+    font-weight: 500;
+  }
+}

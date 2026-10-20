@@ -1,0 +1,116 @@
+@use '../base' as *;
+
+.review-card {
+  @include glass(16px, rgba(255, 255, 255, 0.2));
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  width: rem(340);
+  height: rem(265);
+  padding: rem(20);
+  color: var(--color-white);
+  border-radius: 5px;
+  transition:
+    background-color $transition,
+    color $transition;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  &__name {
+    @include desc-l-strong;
+  }
+
+  &__date {
+    @include desc-m;
+  }
+
+  &__stars {
+    position: relative;
+    display: flex;
+    gap: rem(4);
+    height: rem(25);
+    padding-top: rem(8);
+
+    img {
+      width: rem(16);
+      height: rem(16);
+      transition: opacity $transition;
+    }
+  }
+
+  // Тёмные звёзды для ховера лежат поверх светлых
+  &__stars-dark {
+    position: absolute;
+    top: rem(8);
+    left: 0;
+    display: flex;
+    gap: rem(4);
+    opacity: 0;
+    transition: opacity $transition;
+  }
+
+  &__title {
+    @include body-m-strong;
+    height: rem(27.5);
+    padding-top: rem(8);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  &__text {
+    @include body-m;
+    height: rem(94.333);
+    margin-top: rem(4);
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color $transition;
+  }
+
+  // В макете превью товара 72×60 (шире обёртки 46) — оно задаёт высоту строки
+  &__product {
+    display: flex;
+    gap: rem(8);
+    align-items: center;
+    min-height: rem(60);
+  }
+
+  &__product-img {
+    flex-shrink: 0;
+    width: rem(46);
+    height: rem(36);
+    object-fit: contain;
+  }
+
+  &__product-title {
+    @include body-s;
+  }
+
+  &__product-subtitle {
+    @include desc-s;
+    margin-top: 2px;
+    opacity: 0.7;
+  }
+
+  @include hover {
+    color: var(--color-fg);
+    background-color: var(--color-white);
+
+    .review-card__text {
+      color: var(--color-fg);
+    }
+
+    .review-card__stars-dark {
+      opacity: 1;
+    }
+
+    .review-card__product-subtitle {
+      opacity: 1;
+    }
+  }
+}

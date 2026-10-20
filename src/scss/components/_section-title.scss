@@ -1,0 +1,15 @@
+@use '../base' as *;
+
+.section-title {
+  @include h2;
+  color: var(--color-fg);
+  text-align: center;
+
+  &--light {
+    color: var(--color-fg-light);
+  }
+
+  &--white {
+    color: var(--color-white);
+  }
+}

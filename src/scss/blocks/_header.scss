@@ -1,0 +1,158 @@
+@use '../base' as *;
+
+// Шапка зафиксирована сверху. Состояния (header.js):
+// - по умолчанию (верх страницы) — как в макете главной;
+// - .is-scrolled — каждая кнопка становится «стеклянной» плашкой (над тёмными блоками);
+// - [data-theme='light'] — над светлыми блоками: белые плашки, тёмный текст и логотип.
+// Тема берётся из атрибута data-header-theme у секции под шапкой.
+.header {
+  --header-fg: var(--color-fg-light);
+  --header-pill-bg: transparent;
+  --header-pill-bg-hover: rgba(255, 255, 255, 0.1);
+  --header-btn-bg: rgba(255, 255, 255, 0.1);
+  --header-btn-bg-hover: rgba(255, 255, 255, 0.2);
+  // Цвет, въезжающий при ховере (swipe) поверх фона плашки/кнопки
+  --header-pill-swipe: rgba(255, 255, 255, 0.1);
+  --header-btn-swipe: rgba(255, 255, 255, 0.11);
+  --header-logo: var(--color-fg-light);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+
+  &.is-scrolled {
+    --header-pill-bg: rgba(255, 255, 255, 0.1);
+    --header-pill-bg-hover: rgba(255, 255, 255, 0.2);
+    --header-pill-swipe: rgba(255, 255, 255, 0.11);
+  }
+
+  &[data-theme='light'] {
+    --header-fg: var(--color-fg-soft);
+    --header-pill-bg: var(--color-white);
+    --header-pill-bg-hover: var(--color-bg-light);
+    --header-btn-bg: var(--color-white);
+    --header-btn-bg-hover: var(--color-bg-light);
+    --header-pill-swipe: var(--color-bg-light);
+    --header-btn-swipe: var(--color-bg-light);
+    --header-logo: var(--color-fg);
+  }
+
+  &__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding-block: rem(20);
+  }
+
+  &__nav {
+    justify-self: start;
+  }
+
+  // Меню совместимо с wp_nav_menu: ul > li.menu-item > a
+  &__menu {
+    display: flex;
+    gap: 2px;
+    height: rem(40);
+    padding: 2px;
+
+    a {
+      @include body-s;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding: rem(11) rem(16);
+    }
+
+    .current-menu-item > a {
+      --header-pill-bg: var(--header-pill-bg-hover);
+    }
+  }
+
+  // Общий вид плашек: пункты меню и телефон
+  &__menu a,
+  &__phone {
+    --swipe-bg: var(--header-pill-swipe);
+    color: var(--header-fg);
+    white-space: nowrap;
+    background-color: var(--header-pill-bg);
+    border-radius: var(--radius-s);
+    transition:
+      background-color $transition,
+      color $transition;
+  }
+
+  // Размытие у плашек — только после начала скролла, вверху страницы текст без подложки
+  &.is-scrolled &__menu a,
+  &.is-scrolled &__phone {
+    backdrop-filter: blur(15.8px);
+  }
+
+  &__logo .logo__img {
+    background-color: var(--header-logo);
+    transition: background-color $transition;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    justify-self: end;
+  }
+
+  &__phone {
+    @include body-s;
+    display: flex;
+    align-items: center;
+    height: rem(40);
+    padding: rem(11) rem(16);
+  }
+
+  &__icon-btn {
+    --swipe-bg: var(--header-btn-swipe);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(40);
+    height: rem(40);
+    color: var(--header-fg);
+    background-color: var(--header-btn-bg);
+    border-radius: var(--radius-s);
+    backdrop-filter: blur(15.8px);
+    transition:
+      background-color $transition,
+      color $transition;
+  }
+
+  &__icon {
+    width: rem(14.732);
+    height: rem(14.732);
+  }
+
+  &__cart &__icon {
+    transform: translateX(-1.18px);
+  }
+
+  &__cart-count {
+    position: absolute;
+    top: rem(4);
+    left: rem(24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(12);
+    height: rem(12);
+    font-family: $font-text;
+    font-weight: 600;
+    font-size: rem(8);
+    line-height: 1;
+    letter-spacing: rem(0.4);
+    border-radius: 1px;
+  }
+
+  &[data-theme='light'] &__cart-count {
+    color: var(--color-fg);
+  }
+}

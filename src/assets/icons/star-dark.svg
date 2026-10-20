@@ -1,0 +1,11 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Star 1" clip-path="url(#clip0_0_911)">
+<path id="Star Vector" d="M8 12.5441L12.944 15.5281L11.632 9.90413L16 6.12013L10.248 5.63213L8 0.328125L5.752 5.63213L0 6.12013L4.368 9.90413L3.056 15.5281L8 12.5441Z" fill="#01273E"/>
+<path id="Star Vector_2" d="M8 12.5441L12.944 15.5281L11.632 9.90413L16 6.12013L10.248 5.63213L8 0.328125L5.752 5.63213L0 6.12013L4.368 9.90413L3.056 15.5281L8 12.5441Z" fill="#01273E"/>
+</g>
+<defs>
+<clipPath id="clip0_0_911">
+<rect width="16" height="16" fill="white"/>
+</clipPath>
+</defs>
+</svg>

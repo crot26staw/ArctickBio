@@ -1,0 +1,19 @@
+@use '../base' as *;
+
+.catalog {
+  display: flex;
+  flex-direction: column;
+  gap: rem(50);
+  padding-top: rem(120);
+  background-color: var(--color-bg-light);
+
+  &__list {
+    display: flex;
+    gap: rem(8);
+
+    > li {
+      flex: 1 0 0;
+      min-width: 1px;
+    }
+  }
+}

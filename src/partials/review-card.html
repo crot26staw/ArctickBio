@@ -1,0 +1,29 @@
+<li class="review-card">
+  <div class="review-card__header">
+    <p class="review-card__name">{{ name }}</p>
+    <time class="review-card__date" datetime="{{ datetime }}">{{ date }}</time>
+  </div>
+  <div class="review-card__stars" role="img" aria-label="Оценка {{ rating }} из 5">
+    <img src="./assets/icons/star-light.svg" alt="" width="16" height="16">
+    <img src="./assets/icons/star-light.svg" alt="" width="16" height="16">
+    <img src="./assets/icons/star-light.svg" alt="" width="16" height="16">
+    <img src="./assets/icons/star-light.svg" alt="" width="16" height="16">
+    <img src="./assets/icons/star-light.svg" alt="" width="16" height="16">
+    <span class="review-card__stars-dark" aria-hidden="true">
+      <img src="./assets/icons/star-dark.svg" alt="" width="16" height="16">
+      <img src="./assets/icons/star-dark.svg" alt="" width="16" height="16">
+      <img src="./assets/icons/star-dark.svg" alt="" width="16" height="16">
+      <img src="./assets/icons/star-dark.svg" alt="" width="16" height="16">
+      <img src="./assets/icons/star-dark.svg" alt="" width="16" height="16">
+    </span>
+  </div>
+  <p class="review-card__title">{{ title }}</p>
+  <p class="review-card__text">{{ text }}</p>
+  <div class="review-card__product">
+    <img class="review-card__product-img" src="./assets/images/product-mini.webp" alt="" width="240" height="186" loading="lazy">
+    <div>
+      <p class="review-card__product-title">{{ product }}</p>
+      <p class="review-card__product-subtitle">{{ product_variant }}</p>
+    </div>
+  </div>
+</li>

@@ -1,0 +1,221 @@
+@use '../base' as *;
+
+.research {
+  display: flex;
+  height: rem(800);
+  overflow: hidden;
+  background-color: #e7eff1;
+
+  &__media {
+    position: relative;
+    display: flex;
+    flex: 1 0 0;
+    align-items: flex-end;
+    min-width: 1px;
+    padding: rem(50);
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 72.486%, rgba(0, 0, 0, 0.5) 92.142%);
+    }
+  }
+
+  &__img {
+    position: absolute;
+    top: -12.66%;
+    left: -0.02%;
+    width: 100%;
+    max-width: none;
+    height: 135%;
+    object-fit: cover;
+  }
+
+  &__title {
+    @include h2;
+    position: relative;
+    z-index: 1;
+    color: var(--color-white);
+  }
+
+  &__content {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 1px;
+    padding-inline: rem(50);
+    background:
+      url("data:image/svg+xml;utf8,<svg viewBox='0 0 720 800' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(24.864 90.65 -81.585 21.638 264.41 361.5)'><stop stop-color='rgba(245,248,253,1)' offset='0'/><stop stop-color='rgba(198,218,248,1)' offset='1'/></radialGradient></defs></svg>")
+        0 0 / 100% 100%,
+      var(--color-white);
+  }
+}
+
+// Список-аккордеон: при наведении пункт раскрывается, остальные сворачиваются в строку (research.js).
+// Высота анимируется через grid-template-rows 0fr ↔ 1fr
+$research-ease: 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+
+.research-list {
+  width: rem(600);
+
+  &__item {
+    padding-block: rem(24);
+    cursor: default;
+
+    & + & {
+      border-top: 1px solid var(--color-border-muted);
+    }
+  }
+
+  &__row {
+    display: flex;
+    gap: rem(36);
+    align-items: flex-start;
+  }
+
+  &__num {
+    @include desc-m;
+    color: var(--color-fg-muted);
+    white-space: nowrap;
+  }
+
+  &__body {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    min-width: 1px;
+    color: var(--color-fg-soft);
+  }
+
+  // Раскрывающаяся часть (скрыта у свёрнутого пункта) и сворачивающаяся (подпись строки)
+  &__expand,
+  &__collapse {
+    display: grid;
+    transition:
+      grid-template-rows $research-ease,
+      opacity $research-ease;
+  }
+
+  &__expand {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+
+  &__collapse {
+    grid-template-rows: 1fr;
+  }
+
+  &__item.is-active &__expand {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  &__item.is-active &__collapse {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+
+  &__inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  &__label {
+    @include display-s;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+  }
+
+  &__value {
+    @include display-l;
+  }
+
+  // Счётчик (number-ticker.js): моноширинные цифры, чтобы строка не дёргалась при отсчёте
+  &__number {
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__title {
+    @include display-s;
+  }
+
+  &__text {
+    @include body-m;
+    max-width: rem(500);
+  }
+
+  &__media {
+    padding: rem(36) rem(50) 0;
+  }
+
+  &__img {
+    width: rem(150);
+    height: rem(200);
+    object-fit: cover;
+    mix-blend-mode: multiply;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__expand,
+    &__collapse {
+      transition: none;
+    }
+  }
+}
+
+// Документ для скачивания: белый лист со срезанным правым верхним углом
+.research-docs {
+  display: flex;
+  gap: rem(7);
+}
+
+.research-doc {
+  &__link {
+    position: relative;
+    display: block;
+    width: rem(111);
+    height: rem(142);
+    padding: rem(12);
+    background-color: var(--color-white);
+    clip-path: polygon(0 0, 86.37% 0, 100% 12.5%, 100% 100%, 0 100%);
+  }
+
+  &__meta {
+    display: flex;
+    gap: rem(8);
+    font-family: $font-display;
+    font-weight: 500;
+    font-size: rem(10);
+    line-height: 0.9;
+    letter-spacing: rem(-0.5);
+    color: #c5c5c5;
+    white-space: nowrap;
+  }
+
+  &__title {
+    display: block;
+    width: rem(89);
+    margin-top: rem(28);
+    font-family: $font-display;
+    font-weight: 500;
+    font-size: rem(12);
+    line-height: 0.9;
+    letter-spacing: rem(-0.5);
+    color: #00101a;
+  }
+
+  &__icon {
+    position: absolute;
+    top: rem(116);
+    left: rem(12);
+    width: rem(16);
+    height: rem(16);
+  }
+}

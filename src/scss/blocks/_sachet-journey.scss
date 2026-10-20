@@ -1,0 +1,26 @@
+@use '../base' as *;
+
+// Обёртка блоков about + product-scene. Стик лежит в ней, а не в секции,
+// чтобы при перелёте его не обрезал overflow секций.
+// Слои: карточки about (z 3) > стик (z 2) > камни product-scene (auto); передняя стенка пачки (z 3) > стик.
+.sachet-journey {
+  position: relative;
+
+  // Стартовая позиция — блок about из макета
+  &__sachet {
+    position: absolute;
+    top: rem(275);
+    left: calc(50% - #{rem(45)});
+    z-index: 2;
+    width: rem(90);
+    height: rem(350);
+    pointer-events: none;
+    will-change: transform;
+
+    img {
+      width: 100%;
+      max-width: none;
+      height: 100%;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+@use '../base' as *;
+
+.logo {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: rem(67.273);
+  height: rem(40);
+
+  &__img {
+    display: block;
+    width: rem(67.225);
+    height: rem(47.306);
+    background-color: var(--color-fg-light);
+    mask: url('../../assets/images/logo.png') no-repeat 0 0 / 100% 100%;
+  }
+}

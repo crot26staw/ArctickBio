@@ -1,0 +1,43 @@
+@use 'index' as *;
+
+body {
+  @include body-m;
+  min-width: 320px;
+  color: var(--color-fg);
+  background-color: var(--color-bg-light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex-grow: 1;
+}
+
+.container {
+  width: 100%;
+  max-width: $container-width;
+  margin-inline: auto;
+  padding-inline: $container-padding;
+}
+
+// Заголовки с анимацией скрыты, пока title-reveal.js не разобьёт их на строки (без мигания)
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-js-title-reveal]:not(.is-split) {
+    visibility: hidden;
+  }
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}

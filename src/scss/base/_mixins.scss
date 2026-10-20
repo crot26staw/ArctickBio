@@ -1,0 +1,151 @@
+@use 'sass:map';
+@use 'variables' as *;
+@use 'functions' as *;
+
+// Desktop-first: @include media(tablet) { ... } => @media (max-width: 1199px)
+@mixin media($name) {
+  @media (max-width: map.get($breakpoints, $name)) {
+    @content;
+  }
+}
+
+@mixin hover {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Картинка, растянутая на весь родителя (фон секции)
+@mixin cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+// Стеклянная подложка из макета
+@mixin glass($blur: 15.8px, $bg: rgba(255, 255, 255, 0.1)) {
+  background-color: $bg;
+  backdrop-filter: blur($blur);
+}
+
+// ---------- Типографика (стили из Figma) ----------
+
+@mixin h1 {
+  font-family: $font-involve;
+  font-weight: 400;
+  font-size: rem(64);
+  line-height: 0.9;
+  letter-spacing: rem(-2);
+}
+
+@mixin h2 {
+  font-family: $font-involve;
+  font-weight: 500;
+  font-size: rem(44);
+  line-height: 1.05;
+  letter-spacing: rem(-1);
+}
+
+@mixin h3 {
+  font-family: $font-involve;
+  font-weight: 500;
+  font-size: rem(20);
+  line-height: 1.2;
+}
+
+@mixin body-l {
+  font-family: $font-involve;
+  font-weight: 400;
+  font-size: rem(18);
+  line-height: 1.2;
+}
+
+@mixin display-l {
+  font-family: $font-display;
+  font-weight: 400;
+  font-size: rem(72);
+  line-height: 1;
+  letter-spacing: rem(-3);
+}
+
+@mixin display-s {
+  font-family: $font-text;
+  font-weight: 400;
+  font-size: rem(24);
+  line-height: 1.1;
+  letter-spacing: rem(-0.8);
+}
+
+@mixin body-m {
+  font-family: $font-text;
+  font-weight: 400;
+  font-size: rem(15);
+  line-height: 1.2;
+  letter-spacing: rem(-0.3);
+}
+
+@mixin body-m-strong {
+  @include body-m;
+  font-weight: 500;
+}
+
+@mixin body-s {
+  font-family: $font-text;
+  font-weight: 400;
+  font-size: rem(13);
+  line-height: 1;
+  letter-spacing: rem(-0.5);
+}
+
+@mixin body-s-strong {
+  @include body-s;
+  font-weight: 500;
+}
+
+@mixin desc-l-strong {
+  font-family: $font-text;
+  font-weight: 600;
+  font-size: rem(13);
+  line-height: 1;
+}
+
+@mixin desc-m {
+  font-family: $font-text;
+  font-weight: 400;
+  font-size: rem(11);
+  line-height: 1;
+  letter-spacing: rem(0.2);
+}
+
+@mixin desc-s {
+  font-family: $font-text;
+  font-weight: 400;
+  font-size: rem(10);
+  line-height: rem(12);
+  letter-spacing: rem(0.4);
+}
+
+@mixin footer-link {
+  font-family: $font-text;
+  font-weight: 400;
+  font-size: rem(12);
+  line-height: rem(15);
+  letter-spacing: rem(-0.5);
+}

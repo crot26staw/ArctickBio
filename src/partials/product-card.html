@@ -1,0 +1,18 @@
+<li class="product product-card">
+  <img class="product-card__hover-img" src="./assets/images/product-card-hover.webp" alt="" width="800" height="800" loading="lazy">
+  <a class="product-card__media" href="{{ link }}" tabindex="-1" aria-hidden="true">
+    <img class="product-card__img" src="./assets/images/product-card.webp" alt="" width="640" height="497" loading="lazy">
+  </a>
+  <div class="product-card__info">
+    <div class="product-card__heading">
+      <h3 class="product-card__title woocommerce-loop-product__title">{{ title }}</h3>
+      <span class="product-card__price price">{{ price }}</span>
+    </div>
+    <div class="product-card__actions">
+      <a class="product-card__more btn btn--neutral btn--small" href="{{ link }}" data-js-swipe>Подробнее</a>
+      <a class="product-card__cart icon-btn icon-btn--32 button add_to_cart_button ajax_add_to_cart" href="?add-to-cart={{ id }}" data-product_id="{{ id }}" aria-label="Добавить в корзину: {{ title }}" rel="nofollow" data-js-swipe>
+        <img src="./assets/icons/icn-cart.svg" alt="" width="15" height="15">
+      </a>
+    </div>
+  </div>
+</li>

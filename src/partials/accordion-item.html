@@ -1,0 +1,12 @@
+<div class="accordion {{ state }}" data-js-accordion>
+  <button class="accordion__header" type="button" aria-expanded="{{ expanded }}" aria-controls="{{ id }}" data-js-accordion-toggle data-swipe-trigger>
+    <span class="accordion__question">{{ question }}</span>
+    <span class="accordion__icon icon-btn icon-btn--24" aria-hidden="true" data-js-swipe>
+      <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+      <img src="./assets/icons/icn-minus.svg" alt="" width="18" height="18">
+    </span>
+  </button>
+  <div class="accordion__panel" id="{{ id }}" data-js-accordion-panel>
+    <p class="accordion__answer">{{ answer }}</p>
+  </div>
+</div>

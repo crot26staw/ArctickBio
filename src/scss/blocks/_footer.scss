@@ -1,0 +1,128 @@
+@use '../base' as *;
+
+.footer {
+  padding-bottom: rem(20);
+  overflow: hidden;
+  color: var(--color-fg-light);
+  background-color: var(--color-black);
+
+  &__top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(42);
+    align-items: flex-start;
+    padding-top: rem(50);
+  }
+
+  &__brand {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+    width: rem(411.146);
+    height: rem(358);
+  }
+
+  &__logo {
+    justify-content: flex-start;
+  }
+
+  &__copyright {
+    width: rem(133);
+    font-size: rem(10);
+    line-height: rem(14);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  &__dev {
+    position: absolute;
+    top: rem(251.16);
+    left: 0;
+    display: block;
+    width: rem(120);
+    height: rem(16);
+    transition: opacity $transition;
+
+    @include hover {
+      opacity: 0.7;
+    }
+
+    img {
+      width: rem(119.534);
+      height: rem(15.985);
+    }
+  }
+
+  &__nav {
+    display: flex;
+    flex: 1 0 0;
+    flex-wrap: wrap;
+    gap: rem(32);
+    min-width: 1px;
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    gap: rem(25);
+    width: rem(176.38);
+
+    &--media,
+    &--docs {
+      gap: rem(16);
+    }
+  }
+
+  &__col-title {
+    @include footer-link;
+    line-height: rem(14);
+    color: var(--color-fg-light-soft);
+  }
+
+  &__menu {
+    @include footer-link;
+    display: flex;
+    flex-direction: column;
+    gap: rem(12.5);
+
+    &--docs,
+    &--contacts {
+      gap: rem(16);
+    }
+
+    &--contacts {
+      font-style: normal;
+    }
+
+    a {
+      transition: opacity $transition;
+
+      @include hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  &__bottom-row {
+    display: flex;
+    gap: rem(32);
+  }
+
+  &__disclaimer {
+    padding-block: rem(50) rem(39);
+    font-family: $font-display;
+    font-size: rem(15);
+    letter-spacing: rem(0.3);
+    color: var(--color-fg-muted);
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  // Лента товаров шире экрана, края гаснут
+  &__products {
+    display: flex;
+    gap: rem(26);
+    justify-content: center;
+    mask-image: linear-gradient(90deg, transparent 0, #000 rem(60), #000 calc(100% - #{rem(60)}), transparent 100%);
+  }
+}

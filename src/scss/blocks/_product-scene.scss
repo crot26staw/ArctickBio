@@ -1,0 +1,91 @@
+@use '../base' as *;
+
+// Секция с открытой пачкой между камнями
+.product-scene {
+  position: relative;
+  height: rem(800);
+  overflow: hidden;
+  background-color: var(--color-bg-light);
+
+  &__rock-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    aspect-ratio: 1440 / 240;
+    overflow: hidden;
+    transform: scaleY(-1);
+
+    img {
+      position: absolute;
+      top: -177.64%;
+      left: -0.01%;
+      width: 100%;
+      max-width: none;
+      height: 337.68%;
+    }
+  }
+
+  &__rock-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    aspect-ratio: 1440 / 443;
+
+    img {
+      @include cover-img;
+    }
+  }
+
+  // Без transform: иначе пачка станет отдельным контекстом наложения
+  // и летящий стик не сможет встать между задней и передней стенкой
+  &__product {
+    position: absolute;
+    bottom: rem(60);
+    left: calc(50% - #{rem(136)});
+    width: rem(272);
+    height: rem(500);
+  }
+
+  &__pack,
+  &__pack-front {
+    position: absolute;
+    top: 0;
+    left: rem(-84.08);
+    width: rem(440.157);
+    height: rem(550);
+  }
+
+  &__pack img,
+  &__pack-front img {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  // Передняя стенка пачки поверх саше: та же картинка, обрезанная по маске из макета
+  &__pack-front {
+    z-index: 3;
+    left: rem(-83.69);
+    clip-path: inset(rem(202.422) rem(89.446) rem(49.629) rem(89.047));
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 74.33%, rgba(0, 0, 0, 0.7) 94.909%);
+    }
+  }
+
+  // Невидимая точка назначения летящего стика (позиция саше в пачке из макета)
+  &__sachet {
+    position: absolute;
+    top: rem(14);
+    left: calc(50% - #{rem(31)});
+    width: rem(61);
+    height: rem(236);
+    visibility: hidden;
+  }
+}

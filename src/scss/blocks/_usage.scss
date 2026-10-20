@@ -1,0 +1,126 @@
+@use '../base' as *;
+
+.usage {
+  display: flex;
+  flex-direction: column;
+  gap: rem(50);
+  padding-block: rem(120);
+  background-color: var(--color-bg-light);
+
+  &__title {
+    color: #222;
+  }
+
+  &__grid {
+    display: flex;
+    gap: rem(16);
+  }
+
+  &__main {
+    position: relative;
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    gap: rem(24);
+    align-items: center;
+    justify-content: center;
+    min-width: 1px;
+    height: rem(700);
+    padding: rem(60) rem(30);
+    overflow: hidden;
+    border-radius: var(--radius-l);
+  }
+
+  &__main-img {
+    @include cover-img;
+  }
+
+  &__badge {
+    position: relative;
+    display: flex;
+    gap: rem(16);
+    align-items: center;
+    padding: rem(32);
+    color: var(--color-white);
+    background-image: linear-gradient(202.11deg, rgba(255, 255, 255, 0.2) 27.417%, rgba(0, 0, 0, 0.2) 107.68%);
+    border-radius: 9999px;
+    backdrop-filter: blur(18.2px);
+
+    &:first-of-type {
+      width: rem(278);
+    }
+  }
+
+  &__badge-text {
+    @include display-s;
+  }
+
+  &__badge:first-of-type &__badge-text {
+    width: rem(115);
+  }
+
+  &__cards {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    gap: rem(16);
+    min-width: 1px;
+    height: rem(700);
+  }
+
+  &__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    border-radius: var(--radius-l);
+
+    &--glass {
+      flex: 1 0 0;
+      gap: rem(32);
+      justify-content: flex-end;
+      min-height: 1px;
+      padding: rem(50) rem(30);
+      background-color: #dce6f6;
+    }
+
+    &--time {
+      flex-shrink: 0;
+      gap: rem(16);
+      justify-content: center;
+      height: rem(244);
+      padding-inline: rem(32);
+      background:
+        url("data:image/svg+xml;utf8,<svg viewBox='0 0 632 244' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(21.825 27.648 -71.613 6.5997 232.09 110.26)'><stop stop-color='rgba(245,248,253,1)' offset='0'/><stop stop-color='rgba(198,218,248,1)' offset='1'/></radialGradient></defs></svg>")
+          0 0 / 100% 100%,
+        var(--color-white);
+    }
+  }
+
+  &__glass-img {
+    position: absolute;
+    top: rem(-34);
+    left: rem(142);
+    width: rem(378);
+    height: rem(378);
+    max-width: none;
+    object-fit: cover;
+  }
+
+  &__card-text {
+    @include display-s;
+    position: relative;
+    color: var(--color-fg);
+    text-align: center;
+  }
+
+  &__card--glass &__card-text {
+    width: rem(344);
+    margin-top: rem(18);
+  }
+
+  &__card--time &__card-text {
+    width: rem(256);
+  }
+}

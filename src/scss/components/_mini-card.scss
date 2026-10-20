@@ -1,0 +1,100 @@
+@use '../base' as *;
+
+// Компактная карточка товара (hero, футер)
+.mini-card {
+  @include glass(15px, rgba(0, 19, 31, 0.1));
+  display: flex;
+  flex-shrink: 0;
+  gap: rem(8);
+  align-items: center;
+  padding: rem(8) rem(16) rem(8) rem(8);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-m);
+
+  // Без собственного стекла — внутри слайдера, стекло даёт его рамка (hero)
+  &--bare {
+    background-color: transparent;
+    backdrop-filter: none;
+    border-color: transparent;
+  }
+
+  &__media {
+    display: flex;
+    flex-direction: column;
+    width: rem(72);
+  }
+
+  &__img-wrap {
+    position: relative;
+    height: rem(60);
+  }
+
+  &__img {
+    position: absolute;
+    top: 12.2%;
+    left: 9.41%;
+    width: 80.49%;
+    height: 74.95%;
+  }
+
+  &__dots {
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    padding: 0 rem(4) rem(8);
+  }
+
+  &__dot {
+    width: 4px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 1px;
+
+    &.is-active {
+      background-color: var(--color-white);
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+    justify-content: center;
+    width: rem(180);
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    white-space: nowrap;
+  }
+
+  &__title {
+    @include body-m;
+    overflow: hidden;
+    color: var(--color-white);
+    text-overflow: ellipsis;
+  }
+
+  &__subtitle {
+    @include body-s;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.7);
+    text-overflow: ellipsis;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__price {
+    @include body-s;
+    color: var(--color-white);
+    text-align: right;
+    white-space: nowrap;
+  }
+}

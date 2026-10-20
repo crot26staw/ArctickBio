@@ -1,0 +1,96 @@
+@use '../base' as *;
+
+// Карточка товара каталога. Разметка совместима с циклом WooCommerce (li.product, .price, .add_to_cart_button)
+.product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: rem(385);
+  overflow: hidden;
+  color: var(--color-fg);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-m);
+
+  &__hover-img {
+    @include cover-img;
+    opacity: 0;
+    transition: opacity $transition;
+  }
+
+  &__media {
+    position: relative;
+    display: block;
+    flex: 1 0 0;
+    min-height: 1px;
+    transition: opacity $transition;
+  }
+
+  &__img {
+    position: absolute;
+    top: 18.66%;
+    left: 8.54%;
+    width: 82.68%;
+    height: 63%;
+    object-fit: contain;
+  }
+
+  &__info {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+    padding: rem(20);
+  }
+
+  &__heading {
+    display: flex;
+    gap: rem(8);
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
+    transition: color $transition;
+  }
+
+  &__title {
+    @include body-m;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__price {
+    @include body-s-strong;
+  }
+
+  &__actions {
+    display: flex;
+    gap: rem(4);
+    align-items: center;
+  }
+
+  &__more {
+    flex: 1 0 0;
+    min-width: 1px;
+    transition:
+      background-color $transition,
+      color $transition;
+  }
+
+  // Ховер-состояние из макета: фото-фон, светлый текст, «стеклянная» кнопка
+  @include hover {
+    color: var(--color-fg-light);
+
+    .product-card__hover-img {
+      opacity: 1;
+    }
+
+    .product-card__media {
+      opacity: 0;
+    }
+
+    .product-card__more {
+      @include glass(6px, rgba(255, 255, 255, 0.07));
+      color: var(--color-fg-light);
+      border-radius: 2px;
+    }
+  }
+}

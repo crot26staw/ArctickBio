@@ -1,0 +1,36 @@
+// Base
+@use 'base/fonts';
+@use 'base/reset';
+@use 'base/global';
+
+// Vendor (до компонентов, чтобы наши стили их перекрывали)
+@use 'swiper/css';
+@use 'swiper/css/effect-fade';
+
+// Components
+@use 'components/button';
+@use 'components/swipe';
+@use 'components/logo';
+@use 'components/section-title';
+@use 'components/socials';
+@use 'components/mini-card';
+@use 'components/product-card';
+@use 'components/review-card';
+
+// Blocks
+@use 'blocks/header';
+@use 'blocks/footer';
+@use 'blocks/hero';
+@use 'blocks/about';
+@use 'blocks/product-scene';
+@use 'blocks/sachet-journey';
+@use 'blocks/catalog';
+@use 'blocks/compound';
+@use 'blocks/video';
+@use 'blocks/research';
+@use 'blocks/production';
+@use 'blocks/comparison';
+@use 'blocks/usage';
+@use 'blocks/benefits';
+@use 'blocks/faq';
+@use 'blocks/reviews';

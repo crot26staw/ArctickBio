@@ -1,0 +1,39 @@
+// Шрифты
+$font-involve: 'Involve', 'Arial', sans-serif;
+$font-text: 'Wix Madefor Text', 'Arial', sans-serif;
+$font-display: 'Wix Madefor Display', 'Arial', sans-serif;
+
+// Сетка
+$container-width: 1440px;
+$container-padding: 50px;
+
+// Брейкпоинты (desktop-first, max-width). Макеты: 1440 / 768 / 375
+$breakpoints: (
+  tablet: 1199px,
+  mobile: 767px,
+);
+
+// Анимации
+$transition: 0.3s ease;
+
+// Цвета — CSS custom properties, чтобы их можно было переопределить из WordPress
+:root {
+  --color-fg: #00080d;
+  --color-fg-soft: #01273e;
+  --color-fg-muted: #597281;
+  --color-fg-light: #f0f6fd;
+  --color-fg-light-soft: #81939f;
+  --color-title: #031d51;
+  --color-accent: #0a35c2;
+  --color-white: #ffffff;
+  --color-black: #00080d;
+  --color-bg: #ffffff;
+  --color-bg-light: #f0f6fd;
+  --color-bg-dark: #14151d;
+  --color-border-muted: rgba(1, 39, 62, 0.15);
+  --color-border-default: rgba(1, 39, 62, 0.5);
+  --color-neutral: rgba(1, 39, 62, 0.1);
+  --radius-s: 4px;
+  --radius-m: 6px;
+  --radius-l: 8px;
+}

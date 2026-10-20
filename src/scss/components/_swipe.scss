@@ -1,0 +1,80 @@
+@use '../base' as *;
+
+// Swipe-эффект кнопок (swipe-button.js, референс animata swipe-button):
+// содержимое уезжает вверх, снизу въезжают копия и фон ховера --swipe-bg.
+// Цвет ховера задаётся у кнопки переменной --swipe-bg (вместо смены background-color).
+$swipe-transition: 0.3s ease-in-out;
+
+// :where — нулевая специфичность, чтобы не перебить position: absolute у кнопок
+:where(.swipe) {
+  position: relative;
+}
+
+.swipe {
+  isolation: isolate;
+  overflow: hidden;
+
+  // Фон ховера
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--swipe-bg, transparent);
+    border-radius: inherit;
+    transform: translateY(100%);
+    transition: transform $swipe-transition;
+  }
+
+  &__inner {
+    display: grid;
+    gap: inherit;
+    align-items: center;
+    justify-items: center;
+  }
+
+  &__label {
+    display: flex;
+    grid-area: 1 / 1;
+    gap: inherit;
+    align-items: center;
+    justify-content: center;
+    transition: transform $swipe-transition;
+  }
+
+  &__label--clone {
+    transform: translateY(var(--swipe-shift, 100%));
+  }
+
+  @mixin swipe-active {
+    &::before {
+      transform: none;
+    }
+
+    .swipe__label {
+      transform: translateY(calc(-1 * var(--swipe-shift, 100%)));
+    }
+
+    .swipe__label--clone {
+      transform: none;
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover,
+    [data-swipe-trigger]:hover & {
+      @include swipe-active;
+    }
+  }
+
+  &:focus-visible {
+    @include swipe-active;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before,
+    .swipe__label {
+      transition: none;
+    }
+  }
+}

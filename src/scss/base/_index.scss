@@ -1,0 +1,4 @@
+// Общая точка подключения для всех SCSS-файлов: @use '../base' as *;
+@forward 'functions';
+@forward 'variables';
+@forward 'mixins';

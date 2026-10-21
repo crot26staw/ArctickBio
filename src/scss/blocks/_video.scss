@@ -65,6 +65,7 @@
     }
   }
 
+  // В макете планшета карточки с видео нет — только кнопка по центру
   &__card {
     position: relative;
     flex-shrink: 0;
@@ -72,6 +73,10 @@
     height: rem(250);
     overflow: hidden;
     border-radius: var(--radius-m);
+
+    @include media(tablet) {
+      display: none;
+    }
 
     @include hover {
       .video__card-img {

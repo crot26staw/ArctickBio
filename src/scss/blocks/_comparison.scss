@@ -18,12 +18,17 @@
     align-items: flex-start;
   }
 
+  // В макете планшета фото нет — таблица на всю ширину (макет 18129:38444)
   &__img {
     flex-shrink: 0;
     width: rem(399);
     height: rem(541);
     object-fit: cover;
     border-radius: var(--radius-l);
+
+    @include media(tablet) {
+      display: none;
+    }
   }
 
   &__table-wrap {
@@ -42,6 +47,12 @@
       background-color: #e9f0fb;
       border-radius: var(--radius-m);
       transform: translate(-50%, -50%);
+
+      @include media(tablet) {
+        top: calc(50% + #{rem(1.5)});
+        left: calc(50% - #{rem(48)});
+        width: rem(250);
+      }
     }
   }
 
@@ -104,6 +115,10 @@
     padding-inline: rem(32) !important;
     color: var(--color-fg-muted);
     text-align: center;
+
+    @include media(tablet) {
+      padding-inline: rem(16) !important;
+    }
   }
 
   &__cell-inner {

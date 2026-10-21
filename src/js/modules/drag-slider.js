@@ -7,28 +7,33 @@ gsap.registerPlugin(Draggable, InertiaPlugin);
 /**
  * Горизонтальная лента, которая листается зажатием и свайпом (мышь и тач).
  * Разметка: [data-js-drag-slider] (видимая область) > [data-js-drag-slider-track] (лента).
- * Если лента шире области — стартует по центру, как в макете.
+ * Положение ленты в покое: по центру, как отзывы в макете, или [data-drag-slider-align="start"] — у левого края.
+ * Листается, только если лента шире области (например, каталог — на планшете, а на десктопе помещается);
+ * тогда у области класс is-draggable.
  */
 function initSlider(viewport) {
   const track = viewport.querySelector('[data-js-drag-slider-track]');
   if (!track) return;
 
+  const alignStart = viewport.dataset.dragSliderAlign === 'start';
+  const getOverflow = () => track.scrollWidth - viewport.clientWidth;
+
   const getBounds = () => {
-    const overflow = track.scrollWidth - viewport.clientWidth;
+    const overflow = getOverflow();
     return overflow > 0
       ? { minX: -overflow, maxX: 0 }
       : { minX: -overflow / 2, maxX: -overflow / 2 };
   };
 
-  const centerTrack = () => {
+  const resetPosition = () => {
     const { minX, maxX } = getBounds();
-    gsap.set(track, { x: (minX + maxX) / 2 });
+    gsap.set(track, { x: alignStart ? maxX : (minX + maxX) / 2 });
   };
 
   // Сообщить о сдвиге ленты (fake-glass.js выравнивает по нему подложку карточек)
   const notify = () => viewport.dispatchEvent(new CustomEvent('drag-slider:update', { bubbles: true }));
 
-  centerTrack();
+  resetPosition();
 
   const [draggable] = Draggable.create(track, {
     type: 'x',
@@ -41,13 +46,23 @@ function initSlider(viewport) {
     onThrowUpdate: notify,
   });
 
+  const setScrollable = () => {
+    const scrollable = getOverflow() > 0;
+    viewport.classList.toggle('is-draggable', scrollable);
+    if (scrollable) draggable.enable();
+    else draggable.disable();
+  };
+
+  setScrollable();
+
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       draggable.applyBounds(getBounds());
-      centerTrack();
+      resetPosition();
       draggable.update();
+      setScrollable();
       notify();
     }, 150);
   });

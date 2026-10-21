@@ -43,6 +43,13 @@
     counter-reset: step;
     will-change: transform;
 
+    // Планшет: ряд карточек через 8px (макет 18514:123744)
+    @include media(tablet) {
+      gap: rem(8);
+      height: auto;
+      padding-inline: rem(10);
+    }
+
     // Без анимации ленту листают вручную
     @media (prefers-reduced-motion: reduce) {
       width: 100%;
@@ -64,7 +71,8 @@
 
   // Шаг с открытым попапом — поверх соседей
   &:hover,
-  &:focus-within {
+  &:focus-within,
+  &.is-popup-open {
     z-index: 1;
   }
 
@@ -88,6 +96,25 @@
     }
   }
 
+  // Планшет: карточка — номер с названием, картинка 200, маркер в правом нижнем углу (макет 18514:81500).
+  // Ширина — по содержимому (длинное название в одну строку шире картинки), без линий и чередования высоты
+  @include media(tablet) {
+    &,
+    &:nth-child(even),
+    & + & {
+      gap: rem(12);
+      align-items: flex-start;
+      width: auto;
+      padding: rem(24) rem(16) rem(16);
+      background-color: #2a2c38;
+      border-radius: var(--radius-l);
+    }
+
+    & + &::before {
+      display: none;
+    }
+  }
+
   &__title {
     @include body-l;
     display: flex;
@@ -99,6 +126,15 @@
     span::before {
       content: counter(step) '.\00a0';
     }
+
+    @include media(tablet) {
+      height: auto;
+      white-space: nowrap;
+
+      br {
+        display: none;
+      }
+    }
   }
 
   &__img-wrap {
@@ -106,6 +142,11 @@
     width: rem(260);
     height: rem(260);
     overflow: hidden;
+
+    @include media(tablet) {
+      width: rem(200);
+      height: rem(200);
+    }
   }
 
   // По умолчанию картинка растянута на весь блок (fill: шаги 1, 3, 14)
@@ -168,6 +209,10 @@
       rgba(10, 53, 194, 0) 100%
     );
     pointer-events: none;
+
+    @include media(tablet) {
+      display: none;
+    }
   }
 
   &:nth-child(even) &__beam {
@@ -191,6 +236,18 @@
 
   &:nth-child(even) &__marker {
     top: rem(193);
+  }
+
+  // Планшет: маркер — в потоке, под картинкой справа (отступ 50 от картинки в макете)
+  @include media(tablet) {
+    &__marker,
+    &:nth-child(even) &__marker {
+      position: relative;
+      top: auto;
+      right: auto;
+      align-self: flex-end;
+      margin-top: rem(38);
+    }
   }
 
   // Всплывающая карточка шага: нижний левый угол совпадает с маркером
@@ -222,10 +279,38 @@
     left: auto;
   }
 
-  &__marker:hover + &__popup,
-  &__marker:focus-visible + &__popup {
+  // Открытие: на десктопе — наведение на маркер, на планшете — нажатие (step-popup.js, класс is-popup-open)
+  @media (hover: hover) {
+    &__marker:hover + &__popup {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  &__marker:focus-visible + &__popup,
+  &.is-popup-open &__popup {
     visibility: visible;
     opacity: 1;
+  }
+
+  // Планшет: маркер внизу карточки — попап над ним, нижний левый угол на маркере.
+  // Если вправо не помещается в экран — открывается влево (is-popup-left, step-popup.js).
+  // Фон попапа совпадает с фоном карточек, поэтому тонкая рамка
+  @include media(tablet) {
+    &__popup,
+    &:nth-child(even) &__popup,
+    &:last-child &__popup {
+      top: auto;
+      right: auto;
+      bottom: rem(16);
+      left: calc(100% - #{rem(48)});
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    &.is-popup-left &__popup {
+      right: rem(16);
+      left: auto;
+    }
   }
 
   &__popup-text {

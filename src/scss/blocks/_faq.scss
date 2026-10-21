@@ -9,12 +9,23 @@
     flex-wrap: wrap;
     gap: rem(67) rem(133);
     align-items: flex-start;
+
+    // Планшет: всё в одну колонку — заголовок, вопросы, «Нужна помощь» (макет 18541:70788)
+    @include media(tablet) {
+      flex-direction: column;
+    }
   }
 
   &__main {
     display: flex;
     gap: rem(170);
     align-items: flex-start;
+
+    @include media(tablet) {
+      flex-direction: column;
+      gap: rem(32);
+      width: 100%;
+    }
   }
 
   &__heading {
@@ -23,6 +34,10 @@
     gap: rem(32);
     align-items: flex-start;
     width: rem(282);
+
+    @include media(tablet) {
+      width: 100%;
+    }
   }
 
   &__title {
@@ -33,6 +48,10 @@
     @include body-l;
     width: rem(262);
     color: var(--color-fg-soft);
+
+    @include media(tablet) {
+      width: auto;
+    }
   }
 
   &__btn {
@@ -44,6 +63,10 @@
     flex-direction: column;
     gap: rem(8);
     width: rem(452);
+
+    @include media(tablet) {
+      width: 100%;
+    }
   }
 
   &__aside {

@@ -6,6 +6,22 @@
   overflow: hidden;
   background-color: #e7eff1;
 
+  // Планшет: одна колонка — заголовок по центру над списком, без фото (макет 18129:37927).
+  // Фон — градиент колонки списка, на всю секцию
+  @include media(tablet) {
+    flex-direction: column;
+    gap: rem(75);
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    min-height: 100svh;
+    padding: rem(120) rem(20);
+    background:
+      url("data:image/svg+xml;utf8,<svg viewBox='0 0 768 1080' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(26.522 122.38 -87.024 29.212 282.03 488.03)'><stop stop-color='rgba(245,248,253,1)' offset='0'/><stop stop-color='rgba(198,218,248,1)' offset='1'/></radialGradient></defs></svg>")
+        0 0 / 100% 100%,
+      var(--color-white);
+  }
+
   &__media {
     position: relative;
     display: flex;
@@ -21,9 +37,23 @@
       inset: 0;
       background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 72.486%, rgba(0, 0, 0, 0.5) 92.142%);
     }
+
+    @include media(tablet) {
+      flex: none;
+      width: 100%;
+      padding: 0;
+
+      &::after {
+        display: none;
+      }
+    }
   }
 
   &__img {
+    @include media(tablet) {
+      display: none;
+    }
+
     position: absolute;
     top: -12.66%;
     left: -0.02%;
@@ -38,6 +68,12 @@
     position: relative;
     z-index: 1;
     color: var(--color-white);
+
+    @include media(tablet) {
+      width: 100%;
+      color: var(--color-fg);
+      text-align: center;
+    }
   }
 
   &__content {
@@ -51,6 +87,13 @@
       url("data:image/svg+xml;utf8,<svg viewBox='0 0 720 800' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(24.864 90.65 -81.585 21.638 264.41 361.5)'><stop stop-color='rgba(245,248,253,1)' offset='0'/><stop stop-color='rgba(198,218,248,1)' offset='1'/></radialGradient></defs></svg>")
         0 0 / 100% 100%,
       var(--color-white);
+
+    @include media(tablet) {
+      flex: none;
+      width: 100%;
+      padding-inline: 0;
+      background: none;
+    }
   }
 }
 
@@ -64,6 +107,10 @@ $research-rise: 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
 
 .research-list {
   width: rem(600);
+
+  @include media(tablet) {
+    width: 100%;
+  }
 
   &__item {
     padding-block: rem(24);

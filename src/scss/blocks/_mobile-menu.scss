@@ -1,0 +1,161 @@
+@use '../base' as *;
+
+$menu-bg: #010e1b;
+
+// Меню планшета и мобилки (макет 18129:38632): на весь экран под шапкой, открывается бургером (mobile-menu.js).
+// Лежит внутри .header, шапка (.header__inner) — поверх него.
+// Появление — как на nature-center.site: панель въезжает справа, у неё выпуклый скруглённый левый край (::before),
+// который выпрямляется, когда панель почти доехала. Закрытие — в обратную сторону, без задержки
+$menu-slide: 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  display: none;
+  color: var(--color-white);
+  background-color: $menu-bg;
+  visibility: hidden;
+  transform: translateX(110%); // 110% — за экраном и выпуклый край
+  transition:
+    transform $menu-slide,
+    visibility 0s linear 0.9s;
+
+  @include media(tablet) {
+    display: block;
+  }
+
+  // Выпуклый край: торчит влево на 10% ширины, левая сторона — полуэллипс
+  &::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    z-index: -1;
+    width: 30%;
+    height: 120%;
+    background-color: $menu-bg;
+    border-radius: 50% 0 0 50%;
+    transition:
+      left 0.5s ease,
+      border-radius 0.5s ease;
+  }
+
+  .is-menu-open & {
+    visibility: visible;
+    transform: none;
+    transition:
+      transform $menu-slide 0.12s,
+      visibility 0s;
+
+    &::before {
+      left: 0;
+      border-radius: 0;
+      transition:
+        left 0.5s ease 0.6s,
+        border-radius 0.5s ease 0.6s;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    &::before,
+    .is-menu-open &,
+    .is-menu-open &::before {
+      transition: none;
+    }
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: rem(50);
+    justify-content: space-between;
+    height: 100%;
+    padding: calc(#{rem(72)} + #{rem(50)}) rem(16) rem(50);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  // Пункты совместимы с wp_nav_menu: ul.menu > li.menu-item > a
+  &__list {
+    a {
+      display: flex;
+      align-items: center;
+      height: rem(44);
+      padding-inline: rem(12);
+      font-family: $font-involve;
+      font-weight: 500;
+      font-size: rem(24);
+      line-height: 1.05;
+      letter-spacing: rem(-0.5);
+      border-radius: var(--radius-s);
+    }
+
+    .current-menu-item > a {
+      background-color: var(--color-accent);
+    }
+
+    // Текст пунктов — по левому краю (у swipe-кнопок по умолчанию по центру)
+    .swipe__inner {
+      justify-items: start;
+    }
+  }
+
+  // Линия над контактами — граница блока
+  &__contacts {
+    display: flex;
+    flex-direction: column;
+    gap: rem(50);
+    align-items: flex-start;
+    padding-top: rem(50);
+    border-top: 1px solid rgba(129, 147, 159, 0.5);
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+    width: 100%;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+    align-items: flex-start;
+
+    &--phone {
+      gap: rem(12);
+      width: 100%;
+    }
+  }
+
+  &__label {
+    font-family: $font-text;
+    font-size: rem(13);
+    line-height: 1;
+    color: var(--color-fg-muted);
+
+    &--media {
+      font-weight: 500;
+      font-size: rem(12);
+      line-height: rem(16);
+    }
+  }
+
+  &__mail {
+    font-family: $font-display;
+    font-size: rem(20);
+    line-height: 1.2;
+  }
+
+  &__address {
+    @include body-m;
+    font-style: normal;
+  }
+
+  &__phone {
+    @include display-l;
+    white-space: nowrap;
+  }
+}

@@ -51,16 +51,6 @@
     display: flex;
     gap: rem(16);
     width: max-content;
-    cursor: grab;
-    touch-action: pan-y;
-    user-select: none;
-
-    &:active {
-      cursor: grabbing;
-    }
-
-    img {
-      pointer-events: none;
-    }
+    @include drag-track;
   }
 }

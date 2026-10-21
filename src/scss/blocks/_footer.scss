@@ -12,6 +12,13 @@
     gap: rem(42);
     align-items: flex-start;
     padding-top: rem(50);
+
+    // Планшет: логотип, под ним все ссылки, ниже — «Разработано в Alta» (макет 18129:37714)
+    @include media(tablet) {
+      position: relative;
+      flex-direction: column;
+      padding-bottom: calc(#{rem(16)} + #{rem(42)});
+    }
   }
 
   &__brand {
@@ -21,6 +28,12 @@
     gap: rem(16);
     width: rem(411.146);
     height: rem(358);
+
+    @include media(tablet) {
+      position: static;
+      width: auto;
+      height: auto;
+    }
   }
 
   &__logo {
@@ -32,6 +45,10 @@
     font-size: rem(10);
     line-height: rem(14);
     color: rgba(255, 255, 255, 0.7);
+
+    @include media(tablet) {
+      width: auto;
+    }
   }
 
   &__dev {
@@ -47,6 +64,12 @@
       opacity: 0.7;
     }
 
+    @include media(tablet) {
+      top: auto;
+      bottom: 0;
+      left: $container-padding-tablet;
+    }
+
     img {
       width: rem(119.534);
       height: rem(15.985);
@@ -59,6 +82,15 @@
     flex-wrap: wrap;
     gap: rem(32);
     min-width: 1px;
+
+    // Планшет: первый ряд — каталог, о нас, покупателям, документы; второй — контакты и медиа
+    @include media(tablet) {
+      display: grid;
+      grid-template-columns: rem(118) rem(78) rem(98) rem(176.38);
+      gap: rem(50) 0;
+      justify-content: space-between;
+      width: 100%;
+    }
   }
 
   &__col {
@@ -70,6 +102,25 @@
     &--media,
     &--docs {
       gap: rem(16);
+    }
+
+    @include media(tablet) {
+      width: auto;
+
+      &--docs {
+        grid-row: 1;
+        grid-column: 4;
+      }
+
+      &--contacts {
+        grid-row: 2;
+        grid-column: 1 / 4;
+      }
+
+      &--media {
+        grid-row: 2;
+        grid-column: 4;
+      }
     }
   }
 
@@ -100,6 +151,24 @@
   &__bottom-row {
     display: flex;
     gap: rem(32);
+
+    @include media(tablet) {
+      display: contents;
+    }
+  }
+
+  // Планшет: иконки соцсетей 32 (на десктопе 24)
+  &__col--media .socials__link {
+    @include media(tablet) {
+      width: rem(32);
+      height: rem(32);
+      border-radius: 2px;
+
+      img {
+        width: rem(32);
+        height: rem(32);
+      }
+    }
   }
 
   &__disclaimer {
@@ -110,6 +179,10 @@
     color: var(--color-fg-muted);
     text-align: center;
     text-transform: uppercase;
+
+    @include media(tablet) {
+      padding-bottom: rem(21);
+    }
   }
 
   // Лента товаров шире экрана, края гаснут

@@ -1,5 +1,6 @@
 import { initSmoothScroll } from './modules/smooth-scroll.js';
 import { initHeader } from './modules/header.js';
+import { initMobileMenu } from './modules/mobile-menu.js';
 import { initHeroCover } from './modules/hero-cover.js';
 import { initAccordions } from './modules/accordion.js';
 import { initDragSliders } from './modules/drag-slider.js';
@@ -9,6 +10,7 @@ import { initSachetJourney } from './modules/sachet-journey.js';
 import { initProductSliders } from './modules/product-slider.js';
 import { initResearch } from './modules/research.js';
 import { initRibbons } from './modules/ribbon.js';
+import { initStepPopups } from './modules/step-popup.js';
 import { initCardsRise } from './modules/cards-rise.js';
 import { initSwipeButtons } from './modules/swipe-button.js';
 import { initRollText } from './modules/roll-text.js';
@@ -21,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initRollText();
   initHeroCover();
   initHeader();
+  initMobileMenu();
   initAccordions();
   initDragSliders();
   initFakeGlass();
@@ -29,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initProductSliders();
   initResearch();
   initRibbons();
+  initStepPopups();
   initCardsRise();
   initCursorFollow();
   initRevealSequence();

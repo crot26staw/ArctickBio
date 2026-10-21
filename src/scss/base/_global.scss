@@ -7,10 +7,11 @@
 html {
   font-size: fluid-root-desktop(map.get($design-widths, desktop), $fluid-growth, $fluid-max-width);
 
-  // Включить при адаптиве, когда будут готовы планшет и мобилка:
-  // @include media(tablet) {
-  //   font-size: fluid-root-size(map.get($design-widths, tablet));
-  // }
+  @include media(tablet) {
+    font-size: fluid-root-size(map.get($design-widths, tablet));
+  }
+
+  // Включить, когда начнём мобилку:
   // @include media(mobile) {
   //   font-size: fluid-root-size(map.get($design-widths, mobile));
   // }
@@ -23,6 +24,11 @@ body {
   background-color: var(--color-bg-light);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+// Страница не скроллится, пока открыто меню (mobile-menu.js; с Lenis скролл останавливает он)
+.is-scroll-locked {
+  overflow: hidden;
 }
 
 .page {
@@ -40,6 +46,10 @@ body {
   max-width: $container-width;
   margin-inline: auto;
   padding-inline: $container-padding;
+
+  @include media(tablet) {
+    padding-inline: $container-padding-tablet;
+  }
 }
 
 // Заголовки с анимацией скрыты, пока title-reveal.js не разобьёт их на строки (без мигания)

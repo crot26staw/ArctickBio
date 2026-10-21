@@ -1,4 +1,7 @@
 <header class="header" data-js-header>
+  <!-- Меню планшета и мобилки: открывается бургером (js/modules/mobile-menu.js) -->
+  <include src="partials/mobile-menu.html"></include>
+
   <div class="header__inner container">
     <nav class="header__nav" aria-label="Основное меню">
       <ul class="header__menu menu" data-js-swipe-group>
@@ -29,6 +32,9 @@
         </svg>
         <span class="header__cart-count" data-js-cart-count data-swipe-static>0</span>
       </a>
+      <button class="header__icon-btn header__burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu" data-js-mobile-menu-toggle data-js-swipe>
+        <span class="header__burger-lines" aria-hidden="true"></span>
+      </button>
     </div>
   </div>
 </header>

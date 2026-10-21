@@ -34,15 +34,36 @@
     --header-badge: var(--color-fg);
   }
 
+  // Над открытым меню шапка в тёмной теме — с момента, когда панель меню её накрыла (mobile-menu.js)
+  &.is-menu-dark {
+    --header-fg: var(--color-fg-light);
+    --header-btn-bg: rgba(255, 255, 255, 0.1);
+    --header-btn-bg-hover: rgba(255, 255, 255, 0.2);
+    --header-logo: var(--color-fg-light);
+    --header-badge: inherit;
+  }
+
   &__inner {
+    position: relative; // над меню (.mobile-menu)
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     padding-block: rem(20);
+
+    // Планшет: логотип слева, справа кабинет, корзина и бургер (макет 18543:94129)
+    @include media(tablet) {
+      display: flex;
+      justify-content: space-between;
+      padding: rem(10);
+    }
   }
 
   &__nav {
     justify-self: start;
+
+    @include media(tablet) {
+      display: none;
+    }
   }
 
   // Меню совместимо с wp_nav_menu: ul > li.menu-item > a
@@ -95,6 +116,18 @@
     transition: background-color $transition;
   }
 
+  @include media(tablet) {
+    &__logo {
+      width: rem(53.818);
+      height: rem(32);
+    }
+
+    &__logo .logo__img {
+      width: rem(48.891);
+      height: rem(34.405);
+    }
+  }
+
   &__actions {
     display: flex;
     gap: 2px;
@@ -108,6 +141,10 @@
     align-items: center;
     height: rem(40);
     padding: rem(11) rem(16);
+
+    @include media(tablet) {
+      display: none;
+    }
   }
 
   &__icon-btn {
@@ -152,5 +189,25 @@
     // Цвет через переменную: на ховере бейдж перекрашивает .swipe (селектор с низкой специфичностью не мешает)
     color: var(--header-badge, inherit);
     border-radius: 1px;
+  }
+
+  // Бургер — только на планшете и мобилке; отделён от кабинета и корзины (gap 12 в макете)
+  &__burger {
+    display: none;
+
+    @include media(tablet) {
+      display: flex;
+      margin-left: rem(10);
+    }
+  }
+
+  // Две линии 18 и 10.8px (макет icn-menu)
+  &__burger-lines {
+    display: block;
+    width: rem(18);
+    height: calc(#{rem(3.13)} + 2 * #{rem(1.174)});
+    background:
+      linear-gradient(currentColor, currentColor) 0 0 / 100% #{rem(1.174)} no-repeat,
+      linear-gradient(currentColor, currentColor) 0 100% / #{rem(10.798)} #{rem(1.174)} no-repeat;
   }
 }

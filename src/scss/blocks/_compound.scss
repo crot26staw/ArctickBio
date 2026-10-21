@@ -32,6 +32,11 @@
     height: rem(800);
     margin-inline: auto;
     padding-top: rem(120);
+
+    // Планшет: сцена на весь экран, стик и витамины — от её центра (макет 18541:70765)
+    @include media(tablet) {
+      height: 100%;
+    }
   }
 
   // Заголовок поверх всплывающих карточек витаминов (как в макете)
@@ -53,6 +58,12 @@
     height: rem(512.508);
     transform: translateX(-50%);
     pointer-events: none;
+
+    @include media(tablet) {
+      top: 50%;
+      left: calc(50% + #{rem(0.77)});
+      transform: translate(-50%, -50%);
+    }
 
     // У картинки прозрачные поля по бокам, поэтому она шире рамки
     img {
@@ -195,5 +206,40 @@
   &--a {
     top: var(--top-3);
     right: rem(398);
+  }
+
+  // Планшет: C и K справа от стика, H и A слева (макет 18541:70768–70783)
+  @include media(tablet) {
+    &--c,
+    &--k {
+      left: rem(522);
+    }
+
+    &--e {
+      left: rem(185);
+    }
+
+    &--h {
+      right: rem(499);
+    }
+
+    &--pp {
+      right: rem(155);
+    }
+
+    &--a {
+      right: rem(500);
+    }
+
+    // E и PP ближе к краям экрана: карточка раскрывается внутрь, а не за край
+    &--e &__card {
+      right: auto;
+      left: -1px;
+    }
+
+    &--pp &__card {
+      right: -1px;
+      left: auto;
+    }
   }
 }

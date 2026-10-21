@@ -17,5 +17,27 @@
       flex: 1 0 0;
       min-width: 1px;
     }
+
+    // Планшет: ряд шире экрана, карточки 274 (макет 18541:70764), листается свайпом
+    @include media(tablet) {
+      width: max-content;
+      max-width: none;
+      margin: 0;
+
+      > li {
+        flex: none;
+        width: rem(274);
+      }
+    }
+  }
+
+  &__viewport {
+    @include media(tablet) {
+      overflow: hidden;
+    }
+  }
+
+  &__viewport.is-draggable &__list {
+    @include drag-track;
   }
 }

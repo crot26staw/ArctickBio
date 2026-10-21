@@ -11,12 +11,14 @@ import { initResearch } from './modules/research.js';
 import { initRibbons } from './modules/ribbon.js';
 import { initCardsRise } from './modules/cards-rise.js';
 import { initSwipeButtons } from './modules/swipe-button.js';
+import { initRollText } from './modules/roll-text.js';
 import { initCursorFollow } from './modules/cursor-follow.js';
 import { initRevealSequence } from './modules/reveal-sequence.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initSwipeButtons();
+  initRollText();
   initHeroCover();
   initHeader();
   initAccordions();

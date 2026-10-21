@@ -1,13 +1,13 @@
-<section class="faq" data-header-theme="light">
+<section class="faq" data-header-theme="light" data-js-reveal-sequence>
   <div class="faq__inner container">
     <div class="faq__main">
       <div class="faq__heading">
-        <h2 class="faq__title" data-js-title-reveal>Частые вопросы</h2>
-        <p class="faq__text">Мы собрали всё самое важное о продукте, приёме и&nbsp;заказе</p>
-        <a class="faq__btn btn btn--accent" href="#" data-js-swipe>Все вопросы</a>
+        <h2 class="faq__title" data-js-reveal-sequence-item data-reveal-sequence-split>Частые вопросы</h2>
+        <p class="faq__text" data-js-reveal-sequence-item>Мы собрали всё самое важное о продукте, приёме и&nbsp;заказе</p>
+        <a class="faq__btn btn btn--accent" href="#" data-js-swipe data-js-reveal-sequence-item>Все вопросы</a>
       </div>
 
-      <div class="faq__list" data-js-accordion-group>
+      <div class="faq__list" data-js-accordion-group data-js-reveal-sequence-item data-reveal-sequence-children>
         <include src="partials/accordion-item.html" data='{"id": "faq-1", "expanded": "false", "question": "Какую упаковку выбрать: 15 или 30 саше?", "answer": "15 саше — попробовать продукт и выбрать любимую ягоду. 30 саше — месяц ежедневного приёма"}'></include>
         <include src="partials/accordion-item.html" data='{"id": "faq-2", "state": "is-open", "expanded": "true", "question": "Как принимать коллаген?", "answer": "15 саше — попробовать продукт и выбрать любимую ягоду. 30 саше — месяц ежедневного приёма"}'></include>
         <include src="partials/accordion-item.html" data='{"id": "faq-3", "expanded": "false", "question": "Нужно ли хранить саше в холодильнике?", "answer": "15 саше — попробовать продукт и выбрать любимую ягоду. 30 саше — месяц ежедневного приёма"}'></include>
@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="faq__aside">
+    <div class="faq__aside" data-js-reveal-sequence-item data-reveal-sequence-gap="1.5">
       <p>Нужна помощь? <br>Наша команда всегда на связи.</p>
       <ul class="socials socials--large">
         <li><a class="socials__link" href="#" target="_blank" rel="noopener" aria-label="ВКонтакте"><img src="./assets/icons/icn-vk-32.svg" alt="" width="32" height="32"></a></li>

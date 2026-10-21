@@ -97,11 +97,18 @@ src/
                    Центрирование такого элемента — `translate: -50% -50%`, не transform. Сейчас — кнопка .video__play)
                    reveal-sequence.js (поочерёдное появление блоков секции ПО СКРОЛЛУ (scrub, без pin, top 90% → top -20%):
                    section[data-js-reveal-sequence] > [data-js-reveal-sequence-item], по порядку в DOM, снизу + проявление;
-                   [data-reveal-sequence-split] — бить на строки (заголовок, такому НЕ ставить data-js-title-reveal). Сейчас — comparison: заголовок → фото → таблица; usage: заголовок → фото → карточки по одной)
+                   [data-reveal-sequence-split] — бить на строки (заголовок, такому НЕ ставить data-js-title-reveal). Сейчас — comparison: заголовок → фото → таблица; usage: заголовок → фото → карточки по одной;
+                   catalog: заголовок → карточки из фейда слева направо — [data-reveal-sequence-children] + [data-reveal-sequence-from="left"];
+                   faq: заголовок → описание → кнопка → аккордеоны по одному → «Нужна помощь» с соцсетями, раньше конца аккордеонов — [data-reveal-sequence-gap];
+                   reviews: заголовок → кнопка → карточки, видные на экране — [data-reveal-sequence-children="visible"])
                    swipe-button.js (ховер всех кнопок как animata swipe-button: содержимое уезжает вверх, снизу въезжают копия и фон --swipe-bg;
                    [data-js-swipe] на кнопке, [data-js-swipe-group] — все ссылки внутри (меню), [data-swipe-trigger] — ховер предка,
                    [data-swipe-static] — не двигать (бейдж корзины). Стили components/_swipe.scss. НОВЫЕ КНОПКИ: ставить data-js-swipe и --swipe-bg вместо hover-фона;
                    исключение по просьбе пользователя — плюс/минус в FAQ без эффекта)
+                   roll-text.js (ховер ТЕКСТОВЫХ ССЫЛОК как animata roll-text, stagger по буквам: у каждой буквы две копии, стопка уезжает вверх
+                   на строку, буквы по очереди (20ms, 450ms, WAAPI); доигрывает до конца. [data-js-roll] на ссылке, [data-js-roll-group] — все ссылки внутри.
+                   Внутри ссылки — только текст. Стили components/_roll.scss. Сейчас — ссылки футера (меню, телефон, почта, документы).
+                   НОВЫЕ ТЕКСТОВЫЕ ССЫЛКИ: ставить roll вместо opacity/color-ховера; кнопки и плашки — swipe)
   assets/
     images/  — webp (фото), logo.png (маска логотипа)
     icons/   — svg

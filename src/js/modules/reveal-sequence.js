@@ -10,19 +10,38 @@ gsap.registerPlugin(SplitText);
  * Разметка: section[data-js-reveal-sequence] с элементами [data-js-reveal-sequence-item] (порядок = порядок в DOM).
  * [data-reveal-sequence-split] у элемента — бить на строки (заголовок: строки по очереди, с размытием, как в title-reveal.js).
  * Такому заголовку НЕ ставить data-js-title-reveal — он анимируется здесь.
- * Сейчас — comparison: заголовок → фото → таблица; usage: заголовок → фото → карточки по одной.
+ * [data-reveal-sequence-children] — анимировать не сам элемент, а его детей по очереди (список карточек).
+ *   ="visible" — только детей, видных в окне по горизонтали (лента шире экрана: drag-slider), остальные не трогаем.
+ * [data-reveal-sequence-from="left"] — выезжать слева (по x), а не снизу.
+ * [data-reveal-sequence-gap="1.5"] — начать раньше: насколько наложиться на предыдущий элемент (по умолчанию SEQUENCE.gap).
+ * Сейчас — comparison: заголовок → фото → таблица; usage: заголовок → фото → карточки по одной;
+ * catalog: заголовок → карточки из фейда слева направо; reviews: заголовок → кнопка → видимые карточки;
+ * faq: заголовок → описание → кнопка → аккордеоны по одному → «Нужна помощь» с соцсетями.
  */
 const SEQUENCE = {
   start: 'top 90%',
   end: 'top -20%', // секция уже ушла под верх экрана, таблица ещё в кадре
   scrub: 1,
   y: 60, // фото, таблица
+  x: 60, // [data-reveal-sequence-from="left"]
+  childStagger: 0.3, // дети [data-reveal-sequence-children]
   lineY: 17, // строки заголовка
   blur: 6,
   lineStagger: 0.15,
   gap: 0.5, // следующий элемент стартует, когда предыдущий прошёл половину
   ease: 'power2.out',
 };
+
+function getTargets(item) {
+  const mode = item.dataset.revealSequenceChildren;
+  if (mode === undefined) return item;
+  if (mode !== 'visible') return item.children;
+
+  return [...item.children].filter((child) => {
+    const { left, right } = child.getBoundingClientRect();
+    return right > 0 && left < window.innerWidth;
+  });
+}
 
 export function initRevealSequence() {
   const groups = document.querySelectorAll('[data-js-reveal-sequence]');
@@ -44,7 +63,7 @@ export function initRevealSequence() {
       });
 
       items.forEach((item, i) => {
-        const position = i === 0 ? 0 : `-=${SEQUENCE.gap}`;
+        const position = i === 0 ? 0 : `-=${item.dataset.revealSequenceGap ?? SEQUENCE.gap}`;
 
         if (item.hasAttribute('data-reveal-sequence-split')) {
           const { lines } = SplitText.create(item, { type: 'lines', linesClass: 'title-line', aria: 'auto' });
@@ -54,7 +73,31 @@ export function initRevealSequence() {
             position,
           );
         } else {
-          tl.from(item, { opacity: 0, y: SEQUENCE.y }, position);
+          const offset = item.dataset.revealSequenceFrom === 'left' ? { x: -SEQUENCE.x } : { y: SEQUENCE.y };
+          const vars = { opacity: 0, ...offset, stagger: SEQUENCE.childStagger };
+          let targets = getTargets(item);
+          let tween = tl.from(targets, vars, position).recent();
+
+          // Лента листается (drag-slider) — на экране уже другие карточки. Без пересборки обратный скролл
+          // прятал бы ушедшие за край карточки, а видимые оставались бы на месте
+          if (item.dataset.revealSequenceChildren === 'visible') {
+            let timer;
+            group.addEventListener('drag-slider:update', () => {
+              clearTimeout(timer);
+              timer = setTimeout(() => {
+                const start = tween.startTime();
+                tl.remove(tween);
+                gsap.set(targets, { clearProps: 'opacity,transform' });
+
+                targets = getTargets(item);
+                // lazy: false — твин сразу запоминает значения (иначе при обратном скролле карточки не прячутся)
+                tween = gsap.from(targets, { ...vars, duration: 1, ease: SEQUENCE.ease, lazy: false });
+                tl.add(tween, start);
+                // Состояние новых карточек — по текущему положению скролла
+                tween.totalTime(Math.max(0, tl.time() - start));
+              }, 200);
+            });
+          }
         }
       });
     });

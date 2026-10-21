@@ -1,0 +1,40 @@
+@use '../base' as *;
+
+// Ховер текстовых ссылок «roll text» (js/modules/roll-text.js)
+.roll {
+  font-kerning: none;
+
+  &__track {
+    white-space: normal;
+  }
+
+  &__word {
+    white-space: nowrap;
+  }
+
+  // inline-grid держит базовую линию по невидимой букве-«распорке», стопка обрезается по её высоте
+  &__unit {
+    position: relative;
+    display: inline-grid;
+    overflow: clip;
+    vertical-align: baseline;
+  }
+
+  &__sizer {
+    grid-area: 1 / 1;
+    white-space: pre;
+    visibility: hidden;
+  }
+
+  &__stack {
+    position: absolute;
+    inset: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__line {
+    display: block;
+    white-space: pre;
+  }
+}

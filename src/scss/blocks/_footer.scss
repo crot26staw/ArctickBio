@@ -94,13 +94,7 @@
       font-style: normal;
     }
 
-    a {
-      transition: opacity $transition;
-
-      @include hover {
-        opacity: 0.7;
-      }
-    }
+    // Ховер ссылок — roll text (js/modules/roll-text.js)
   }
 
   &__bottom-row {

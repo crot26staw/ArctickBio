@@ -18,6 +18,16 @@
     pointer-events: none;
     will-change: transform;
 
+    // Мобилка: стик меньше (макет 16721:167185). Привязан к низу about, как стопка карточек
+    // (её верх — 20 + 432 от низа): первая карточка заходит на стик на 34px, но стик не выше 16px под абзацем (254) —
+    // на невысоких экранах карточки закрывают его больше. Высота about — max(100svh, min-height из _about.scss)
+    @include media(mobile) {
+      top: max(#{rem(254)}, calc(max(100svh, #{rem(700)}) - #{rem(20 + 280 + 76 * 2 - 34 + 200)}));
+      left: calc(50% - #{rem(25.714)});
+      width: rem(51.429);
+      height: rem(200);
+    }
+
     img {
       width: 100%;
       max-width: none;

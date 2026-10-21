@@ -7,7 +7,8 @@ gsap.registerPlugin(Draggable, InertiaPlugin);
 /**
  * Горизонтальная лента, которая листается зажатием и свайпом (мышь и тач).
  * Разметка: [data-js-drag-slider] (видимая область) > [data-js-drag-slider-track] (лента).
- * Положение ленты в покое: по центру, как отзывы в макете, или [data-drag-slider-align="start"] — у левого края.
+ * Положение ленты в покое: по центру, как отзывы в макете, или [data-drag-slider-align="start"] — у левого края;
+ * [data-drag-slider-align-mobile="start"] — у левого края только на мобилке (отзывы).
  * Листается, только если лента шире области (например, каталог — на планшете, а на десктопе помещается);
  * тогда у области класс is-draggable.
  */
@@ -15,7 +16,10 @@ function initSlider(viewport) {
   const track = viewport.querySelector('[data-js-drag-slider-track]');
   if (!track) return;
 
-  const alignStart = viewport.dataset.dragSliderAlign === 'start';
+  const mobileQuery = window.matchMedia('(max-width: 767px)');
+  const isAlignStart = () =>
+    viewport.dataset.dragSliderAlign === 'start' ||
+    (viewport.dataset.dragSliderAlignMobile === 'start' && mobileQuery.matches);
   const getOverflow = () => track.scrollWidth - viewport.clientWidth;
 
   const getBounds = () => {
@@ -27,7 +31,7 @@ function initSlider(viewport) {
 
   const resetPosition = () => {
     const { minX, maxX } = getBounds();
-    gsap.set(track, { x: alignStart ? maxX : (minX + maxX) / 2 });
+    gsap.set(track, { x: isAlignStart() ? maxX : (minX + maxX) / 2 });
   };
 
   // Сообщить о сдвиге ленты (fake-glass.js выравнивает по нему подложку карточек)

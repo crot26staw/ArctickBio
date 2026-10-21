@@ -22,6 +22,16 @@
       var(--color-white);
   }
 
+  // Мобилка: макет 18160:45660
+  @include media(mobile) {
+    gap: rem(32);
+    padding: rem(75) rem(10);
+    background:
+      url("data:image/svg+xml;utf8,<svg viewBox='0 0 375 914' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(12.95 103.57 -42.492 24.722 137.71 413.01)'><stop stop-color='rgba(245,248,253,1)' offset='0'/><stop stop-color='rgba(198,218,248,1)' offset='1'/></radialGradient></defs></svg>")
+        0 0 / 100% 100%,
+      var(--color-white);
+  }
+
   &__media {
     position: relative;
     display: flex;
@@ -74,6 +84,11 @@
       color: var(--color-fg);
       text-align: center;
     }
+
+    @include media(mobile) {
+      width: rem(300);
+      margin-inline: auto;
+    }
   }
 
   &__content {
@@ -125,6 +140,10 @@ $research-rise: 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
     display: flex;
     gap: rem(36);
     align-items: flex-start;
+
+    @include media(mobile) {
+      gap: rem(24);
+    }
   }
 
   &__num {
@@ -228,6 +247,15 @@ $research-rise: 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
 
   &__media {
     padding: rem(36) rem(50) 0;
+
+    @include media(mobile) {
+      padding-inline: rem(38);
+
+      // Три документа не помещаются в 279px — справа без отступа, листы уже (101 вместо 111)
+      &:has(.research-docs) {
+        padding-right: 0;
+      }
+    }
   }
 
   &__img {
@@ -266,6 +294,10 @@ $research-rise: 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
     padding: rem(12);
     background-color: var(--color-white);
     clip-path: polygon(0 0, 86.37% 0, 100% 12.5%, 100% 100%, 0 100%);
+
+    @include media(mobile) {
+      width: rem(101);
+    }
   }
 
   &__meta {

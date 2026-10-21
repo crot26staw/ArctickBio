@@ -17,6 +17,10 @@
     overflow: hidden;
     transform: scaleY(-1);
 
+    @include media(mobile) {
+      aspect-ratio: 375 / 115;
+    }
+
     img {
       position: absolute;
       top: -177.64%;
@@ -24,6 +28,11 @@
       width: 100%;
       max-width: none;
       height: 337.68%;
+
+      @include media(mobile) {
+        top: -312.84%;
+        height: 502.11%;
+      }
     }
   }
 
@@ -33,6 +42,10 @@
     left: 0;
     width: 100%;
     aspect-ratio: 1440 / 443;
+
+    @include media(mobile) {
+      aspect-ratio: 375 / 115;
+    }
 
     img {
       @include cover-img;
@@ -88,5 +101,34 @@
     width: rem(61);
     height: rem(236);
     visibility: hidden;
+  }
+
+  // Мобилка: пачка — та же сцена в масштабе 0.7 (макет 18541:70826)
+  @include media(mobile) {
+    &__product {
+      bottom: rem(23);
+      left: calc(50% - #{rem(95.2)});
+      width: rem(190.4);
+      height: rem(350);
+    }
+
+    &__pack,
+    &__pack-front {
+      left: rem(-58.856);
+      width: rem(308.11);
+      height: rem(385);
+    }
+
+    &__pack-front {
+      left: rem(-58.583);
+      clip-path: inset(rem(141.695) rem(62.612) rem(34.74) rem(62.333));
+    }
+
+    &__sachet {
+      top: rem(9.8);
+      left: calc(50% - #{rem(21.7)});
+      width: rem(42.7);
+      height: rem(165.2);
+    }
   }
 }

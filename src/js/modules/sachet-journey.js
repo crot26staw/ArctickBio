@@ -121,7 +121,10 @@ export function initSachetJourney() {
 
   initFlight(root, item, target, endSection, pinTrigger);
 
-  if (pinTrigger) initCover(root, endSection, pinTrigger);
+  // На мобилке catalog не наезжает на product-scene (комментарий дизайнера в макете 375)
+  if (pinTrigger) {
+    gsap.matchMedia().add('(min-width: 768px)', () => initCover(root, endSection, pinTrigger));
+  }
 }
 
 // Фаза 3 — product-scene на весь экран у верха закрепляется (внешняя обёртка cover, без pinSpacing),

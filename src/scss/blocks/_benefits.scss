@@ -8,6 +8,10 @@
   position: relative;
   height: 100svh;
   overflow: hidden;
+
+  @include media(mobile) {
+    height: auto;
+  }
   color: var(--color-white);
   background-color: var(--color-black);
 
@@ -24,6 +28,14 @@
     height: 100%;
     padding-top: rem(120);
     padding-bottom: rem(50);
+
+    // Мобилка: высота по содержимому, как в макете (18541:70865, 460), без закрепления (cards-rise.js)
+    @include media(mobile) {
+      gap: rem(32);
+      justify-content: flex-start;
+      height: auto;
+      padding-block: rem(75);
+    }
   }
 
   // Планшет: ряд карточек 252 шире экрана, от края до края, листается свайпом (макет 18321:93812)
@@ -34,6 +46,11 @@
       width: calc(100% + 2 * #{$container-padding-tablet});
       margin-inline: calc(-1 * #{$container-padding-tablet});
       overflow: hidden;
+    }
+
+    @include media(mobile) {
+      width: calc(100% + 2 * #{$container-padding-mobile});
+      margin-inline: calc(-1 * #{$container-padding-mobile});
     }
   }
 
@@ -46,6 +63,13 @@
     @include media(tablet) {
       width: max-content;
       padding-inline: $container-padding-tablet;
+    }
+
+    // Мобилка: карточки 180×228 через 8 (макет 18541:70867)
+    @include media(mobile) {
+      gap: rem(8);
+      height: rem(228);
+      padding-inline: $container-padding-mobile;
     }
   }
 
@@ -70,16 +94,31 @@
     width: rem(252);
   }
 
+  @include media(mobile) {
+    justify-content: center;
+    width: rem(180);
+    padding: rem(56) rem(16);
+  }
+
   backdrop-filter: blur(14.05px);
   @include fake-glass(linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.3)));
 
   &__icon {
     width: rem(80);
     height: rem(80);
+
+    @include media(mobile) {
+      width: rem(56);
+      height: rem(56);
+    }
   }
 
   &__title {
     @include h3;
     font-weight: 500;
+
+    @include media(mobile) {
+      @include body-m-strong;
+    }
   }
 }

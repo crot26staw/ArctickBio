@@ -5,7 +5,10 @@ import { gsap, prefersReducedMotion } from './motion.js';
  * секция доходит до верха экрана и закрепляется (pin на RISE.pin экрана),
  * карточки по одной выезжают снизу из прозрачности, в конце — короткая пауза. Всё по скроллу (scrub).
  * Разметка: контейнер [data-js-cards-rise] с карточками [data-js-cards-rise-item]; закрепляется ближайшая section.
+ * Только ≥768: на мобилке секция по высоте содержимого, без закрепления.
  */
+const MEDIA = '(min-width: 768px)';
+
 
 const RISE = {
   pin: 2.5, // длина закрепления, в экранах скролла
@@ -24,23 +27,25 @@ export function initCardsRise() {
     const section = list.closest('section') ?? list;
     if (!cards.length) return;
 
-    gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: `+=${RISE.pin * 100}%`,
-          pin: true,
-          scrub: 1,
-        },
-      })
-      .from(cards, {
-        y: RISE.y,
-        opacity: 0,
-        duration: RISE.duration,
-        stagger: RISE.stagger,
-        ease: RISE.ease,
-      })
-      .to({}, { duration: RISE.pause });
+    gsap.matchMedia().add(MEDIA, () => {
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: `+=${RISE.pin * 100}%`,
+            pin: true,
+            scrub: 1,
+          },
+        })
+        .from(cards, {
+          y: RISE.y,
+          opacity: 0,
+          duration: RISE.duration,
+          stagger: RISE.stagger,
+          ease: RISE.ease,
+        })
+        .to({}, { duration: RISE.pause });
+    });
   });
 }

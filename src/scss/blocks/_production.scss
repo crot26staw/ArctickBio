@@ -15,6 +15,13 @@
   background-color: var(--color-bg-dark);
   border: 0.75px solid #000;
 
+  // Мобилка: высота по содержимому (макет 18541:89378), лента листается свайпом — без закрепления (ribbon.js)
+  @include media(mobile) {
+    gap: rem(32);
+    height: auto;
+    padding-block: rem(75);
+  }
+
   &__heading {
     position: relative;
   }
@@ -30,6 +37,16 @@
     letter-spacing: rem(-2);
     white-space: nowrap;
     transform: translateX(-50%);
+
+    // Мобилка: стиль h4 (макет 18514:86934)
+    @include media(mobile) {
+      top: 0;
+      left: calc(50% + #{rem(68)});
+      font-family: $font-involve;
+      font-size: rem(14);
+      line-height: rem(20);
+      letter-spacing: 0;
+    }
   }
 
   // Шаг ленты — 360 (карточка 260 + линия 100), по краям 50: на экран 1440 — ровно 4 шага, как в макете
@@ -50,10 +67,22 @@
       padding-inline: rem(10);
     }
 
-    // Без анимации ленту листают вручную
+    // Без анимации и на мобилке ленту листают вручную (нативный горизонтальный скролл)
     @media (prefers-reduced-motion: reduce) {
       width: 100%;
       overflow-x: auto;
+    }
+
+    @include media(mobile) {
+      width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+      will-change: auto;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
   }
 }
@@ -313,12 +342,26 @@
     }
   }
 
+  // Мобилка: лента — скролл-контейнер, а скрытый попап тоже расширяет область прокрутки.
+  // У двух последних шагов попап выступал бы за конец ленты — открывается влево
+  @include media(mobile) {
+    &:nth-last-child(-n + 2) &__popup {
+      right: rem(16);
+      left: auto;
+    }
+  }
+
   &__popup-text {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: rem(242.25);
     padding: rem(12) rem(16) rem(12) rem(12);
+
+    // Мобилка: попап 398 шире экрана — уже текст и меньше фото (макета состояния нет)
+    @include media(mobile) {
+      width: rem(170);
+    }
   }
 
   &__popup-num {
@@ -353,6 +396,11 @@
     width: rem(150);
     height: rem(150);
     overflow: hidden;
+
+    @include media(mobile) {
+      width: rem(120);
+      height: rem(120);
+    }
   }
 
   &__popup-img {

@@ -7,6 +7,12 @@
   padding-block: rem(120);
   background-color: var(--color-bg-light);
 
+  // Мобилка: фото и под ним две карточки столбиком (макет 18160:45618)
+  @include media(mobile) {
+    gap: rem(32);
+    padding-block: rem(75);
+  }
+
   &__title {
     color: #222;
   }
@@ -18,6 +24,10 @@
     // Планшет: фото во всю ширину, под ним две карточки в ряд (макет 18129:37617)
     @include media(tablet) {
       flex-direction: column;
+    }
+
+    @include media(mobile) {
+      gap: rem(8);
     }
   }
 
@@ -39,6 +49,12 @@
       flex: none;
       height: rem(500);
     }
+
+    @include media(mobile) {
+      gap: rem(12);
+      height: auto;
+      padding: rem(50) rem(30);
+    }
   }
 
   &__main-img {
@@ -59,10 +75,40 @@
     &:first-of-type {
       width: rem(278);
     }
+
+    @include media(mobile) {
+      padding: rem(16);
+
+      &,
+      &:first-of-type {
+        width: rem(207);
+      }
+
+      .icon-circle {
+        width: rem(44);
+        height: rem(44);
+
+        img {
+          width: rem(18.857);
+          height: rem(18.857);
+        }
+      }
+    }
   }
 
   &__badge-text {
     @include display-s;
+
+    @include media(mobile) {
+      @include body-m;
+    }
+  }
+
+  &__badge:first-of-type &__badge-text {
+    @include media(mobile) {
+      line-height: rem(24);
+      letter-spacing: 0;
+    }
   }
 
   &__badge:first-of-type &__badge-text {
@@ -81,6 +127,11 @@
       flex: none;
       flex-direction: row;
       height: rem(300);
+    }
+
+    @include media(mobile) {
+      flex-direction: column;
+      height: auto;
     }
   }
 
@@ -106,6 +157,11 @@
         justify-content: center;
         min-width: 1px;
       }
+
+      @include media(mobile) {
+        flex: none;
+        padding: rem(32) rem(16);
+      }
     }
 
     &--time {
@@ -128,6 +184,25 @@
             0 0 / 100% 100%,
           var(--color-white);
       }
+
+      @include media(mobile) {
+        flex: none;
+        padding: rem(32) rem(16);
+        background:
+          url("data:image/svg+xml;utf8,<svg viewBox='0 0 355 160' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(12.26 18.13 -40.226 4.3277 130.37 72.3)'><stop stop-color='rgba(245,248,253,1)' offset='0'/><stop stop-color='rgba(198,218,248,1)' offset='1'/></radialGradient></defs></svg>")
+            0 0 / 100% 100%,
+          var(--color-white);
+
+        .icon-circle {
+          width: rem(44);
+          height: rem(44);
+
+          img {
+            width: rem(18.857);
+            height: rem(18.857);
+          }
+        }
+      }
     }
   }
 
@@ -145,6 +220,11 @@
       width: rem(56);
       height: rem(56);
     }
+
+    @include media(mobile) {
+      width: rem(150);
+      height: rem(150);
+    }
   }
 
   &__card-text {
@@ -152,6 +232,10 @@
     position: relative;
     color: var(--color-fg);
     text-align: center;
+
+    @include media(mobile) {
+      @include body-m;
+    }
   }
 
   &__card--glass &__card-text {

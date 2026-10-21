@@ -11,7 +11,7 @@
     </div>
 
     <div class="footer__nav">
-      <nav class="footer__col" aria-labelledby="footer-catalog">
+      <nav class="footer__col footer__col--catalog" aria-labelledby="footer-catalog">
         <p class="footer__col-title" id="footer-catalog">Каталог продукции</p>
         <ul class="footer__menu menu" data-js-roll-group>
           <li class="menu-item"><a href="#">Коллаген с черникой</a></li>
@@ -22,7 +22,7 @@
         </ul>
       </nav>
 
-      <nav class="footer__col" aria-labelledby="footer-about">
+      <nav class="footer__col footer__col--about" aria-labelledby="footer-about">
         <p class="footer__col-title" id="footer-about">О нас</p>
         <ul class="footer__menu menu" data-js-roll-group>
           <li class="menu-item"><a href="#">Как работает</a></li>
@@ -32,7 +32,7 @@
         </ul>
       </nav>
 
-      <nav class="footer__col" aria-labelledby="footer-buyers">
+      <nav class="footer__col footer__col--buyers" aria-labelledby="footer-buyers">
         <p class="footer__col-title" id="footer-buyers">Покупателям</p>
         <ul class="footer__menu menu" data-js-roll-group>
           <li class="menu-item"><a href="#">Оплата</a></li>
@@ -82,11 +82,14 @@
     Продукт является пищевой продукцией и не является лекарственным средством. Возможна индивидуальная непереносимость компонентов
   </p>
 
-  <div class="footer__products">
-    <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой брусникой", "price": "1440₽", "link": "#", "id": "1", "mod": "mini-card--solid"}'></include>
-    <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой брусникой", "price": "1440₽", "link": "#", "id": "1", "mod": "mini-card--solid"}'></include>
-    <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой брусникой", "price": "1440₽", "link": "#", "id": "1", "mod": "mini-card--solid"}'></include>
-    <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой брусникой", "price": "1440₽", "link": "#", "id": "1", "mod": "mini-card--solid"}'></include>
-    <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой брусникой", "price": "1440₽", "link": "#", "id": "1", "mod": "mini-card--solid"}'></include>
+  <!-- Лента товаров листается зажатием/свайпом, если шире экрана (js/modules/drag-slider.js), в покое — по центру -->
+  <div class="footer__products" data-js-drag-slider>
+    <div class="footer__products-track" data-js-drag-slider-track>
+      <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой брусникой", "price": "1440₽", "link": "#", "id": "1", "mod": "mini-card--solid"}'></include>
+      <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой брусникой", "price": "1440₽", "link": "#", "id": "1", "mod": "mini-card--solid"}'></include>
+      <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой брусникой", "price": "1440₽", "link": "#", "id": "1", "mod": "mini-card--solid"}'></include>
+      <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой брусникой", "price": "1440₽", "link": "#", "id": "1", "mod": "mini-card--solid"}'></include>
+      <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой брусникой", "price": "1440₽", "link": "#", "id": "1", "mod": "mini-card--solid"}'></include>
+    </div>
   </div>
 </footer>

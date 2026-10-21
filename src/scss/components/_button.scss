@@ -14,10 +14,10 @@
   letter-spacing: rem(-0.3);
   white-space: nowrap;
   border-radius: var(--radius-s);
+  // Без opacity: её анимирует GSAP (reveal-sequence.js), CSS-переход сбивал ему конечное значение — кнопка оставалась прозрачной
   transition:
     background-color $transition,
-    color $transition,
-    opacity $transition;
+    color $transition;
 
   // Ховер — swipe-эффект (components/_swipe.scss): снизу въезжает акцентный фон со светлым текстом (UI kit)
   &--accent {

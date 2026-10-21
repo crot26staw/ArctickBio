@@ -9,6 +9,19 @@
   padding-top: rem(120);
   background-color: var(--color-bg-light);
 
+  // Мобилка: макет 18127:29182
+  @include media(mobile) {
+    gap: rem(32);
+    padding-top: rem(75);
+  }
+
+  &__title {
+    @include media(mobile) {
+      max-width: rem(252);
+      margin-inline: auto;
+    }
+  }
+
   &__list {
     display: flex;
     gap: rem(8);
@@ -27,6 +40,12 @@
       > li {
         flex: none;
         width: rem(274);
+      }
+    }
+
+    @include media(mobile) {
+      > li {
+        width: rem(277.8);
       }
     }
   }

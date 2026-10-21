@@ -18,6 +18,10 @@
     aspect-ratio: 1440 / 443;
     pointer-events: none;
 
+    @include media(mobile) {
+      aspect-ratio: 375 / 115;
+    }
+
     img {
       @include cover-img;
     }
@@ -37,6 +41,10 @@
     @include media(tablet) {
       height: 100%;
     }
+
+    @include media(mobile) {
+      padding-top: rem(75);
+    }
   }
 
   // Заголовок поверх всплывающих карточек витаминов (как в макете)
@@ -45,6 +53,10 @@
     z-index: 3;
     width: rem(460);
     margin-inline: auto;
+
+    @include media(mobile) {
+      width: rem(252);
+    }
   }
 
   &__sachet {
@@ -63,6 +75,14 @@
       top: 50%;
       left: calc(50% + #{rem(0.77)});
       transform: translate(-50%, -50%);
+    }
+
+    // Мобилка: та же картинка, рамка 188×317 (макет 18541:70855)
+    @include media(mobile) {
+      top: calc(50% - #{rem(0.41)});
+      left: calc(50% - #{rem(0.29)});
+      width: rem(188.465);
+      height: rem(317.188);
     }
 
     // У картинки прозрачные поля по бокам, поэтому она шире рамки
@@ -240,6 +260,89 @@
     &--pp &__card {
       right: -1px;
       left: auto;
+    }
+  }
+
+  // Мобилка: иконки 24, витамины разбросаны вокруг стика (макет 18541:70846–70862).
+  // Карточка уже (260) и раскрывается в сторону экрана: у C, E, K — вправо, у H, PP, A — влево
+  @include media(mobile) {
+    &__icon {
+      width: rem(24);
+      height: rem(24);
+    }
+
+    &__berry {
+      .vitamin__icon & {
+        width: rem(15);
+        height: rem(15);
+      }
+    }
+
+    &__card {
+      width: rem(260);
+      height: auto;
+      padding: rem(16) rem(12) rem(44);
+    }
+
+    &__text {
+      width: auto;
+    }
+
+    &--c,
+    &--e,
+    &--k {
+      .vitamin__card {
+        right: auto;
+        left: -1px;
+      }
+    }
+
+    &--h,
+    &--pp,
+    &--a {
+      right: auto;
+
+      .vitamin__card {
+        right: -1px;
+        left: auto;
+      }
+    }
+
+    &--c {
+      top: calc(50% - #{rem(186)});
+      left: rem(86);
+
+      // Вверх не помещается (заголовок) — раскрывается вниз, подпись в верхнем углу
+      .vitamin__card {
+        top: -1px;
+        bottom: auto;
+        padding: rem(44) rem(12) rem(16);
+      }
+    }
+
+    &--e {
+      top: calc(50% - #{rem(131)});
+      left: rem(12);
+    }
+
+    &--k {
+      top: calc(50% - #{rem(59)});
+      left: rem(43);
+    }
+
+    &--h {
+      top: calc(50% + #{rem(32)});
+      left: rem(226);
+    }
+
+    &--pp {
+      top: calc(50% + #{rem(122)});
+      left: rem(226);
+    }
+
+    &--a {
+      top: calc(50% + #{rem(193)});
+      left: rem(183);
     }
   }
 }

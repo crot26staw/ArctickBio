@@ -15,6 +15,11 @@
   overflow: hidden;
   background-color: var(--color-black);
 
+  // Мобилка: макет 18541:70874
+  @include media(mobile) {
+    height: rem(650);
+  }
+
   &__bg-wrap {
     position: absolute;
     inset: 0;
@@ -30,6 +35,11 @@
     max-width: none;
     height: 127.51%;
     object-fit: cover;
+
+    @include media(mobile) {
+      top: 0;
+      height: 100%;
+    }
   }
 
   &__header {
@@ -52,5 +62,10 @@
     gap: rem(16);
     width: max-content;
     @include drag-track;
+
+    @include media(mobile) {
+      gap: rem(8);
+      padding-inline: $container-padding-mobile;
+    }
   }
 }

@@ -101,6 +101,11 @@
   font-size: rem(44);
   line-height: 1.05;
   letter-spacing: rem(-1);
+
+  @include media(mobile) {
+    font-size: rem(24);
+    letter-spacing: rem(-0.5);
+  }
 }
 
 @mixin h3 {
@@ -123,6 +128,12 @@
   font-size: rem(72);
   line-height: 1;
   letter-spacing: rem(-3);
+
+  @include media(mobile) {
+    font-family: $font-text;
+    font-size: rem(32);
+    line-height: 1.1;
+  }
 }
 
 @mixin display-s {
@@ -131,6 +142,13 @@
   font-size: rem(24);
   line-height: 1.1;
   letter-spacing: rem(-0.8);
+
+  @include media(mobile) {
+    font-family: $font-display;
+    font-size: rem(20);
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
 }
 
 @mixin body-m {

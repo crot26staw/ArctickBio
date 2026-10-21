@@ -11,10 +11,9 @@ html {
     font-size: fluid-root-size(map.get($design-widths, tablet));
   }
 
-  // Включить, когда начнём мобилку:
-  // @include media(mobile) {
-  //   font-size: fluid-root-size(map.get($design-widths, mobile));
-  // }
+  @include media(mobile) {
+    font-size: fluid-root-size(map.get($design-widths, mobile));
+  }
 }
 
 body {
@@ -49,6 +48,10 @@ body {
 
   @include media(tablet) {
     padding-inline: $container-padding-tablet;
+  }
+
+  @include media(mobile) {
+    padding-inline: $container-padding-mobile;
   }
 }
 

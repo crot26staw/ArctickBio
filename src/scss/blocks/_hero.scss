@@ -37,6 +37,10 @@
     align-items: flex-end;
     justify-content: space-between;
     padding-bottom: rem(50);
+
+    @include media(mobile) {
+      padding-inline: rem(16);
+    }
   }
 
   // Слайдер товаров: стеклянная рамка неподвижна, внутри сменяются карточки (fade).
@@ -94,6 +98,11 @@
       max-width: none;
       font-size: rem(56);
     }
+
+    @include media(mobile) {
+      font-size: rem(36);
+      letter-spacing: rem(-1);
+    }
   }
 
   &__title-accent {
@@ -106,6 +115,12 @@
 
     @include media(tablet) {
       max-width: none;
+    }
+
+    @include media(mobile) {
+      font-family: $font-text;
+      font-size: rem(14);
+      letter-spacing: rem(-0.3);
     }
   }
 }

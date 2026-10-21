@@ -8,6 +8,12 @@
   height: 100svh;
   min-height: rem(800);
   padding-top: rem(120);
+
+  // Мобилка: min-height 700 — заголовок, абзац и стопка карточек (до 690) помещаются на невысоких телефонах
+  @include media(mobile) {
+    min-height: rem(700);
+    padding-top: rem(75);
+  }
   overflow: hidden;
   background-color: var(--color-bg-light);
 
@@ -23,6 +29,11 @@
     // Планшет: та же картинка 1440, сдвинута влево (макет 18541:70753)
     @include media(tablet) {
       left: calc(50% - #{rem(125)});
+    }
+
+    // Мобилка: горы сдвинуты влево сильнее, облака — по центру экрана (макет 18541:70815)
+    @include media(mobile) {
+      left: calc(50% - #{rem(457.5)});
     }
   }
 
@@ -42,6 +53,10 @@
     width: 100%;
     height: rem(320);
     overflow: hidden;
+
+    @include media(mobile) {
+      left: rem(457);
+    }
   }
 
   &__clouds {
@@ -58,12 +73,22 @@
     display: flex;
     gap: rem(92);
     align-items: flex-start;
+
+    @include media(mobile) {
+      flex-direction: column;
+      gap: rem(16);
+      text-align: center;
+    }
   }
 
   &__title {
     @include h2;
     width: rem(701);
     color: var(--color-fg);
+
+    @include media(mobile) {
+      width: 100%;
+    }
   }
 
   // В макете планшета абзаца нет (не помещается рядом с заголовком, а ниже — стик)
@@ -73,6 +98,22 @@
 
     @include media(tablet) {
       display: none;
+    }
+
+    // На мобилке абзац снова под заголовком (макет 18541:70818)
+    @include media(mobile) {
+      display: block;
+      width: calc(100% + 2 * #{$container-padding-mobile});
+      margin-inline: calc(-1 * #{$container-padding-mobile});
+    }
+  }
+
+  // Переносы строк абзаца — как в макете мобилки
+  &__text-br {
+    display: none;
+
+    @include media(mobile) {
+      display: inline;
     }
   }
 
@@ -90,6 +131,11 @@
       flex-direction: column;
       gap: 0;
       align-items: center;
+    }
+
+    // Мобилка: стопка целиком на экране, 20px от низа (в макете 18541:70821 нижняя карточка уходит за край — текст не виден)
+    @include media(mobile) {
+      padding-bottom: rem(20);
     }
   }
 }
@@ -115,6 +161,16 @@
 
     &:not(:last-child) {
       margin-bottom: rem(-280);
+    }
+  }
+
+  // Мобилка: на всю ширину контейнера, от предыдущей видна полоса 76px с заголовком
+  @include media(mobile) {
+    width: 100%;
+    height: rem(280);
+
+    &:not(:last-child) {
+      margin-bottom: rem(-204);
     }
   }
 

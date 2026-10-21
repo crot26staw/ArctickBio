@@ -9,6 +9,7 @@ $font-display: 'Wix Madefor Display', 'Arial', sans-serif;
 $container-width: rem(1440);
 $container-padding: rem(50);
 $container-padding-tablet: rem(20);
+$container-padding-mobile: rem(10);
 
 // Брейкпоинты (desktop-first, max-width). Макеты: 1440 / 768 / 375
 $breakpoints: (

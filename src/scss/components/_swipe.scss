@@ -3,6 +3,8 @@
 // Swipe-эффект кнопок (swipe-button.js, референс animata swipe-button):
 // содержимое уезжает вверх, снизу въезжают копия и фон ховера --swipe-bg.
 // Цвет ховера задаётся у кнопки переменной --swipe-bg (вместо смены background-color).
+// По UI kit ховер у всех кнопок и иконок — акцентный фон и светлый текст: это значения по умолчанию.
+// Въезжающая копия красится в --swipe-fg, картинки-иконки в ней — фильтром --swipe-img-filter.
 $swipe-transition: 0.3s ease-in-out;
 
 // :where — нулевая специфичность, чтобы не перебить position: absolute у кнопок
@@ -20,7 +22,7 @@ $swipe-transition: 0.3s ease-in-out;
     position: absolute;
     inset: 0;
     z-index: -1;
-    background-color: var(--swipe-bg, transparent);
+    background-color: var(--swipe-bg, var(--color-accent));
     border-radius: inherit;
     transform: translateY(100%);
     transition: transform $swipe-transition;
@@ -43,7 +45,17 @@ $swipe-transition: 0.3s ease-in-out;
   }
 
   &__label--clone {
+    color: var(--swipe-fg, var(--color-fg-light));
     transform: translateY(var(--swipe-shift, 100%));
+
+    img {
+      filter: var(--swipe-img-filter, none);
+    }
+  }
+
+  // Неподвижные элементы (бейдж корзины) перекрашиваются вместе с фоном
+  [data-swipe-static] {
+    transition: color $swipe-transition;
   }
 
   @mixin swipe-active {
@@ -57,6 +69,10 @@ $swipe-transition: 0.3s ease-in-out;
 
     .swipe__label--clone {
       transform: none;
+    }
+
+    [data-swipe-static] {
+      color: var(--swipe-fg, var(--color-fg-light));
     }
   }
 

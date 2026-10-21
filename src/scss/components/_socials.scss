@@ -1,16 +1,18 @@
 @use '../base' as *;
 
+// Подложка иконки — фон ссылки (не в SVG), чтобы на ховере под иконку въезжал акцентный фон (swipe, UI kit)
 .socials {
   display: flex;
   gap: rem(8);
 
   &__link {
-    display: block;
-    transition: opacity $transition;
-
-    @include hover {
-      opacity: 0.8;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(24);
+    height: rem(24);
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 1.5px;
 
     img {
       width: rem(24);
@@ -18,8 +20,15 @@
     }
   }
 
-  &--large &__link img {
+  &--large &__link {
     width: rem(32);
     height: rem(32);
+    background-color: var(--color-fg-soft);
+    border-radius: 2px;
+
+    img {
+      width: rem(32);
+      height: rem(32);
+    }
   }
 }

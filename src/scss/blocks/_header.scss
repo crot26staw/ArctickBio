@@ -11,9 +11,6 @@
   --header-pill-bg-hover: rgba(255, 255, 255, 0.1);
   --header-btn-bg: rgba(255, 255, 255, 0.1);
   --header-btn-bg-hover: rgba(255, 255, 255, 0.2);
-  // Цвет, въезжающий при ховере (swipe) поверх фона плашки/кнопки
-  --header-pill-swipe: rgba(255, 255, 255, 0.1);
-  --header-btn-swipe: rgba(255, 255, 255, 0.11);
   --header-logo: var(--color-fg-light);
 
   position: fixed;
@@ -25,7 +22,6 @@
   &.is-scrolled {
     --header-pill-bg: rgba(255, 255, 255, 0.1);
     --header-pill-bg-hover: rgba(255, 255, 255, 0.2);
-    --header-pill-swipe: rgba(255, 255, 255, 0.11);
   }
 
   &[data-theme='light'] {
@@ -34,9 +30,8 @@
     --header-pill-bg-hover: var(--color-bg-light);
     --header-btn-bg: var(--color-white);
     --header-btn-bg-hover: var(--color-bg-light);
-    --header-pill-swipe: var(--color-bg-light);
-    --header-btn-swipe: var(--color-bg-light);
     --header-logo: var(--color-fg);
+    --header-badge: var(--color-fg);
   }
 
   &__inner {
@@ -70,10 +65,9 @@
     }
   }
 
-  // Общий вид плашек: пункты меню и телефон
+  // Общий вид плашек: пункты меню и телефон. Ховер — swipe с акцентным фоном (UI kit, components/_swipe.scss)
   &__menu a,
   &__phone {
-    --swipe-bg: var(--header-pill-swipe);
     color: var(--header-fg);
     white-space: nowrap;
     background-color: var(--header-pill-bg);
@@ -117,7 +111,6 @@
   }
 
   &__icon-btn {
-    --swipe-bg: var(--header-btn-swipe);
     position: relative;
     display: flex;
     align-items: center;
@@ -156,10 +149,8 @@
     font-size: rem(8);
     line-height: 1;
     letter-spacing: rem(0.4);
+    // Цвет через переменную: на ховере бейдж перекрашивает .swipe (селектор с низкой специфичностью не мешает)
+    color: var(--header-badge, inherit);
     border-radius: 1px;
-  }
-
-  &[data-theme='light'] &__cart-count {
-    color: var(--color-fg);
   }
 }

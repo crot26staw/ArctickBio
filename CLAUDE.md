@@ -103,7 +103,11 @@ src/
                    reviews: заголовок → кнопка → карточки, видные на экране — [data-reveal-sequence-children="visible"])
                    swipe-button.js (ховер всех кнопок как animata swipe-button: содержимое уезжает вверх, снизу въезжают копия и фон --swipe-bg;
                    [data-js-swipe] на кнопке, [data-js-swipe-group] — все ссылки внутри (меню), [data-swipe-trigger] — ховер предка,
-                   [data-swipe-static] — не двигать (бейдж корзины). Стили components/_swipe.scss. НОВЫЕ КНОПКИ: ставить data-js-swipe и --swipe-bg вместо hover-фона;
+                   [data-swipe-static] — не двигать (бейдж корзины), на ховере перекрашивается. Стили components/_swipe.scss.
+                   Цвета ховера по UI kit (Pky7FDIkoyGiepPQCMknnV, нода 16796:25708): у ВСЕХ кнопок и иконок-кнопок фон --swipe-bg = accent, текст копии --swipe-fg = fg-light
+                   (это значения по умолчанию, у кнопок их не переопределять); тёмная иконка-<img> белеет через --swipe-img-filter (icon-btn--light).
+                   Подложка иконки — фон кнопки в CSS, не прямоугольник в SVG (иначе синий фон не виден: соцсети, маркеры «Процесса»).
+                   НОВЫЕ КНОПКИ: ставить data-js-swipe вместо hover-фона;
                    исключение по просьбе пользователя — плюс/минус в FAQ без эффекта)
                    roll-text.js (ховер ТЕКСТОВЫХ ССЫЛОК как animata roll-text, stagger по буквам: у каждой буквы две копии, стопка уезжает вверх
                    на строку, буквы по очереди (20ms, 450ms, WAAPI); доигрывает до конца. [data-js-roll] на ссылке, [data-js-roll-group] — все ссылки внутри.

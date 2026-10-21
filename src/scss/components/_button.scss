@@ -19,22 +19,18 @@
     color $transition,
     opacity $transition;
 
-  // Ховер — swipe-эффект (components/_swipe.scss): --swipe-bg въезжает снизу
+  // Ховер — swipe-эффект (components/_swipe.scss): снизу въезжает акцентный фон со светлым текстом (UI kit)
   &--accent {
-    --swipe-bg: #082a9b;
     color: var(--color-white);
     background-color: var(--color-accent);
   }
 
   &--light {
-    --swipe-bg: var(--color-bg-light);
     color: var(--color-fg);
     background-color: var(--color-white);
   }
 
-  // Поверх полупрозрачного фона 0.1 даёт итоговые 0.16, как в прежнем ховере
   &--neutral {
-    --swipe-bg: rgba(1, 39, 62, 0.067);
     color: var(--color-fg);
     background-color: var(--color-neutral);
   }
@@ -51,7 +47,6 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  --swipe-bg: #082a9b;
   color: var(--color-white);
   background-color: var(--color-accent);
   transition:
@@ -82,8 +77,9 @@
     }
   }
 
+  // Тёмная иконка-картинка на ховере становится белой
   &--light {
-    --swipe-bg: var(--color-bg-light);
+    --swipe-img-filter: brightness(0) invert(1);
     background-color: var(--color-white);
   }
 }

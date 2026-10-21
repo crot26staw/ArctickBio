@@ -57,7 +57,6 @@
     white-space: nowrap;
     border-radius: var(--radius-s);
     translate: -50% -50%; // не transform: его занимает GSAP (следование за курсором, cursor-follow.js)
-    --swipe-bg: #082a9b;
     z-index: 1; // над .video__inner (он во всю высоту секции и перекрывал кнопку)
 
     img {

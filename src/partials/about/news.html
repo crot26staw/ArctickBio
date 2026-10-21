@@ -1,0 +1,24 @@
+<section class="news" data-header-theme="light">
+  <h2 class="section-title" data-js-title-reveal>Новости</h2>
+
+  <div class="news__inner container">
+    <!-- Слайдер с автопролистыванием (js/modules/news-slider.js). Пока в макете одна новость — она повторена -->
+    <div class="news__slider swiper" data-js-news-slider>
+      <ul class="news__list swiper-wrapper">
+        <include src="partials/news-item.html" data='{"link": "#", "title": "Представили свою продукцию в Российско-Китайском ЭКСПО, в Харбине", "excerpt": "Наш коллаген — на международной арене! Приняли участие в Российско-Китайском ЭКСПО в Харбине и представили свою продукцию гостям и партнерам из двух стран", "author": "Алина Дмитриева", "author_role": "CEO", "author_img": "./assets/images/news-author.webp", "date": "18 мая, 2026", "datetime": "2026-05-18", "img": "./assets/images/news-1.webp", "img_mobile": "./assets/images/news-1-mobile.webp"}'></include>
+        <include src="partials/news-item.html" data='{"link": "#", "title": "Представили свою продукцию в Российско-Китайском ЭКСПО, в Харбине", "excerpt": "Наш коллаген — на международной арене! Приняли участие в Российско-Китайском ЭКСПО в Харбине и представили свою продукцию гостям и партнерам из двух стран", "author": "Алина Дмитриева", "author_role": "CEO", "author_img": "./assets/images/news-author.webp", "date": "18 мая, 2026", "datetime": "2026-05-18", "img": "./assets/images/news-1.webp", "img_mobile": "./assets/images/news-1-mobile.webp"}'></include>
+        <include src="partials/news-item.html" data='{"link": "#", "title": "Представили свою продукцию в Российско-Китайском ЭКСПО, в Харбине", "excerpt": "Наш коллаген — на международной арене! Приняли участие в Российско-Китайском ЭКСПО в Харбине и представили свою продукцию гостям и партнерам из двух стран", "author": "Алина Дмитриева", "author_role": "CEO", "author_img": "./assets/images/news-author.webp", "date": "18 мая, 2026", "datetime": "2026-05-18", "img": "./assets/images/news-1.webp", "img_mobile": "./assets/images/news-1-mobile.webp"}'></include>
+      </ul>
+
+      <!-- Стрелки — поверх фото (правая колонка) -->
+      <div class="news__nav">
+        <button class="news__arrow news__arrow--prev" type="button" aria-label="Предыдущая новость" data-js-news-slider-prev data-js-swipe>
+          <img src="./assets/icons/icn-arrow-back.svg" alt="" width="24" height="24">
+        </button>
+        <button class="news__arrow news__arrow--next" type="button" aria-label="Следующая новость" data-js-news-slider-next data-js-swipe>
+          <img src="./assets/icons/icn-arrow-back.svg" alt="" width="24" height="24">
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

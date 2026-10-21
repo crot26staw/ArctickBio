@@ -1,0 +1,179 @@
+@use '../base' as *;
+
+// «Новости» (макет 18517:126642): слайдер с автопролистыванием и стрелками на фото (news-slider.js)
+.news {
+  display: flex;
+  flex-direction: column;
+  gap: rem(75);
+  align-items: center;
+  padding-block: rem(120);
+
+  // Мобилка: макет 18165:55666 — фото сверху, затем заголовок и автор
+  @include media(mobile) {
+    gap: rem(32);
+    padding-block: rem(75);
+  }
+
+  // Стрелки — поверх правой колонки (фото)
+  &__nav {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: calc((100% - #{rem(50)}) / 2);
+    padding-inline: rem(16);
+    pointer-events: none;
+
+    // Планшет: фото во всю ширину, под заголовком новости (на 128 от верха слайда, высота 500)
+    @include media(tablet) {
+      top: rem(128);
+      bottom: auto;
+      width: 100%;
+      height: rem(500);
+    }
+
+    @include media(mobile) {
+      top: 0;
+      height: rem(439);
+    }
+  }
+
+  &__arrow {
+    display: flex;
+    padding: rem(10);
+    border-radius: var(--radius-s);
+    pointer-events: auto;
+
+    img {
+      width: rem(24);
+      height: rem(24);
+    }
+
+    &--next img {
+      transform: scaleX(-1);
+    }
+  }
+}
+
+.news-item {
+  display: flex;
+  gap: rem(50);
+  height: rem(473);
+  // Слайды fade лежат друг на друге — фон, чтобы не просвечивали
+  background-color: var(--color-bg-light);
+
+  // Планшет: колонкой — заголовок, фото, автор с датой (макет 18165:54076)
+  @include media(tablet) {
+    flex-direction: column;
+    gap: rem(32);
+    height: auto;
+  }
+
+  @include media(mobile) {
+    gap: rem(16);
+  }
+
+  &__text {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 1px;
+    padding-block: rem(32);
+
+    @include media(tablet) {
+      display: contents;
+    }
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+  }
+
+  &__title {
+    @include h3;
+    max-width: rem(500);
+
+    @include media(tablet) {
+      max-width: rem(580);
+    }
+
+    @include media(mobile) {
+      max-width: rem(291);
+      font-size: rem(18);
+      line-height: 1.1;
+    }
+  }
+
+  &__excerpt {
+    @include body-m;
+    color: var(--color-fg-muted);
+  }
+
+  &__meta {
+    display: flex;
+    gap: rem(32);
+    align-items: center;
+
+    @include media(tablet) {
+      order: 2;
+    }
+  }
+
+  &__author {
+    display: flex;
+    gap: rem(12);
+    align-items: center;
+  }
+
+  &__author-img {
+    width: rem(54);
+    height: rem(56);
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  &__author-name {
+    @include body-m-strong;
+    margin-bottom: rem(2);
+    color: var(--color-black);
+  }
+
+  &__author-role {
+    @include body-m;
+    color: var(--color-fg-muted);
+  }
+
+  &__date {
+    @include body-m;
+    color: var(--color-fg-soft);
+  }
+
+  &__picture {
+    flex: 1 0 0;
+    min-width: 1px;
+
+    @include media(tablet) {
+      flex: none;
+      order: 1;
+      height: rem(500);
+    }
+
+    @include media(mobile) {
+      order: -1;
+      height: rem(439);
+    }
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

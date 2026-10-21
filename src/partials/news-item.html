@@ -1,0 +1,22 @@
+<li class="news-item swiper-slide">
+  <div class="news-item__text">
+    <div class="news-item__header">
+      <h3 class="news-item__title"><a href="{{ link }}">{{ title }}</a></h3>
+      <p class="news-item__excerpt">{{ excerpt }}</p>
+    </div>
+    <div class="news-item__meta">
+      <div class="news-item__author">
+        <img class="news-item__author-img" src="{{ author_img }}" alt="" width="108" height="112" loading="lazy">
+        <div>
+          <p class="news-item__author-name">{{ author }}</p>
+          <p class="news-item__author-role">{{ author_role }}</p>
+        </div>
+      </div>
+      <time class="news-item__date" datetime="{{ datetime }}">{{ date }}</time>
+    </div>
+  </div>
+  <picture class="news-item__picture">
+    <source media="(max-width: 767px)" srcset="{{ img_mobile }}" width="710" height="878">
+    <img class="news-item__img" src="{{ img }}" alt="" width="1290" height="946" loading="lazy">
+  </picture>
+</li>

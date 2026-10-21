@@ -8,6 +8,7 @@ import { initFakeGlass } from './modules/fake-glass.js';
 import { initTitleReveal } from './modules/title-reveal.js';
 import { initSachetJourney } from './modules/sachet-journey.js';
 import { initProductSliders } from './modules/product-slider.js';
+import { initNewsSliders } from './modules/news-slider.js';
 import { initResearch } from './modules/research.js';
 import { initRibbons } from './modules/ribbon.js';
 import { initStepPopups } from './modules/step-popup.js';
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTitleReveal();
   initSachetJourney();
   initProductSliders();
+  initNewsSliders();
   initResearch();
   initRibbons();
   initStepPopups();

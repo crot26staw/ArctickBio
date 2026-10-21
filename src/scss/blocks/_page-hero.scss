@@ -1,0 +1,51 @@
+@use '../base' as *;
+
+// Первый экран внутренних страниц: фото с затемнением и заголовок внизу слева (О компании — макет 18517:126614)
+.page-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: rem(700);
+  overflow: hidden;
+  color: var(--color-white);
+  background-color: var(--color-black);
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    img {
+      @include cover-img;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &__inner {
+    position: relative;
+    padding-bottom: rem(50);
+
+    // Мобилка: заголовок с отступом 20, как в макете 18165:55640
+    @include media(mobile) {
+      padding-inline: rem(20);
+    }
+  }
+
+  &__title {
+    @include h1;
+    max-width: rem(579);
+
+    @include media(mobile) {
+      max-width: rem(330);
+      font-size: rem(36);
+      letter-spacing: rem(-1);
+    }
+  }
+}

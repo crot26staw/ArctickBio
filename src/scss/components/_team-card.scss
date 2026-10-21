@@ -1,0 +1,51 @@
+@use '../base' as *;
+
+// Карточка сотрудника (макет 18731:23538)
+.team-card {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: rem(8);
+  width: rem(400);
+  padding: rem(16);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-m);
+
+  // Мобилка: фото 298×372.5 (макет 18731:23949)
+  @include media(mobile) {
+    width: rem(330);
+  }
+
+  &__img {
+    width: 100%;
+    height: rem(460);
+    object-fit: cover;
+    border-radius: var(--radius-s);
+
+    @include media(mobile) {
+      height: rem(372.5);
+      border-radius: 1px;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+  }
+
+  &__job {
+    @include body-s;
+    letter-spacing: 0;
+    color: var(--color-fg-soft);
+  }
+
+  &__name {
+    @include body-m-strong;
+  }
+
+  &__exp {
+    @include body-m;
+    color: var(--color-fg-muted);
+  }
+}

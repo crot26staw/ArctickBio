@@ -1,0 +1,104 @@
+@use '../base' as *;
+
+// «Сделано людьми Севера» на странице О компании (макет 18517:126617)
+.company-intro {
+  display: flex;
+  gap: rem(50);
+  height: rem(900);
+  padding-block: rem(120);
+
+  // Планшет: заголовок и текст над фото, маленького фото и абзаца нет (макет 18165:54051)
+  @include media(tablet) {
+    flex-direction: column;
+    height: auto;
+  }
+
+  // Мобилка: заголовок и текст по центру, фото 355×355 (макет 18165:55644)
+  @include media(mobile) {
+    padding-block: rem(75);
+  }
+
+  &__content {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 1px;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: rem(30);
+
+    @include media(tablet) {
+      gap: rem(32);
+    }
+
+    @include media(mobile) {
+      gap: rem(8);
+      text-align: center;
+    }
+  }
+
+  &__title {
+    @include h2;
+    max-width: rem(430);
+
+    @include media(tablet) {
+      max-width: none;
+    }
+  }
+
+  &__lead {
+    @include display-s;
+    color: var(--color-fg-muted);
+
+    @include media(mobile) {
+      @include body-m;
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    gap: rem(100);
+    align-items: flex-end;
+
+    @include media(tablet) {
+      display: none;
+    }
+  }
+
+  &__img-small {
+    flex-shrink: 0;
+    width: rem(250);
+    height: rem(320);
+    object-fit: cover;
+  }
+
+  &__text {
+    @include body-m;
+    width: rem(326);
+    color: var(--color-fg-muted);
+  }
+
+  &__picture {
+    flex: 1 0 0;
+    min-width: 1px;
+
+    @include media(tablet) {
+      flex: none;
+      height: rem(600);
+    }
+
+    @include media(mobile) {
+      height: rem(355);
+    }
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

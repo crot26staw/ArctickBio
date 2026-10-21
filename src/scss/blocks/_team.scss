@@ -1,0 +1,47 @@
+@use '../base' as *;
+
+// «Реальные сотрудники производства» (макет 18517:126627). Лента листается зажатием/свайпом (drag-slider.js)
+.team {
+  display: flex;
+  flex-direction: column;
+  gap: rem(53);
+  padding-block: rem(120);
+
+  // Мобилка: макет 18165:55651
+  @include media(mobile) {
+    gap: rem(32);
+    padding-block: rem(75);
+  }
+
+  &__title {
+    @include h2;
+    max-width: rem(676);
+
+    @include media(mobile) {
+      text-align: center;
+    }
+  }
+
+  &__viewport {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  // Слева в макете отступ 398 — лента начинается правее заголовка
+  &__list {
+    display: flex;
+    gap: rem(16);
+    width: max-content;
+    padding-right: $container-padding;
+    padding-left: rem(398);
+    @include drag-track;
+
+    @include media(tablet) {
+      padding-inline: $container-padding-tablet;
+    }
+
+    @include media(mobile) {
+      padding-inline: $container-padding-mobile;
+    }
+  }
+}

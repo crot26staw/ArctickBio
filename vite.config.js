@@ -8,6 +8,7 @@ const root = fileURLToPath(new URL('./src', import.meta.url));
 // Каждая новая страница добавляется сюда
 const pages = {
   index: 'index.html',
+  about: 'about.html',
 };
 
 export default defineConfig({

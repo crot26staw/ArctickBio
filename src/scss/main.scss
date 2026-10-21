@@ -6,6 +6,7 @@
 // Vendor (до компонентов, чтобы наши стили их перекрывали)
 @use 'swiper/css';
 @use 'swiper/css/effect-fade';
+@use 'lenis/dist/lenis.css';
 
 // Components
 @use 'components/button';
@@ -21,12 +22,14 @@
 @use 'blocks/header';
 @use 'blocks/footer';
 @use 'blocks/hero';
+@use 'blocks/cloud-veil';
 @use 'blocks/about';
 @use 'blocks/product-scene';
 @use 'blocks/sachet-journey';
 @use 'blocks/catalog';
 @use 'blocks/compound';
 @use 'blocks/video';
+@use 'blocks/overlap-stack';
 @use 'blocks/research';
 @use 'blocks/production';
 @use 'blocks/comparison';

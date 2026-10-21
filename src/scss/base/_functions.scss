@@ -6,3 +6,22 @@ $root-font-size: 16;
 @function rem($px) {
   @return math.div($px, $root-font-size) * 1rem;
 }
+
+// Резиновый rem: на ширине макета 1rem = 16px, на других ширинах — пропорционально.
+// fluid-root-size(1440) => 1.1111vw
+@function fluid-root-size($design-width) {
+  @return math.div(100vw * $root-font-size, $design-width);
+}
+
+// Десктоп: min() из трёх веток —
+// до 1440: 100vw / 1440 * 16 (1.1111vw);
+// 1440–$fluid-max-width: 16px + прирост окна * $fluid-growth;
+// шире: значение на $fluid-max-width.
+@function fluid-root-desktop($design-width: 1440, $growth: 0.5, $max-width: 1920) {
+  $base: $root-font-size * 1px;
+  $proportional: fluid-root-size($design-width);
+  $slow-vw: $proportional * $growth;
+  $slow-px: $base * (1 - $growth);
+  $max: $base + math.div(($max-width - $design-width) * $root-font-size * $growth, $design-width) * 1px;
+  @return min(#{$proportional}, calc(#{$slow-px} + #{$slow-vw}), #{$max});
+}

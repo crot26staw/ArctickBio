@@ -5,7 +5,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: rem(800);
+  height: 100svh;
+  min-height: rem(800);
   padding-top: rem(120);
   overflow: hidden;
   background-color: var(--color-bg-light);

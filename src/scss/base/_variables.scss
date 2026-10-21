@@ -1,17 +1,31 @@
+@use 'functions' as *;
+
 // Шрифты
 $font-involve: 'Involve', 'Arial', sans-serif;
 $font-text: 'Wix Madefor Text', 'Arial', sans-serif;
 $font-display: 'Wix Madefor Display', 'Arial', sans-serif;
 
 // Сетка
-$container-width: 1440px;
-$container-padding: 50px;
+$container-width: rem(1440);
+$container-padding: rem(50);
 
 // Брейкпоинты (desktop-first, max-width). Макеты: 1440 / 768 / 375
 $breakpoints: (
   tablet: 1199px,
   mobile: 767px,
 );
+
+// Ширины макетов: под них масштабируется rem (см. html в _global.scss)
+$design-widths: (
+  desktop: 1440,
+  tablet: 768,
+  mobile: 375,
+);
+
+// Шире макета 1440 вёрстка растёт медленнее окна ($fluid-growth: 0 — не растёт, 1 — пропорционально)
+// и перестаёт расти на $fluid-max-width
+$fluid-growth: 0.5;
+$fluid-max-width: 1920;
 
 // Анимации
 $transition: 0.3s ease;

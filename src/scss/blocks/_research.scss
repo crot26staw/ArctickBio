@@ -2,7 +2,7 @@
 
 .research {
   display: flex;
-  height: rem(800);
+  height: 100svh;
   overflow: hidden;
   background-color: #e7eff1;
 
@@ -54,9 +54,13 @@
   }
 }
 
-// Список-аккордеон: при наведении пункт раскрывается, остальные сворачиваются в строку (research.js).
-// Высота анимируется через grid-template-rows 0fr ↔ 1fr
-$research-ease: 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+// Список-аккордеон: пункты раскрываются по скроллу, остальные сворачиваются в строку (research.js).
+// Высота анимируется через grid-template-rows 0fr ↔ 1fr (плавный in-out). Уходящее содержимое гаснет быстро,
+// появляющееся — проявляется с задержкой и чуть всплывает, когда высота уже раскрывается
+$research-height: 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+$research-fade-out: 0.3s ease;
+$research-fade-in: 0.6s ease 0.3s;
+$research-rise: 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
 
 .research-list {
   width: rem(600);
@@ -91,31 +95,55 @@ $research-ease: 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   // Раскрывающаяся часть (скрыта у свёрнутого пункта) и сворачивающаяся (подпись строки)
+  // Переходы «скрыть» — в базовом состоянии, «показать» — в состоянии, куда переходим
   &__expand,
   &__collapse {
     display: grid;
-    transition:
-      grid-template-rows $research-ease,
-      opacity $research-ease;
   }
 
   &__expand {
     grid-template-rows: 0fr;
     opacity: 0;
+    transition:
+      grid-template-rows $research-height,
+      opacity $research-fade-out;
   }
 
   &__collapse {
     grid-template-rows: 1fr;
+    opacity: 1;
+    transition:
+      grid-template-rows $research-height,
+      opacity $research-fade-in;
   }
 
   &__item.is-active &__expand {
     grid-template-rows: 1fr;
     opacity: 1;
+    transition:
+      grid-template-rows $research-height,
+      opacity $research-fade-in;
   }
 
   &__item.is-active &__collapse {
     grid-template-rows: 0fr;
     opacity: 0;
+    transition:
+      grid-template-rows $research-height,
+      opacity $research-fade-out;
+  }
+
+  // Содержимое раскрывшегося пункта всплывает снизу
+  &__details,
+  &__media {
+    transform: translateY(#{rem(16)});
+    transition: transform $research-fade-out;
+  }
+
+  &__item.is-active &__details,
+  &__item.is-active &__media {
+    transform: none;
+    transition: transform $research-rise;
   }
 
   &__inner {
@@ -164,7 +192,13 @@ $research-ease: 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 
   @media (prefers-reduced-motion: reduce) {
     &__expand,
-    &__collapse {
+    &__collapse,
+    &__details,
+    &__media,
+    &__item.is-active &__expand,
+    &__item.is-active &__collapse,
+    &__item.is-active &__details,
+    &__item.is-active &__media {
       transition: none;
     }
   }

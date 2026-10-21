@@ -14,17 +14,30 @@
 
   <main class="main">
     <include src="partials/home/hero.html"></include>
+    <!-- Внешняя обёртка: в конце закрепляется, и catalog наезжает на product-scene (js/modules/sachet-journey.js, фаза 3).
+         Отдельный элемент — второй pin на .sachet-journey ломает её первый pin -->
+    <div class="sachet-journey-cover" data-js-sachet-journey-cover>
     <!-- Стик «перелетает» из блока about в пачку product-scene при скролле (js/modules/sachet-journey.js) -->
     <div class="sachet-journey" data-js-sachet-journey>
+      <!-- Облачная завеса: поднимается над hero, about выходит из неё (js/modules/hero-cover.js) -->
+      <div class="cloud-veil" aria-hidden="true" data-js-cloud-veil>
+        <img class="cloud-veil__clouds" src="./assets/images/about-clouds.webp" alt="" width="648" height="405" loading="lazy">
+        <div class="cloud-veil__fill"></div>
+        <div class="cloud-veil__theme" data-header-theme="light"></div>
+      </div>
       <include src="partials/home/about.html"></include>
       <include src="partials/home/product-scene.html"></include>
       <div class="sachet-journey__sachet" data-js-sachet-journey-item>
         <img src="./assets/images/sachet.webp" alt="" width="820" height="1024" loading="lazy" data-js-sachet-journey-img>
       </div>
     </div>
+    </div>
     <include src="partials/home/catalog.html"></include>
-    <include src="partials/home/compound.html"></include>
-    <include src="partials/home/video.html"></include>
+    <!-- video наезжает сверху на закреплённый compound (scss/blocks/_overlap-stack.scss) -->
+    <div class="overlap-stack">
+      <include src="partials/home/compound.html"></include>
+      <include src="partials/home/video.html"></include>
+    </div>
     <include src="partials/home/research.html"></include>
     <include src="partials/home/production.html"></include>
     <include src="partials/home/comparison.html"></include>

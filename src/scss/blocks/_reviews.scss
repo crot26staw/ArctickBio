@@ -1,6 +1,9 @@
 @use '../base' as *;
 
 .reviews {
+  // Размытая копия фона для «стекла» карточек (blur 16px, fake-glass.js)
+  --glass-image: url('../../assets/images/review-bg-blur.webp');
+
   position: relative;
   display: flex;
   flex-direction: column;

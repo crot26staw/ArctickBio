@@ -1,8 +1,12 @@
 @use '../base' as *;
 
+// На весь экран: закрепляется, пока выезжают карточки (js/modules/cards-rise.js)
 .benefits {
+  // Размытая копия фона для «стекла» карточек (blur 14px, fake-glass.js)
+  --glass-image: url('../../assets/images/benefits-bg-blur.webp');
+
   position: relative;
-  height: rem(800);
+  height: 100svh;
   overflow: hidden;
   color: var(--color-white);
   background-color: var(--color-black);
@@ -41,6 +45,7 @@
   text-align: center;
   background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.3));
   backdrop-filter: blur(14.05px);
+  @include fake-glass(linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.3)));
 
   &__icon {
     width: rem(80);

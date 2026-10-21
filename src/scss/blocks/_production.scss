@@ -1,12 +1,15 @@
 @use '../base' as *;
 
-// Процесс изготовления. Карточки шагов чередуются по высоте (нечётные выше, чётные ниже)
+// Процесс изготовления, на весь экран. Карточки шагов чередуются по высоте (нечётные выше, чётные ниже).
+// Шагов 16 — лента шире экрана; секция закреплена, лента уезжает влево по скроллу (js/modules/ribbon.js).
+// Макеты ленты: 18627:75508, 18627:75681, 18627:75748, 18627:75817 (по 4 шага на экран)
 .production {
   display: flex;
   flex-direction: column;
   gap: rem(75);
   align-items: center;
-  padding-block: rem(120);
+  justify-content: center;
+  height: 100svh;
   overflow: hidden;
   color: var(--color-fg-light);
   background-color: var(--color-bg-dark);
@@ -29,11 +32,22 @@
     transform: translateX(-50%);
   }
 
+  // Шаг ленты — 360 (карточка 260 + линия 100), по краям 50: на экран 1440 — ровно 4 шага, как в макете
   &__steps {
     display: flex;
-    justify-content: space-between;
+    flex-shrink: 0;
+    align-self: flex-start;
+    width: max-content;
     height: rem(428);
+    padding-inline: rem(50);
     counter-reset: step;
+    will-change: transform;
+
+    // Без анимации ленту листают вручную
+    @media (prefers-reduced-motion: reduce) {
+      width: 100%;
+      overflow-x: auto;
+    }
   }
 }
 
@@ -94,31 +108,49 @@
     overflow: hidden;
   }
 
+  // По умолчанию картинка растянута на весь блок (fill: шаги 1, 3, 14)
   &__img {
     position: absolute;
-    max-width: none;
-  }
-
-  // Каждая картинка обрезана в макете по-своему; 1 и 3 растянуты на весь блок (fill)
-  &--1 &__img,
-  &--3 &__img {
     inset: 0;
     width: 100%;
+    max-width: none;
     height: 100%;
   }
 
-  &--2 &__img {
-    top: 14.18%;
-    left: -3.65%;
-    width: 106.87%;
-    height: 71.25%;
+  // Заливка из макета у каждого шага своя: cover, contain или кадрирование (crop)
+  &--6 &__img,
+  &--10 &__img,
+  &--11 &__img {
+    object-fit: cover;
   }
 
-  &--4 &__img {
-    top: 9.93%;
-    left: -6.9%;
-    width: 113.9%;
-    height: 75.93%;
+  &--8 &__img,
+  &--13 &__img,
+  &--16 &__img {
+    object-fit: contain;
+  }
+
+  @each $step, $top, $left, $width, $height in (
+    (2, 14.18%, -3.65%, 106.87%, 71.25%),
+    (4, 9.93%, -6.9%, 113.9%, 75.93%),
+    (5, 7.38%, -13.64%, 127.5%, 85%),
+    (7, 10.68%, -10.34%, 117.84%, 78.56%),
+    (9, 7.9%, -18.09%, 126.68%, 84.46%),
+    (12, 6.64%, -14.37%, 129.87%, 86.58%),
+    (15, 11.84%, -6.93%, 114.16%, 76.1%)
+  ) {
+    &--#{$step} &__img {
+      top: $top;
+      left: $left;
+      width: $width;
+      height: $height;
+    }
+  }
+
+  // В макете картинки шагов 15 и 16 отражены по горизонтали
+  &--15 &__img-wrap,
+  &--16 &__img-wrap {
+    transform: scaleX(-1);
   }
 
   // Синий луч и маркер поверх картинки

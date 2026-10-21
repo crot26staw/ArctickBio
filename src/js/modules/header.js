@@ -1,3 +1,5 @@
+import { ScrollTrigger } from './motion.js';
+
 const SCROLLED_CLASS = 'is-scrolled';
 const SCROLL_OFFSET = 10;
 
@@ -19,7 +21,8 @@ export function initHeader() {
 
     // Точка проверки — середина шапки
     const probe = header.offsetHeight / 2;
-    const current = sections.find((section) => {
+    // findLast: элемент ниже по DOM лежит поверх (облачная завеса и about — над hero)
+    const current = sections.findLast((section) => {
       const { top, bottom } = section.getBoundingClientRect();
       return top <= probe && bottom > probe;
     });
@@ -37,4 +40,6 @@ export function initHeader() {
   update();
   window.addEventListener('scroll', requestUpdate, { passive: true });
   window.addEventListener('resize', requestUpdate);
+  // Пины и анимации GSAP (облачная завеса, hero) меняют позиции секций без события scroll
+  ScrollTrigger.addEventListener('refresh', requestUpdate);
 }

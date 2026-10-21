@@ -7,10 +7,12 @@ gsap.registerPlugin(SplitText);
  * Анимация заголовков «mask reveal up» (референс: animata.design/docs/text/mask-reveal-up):
  * заголовок бьётся на строки, строки по очереди поднимаются снизу, проявляются и теряют размытие.
  * Заголовки первого экрана анимируются сразу, остальные — при появлении во вьюпорте (один раз).
- * Разметка: [data-js-title-reveal].
+ * Разметка: [data-js-title-reveal]; подходит и для абзацев.
+ * [data-title-reveal-start] — свой момент запуска (start ScrollTrigger), по умолчанию 'top 85%'.
+ *   В about — 'top 20%': иначе анимация проходит под облачной завесой (hero-cover.js).
  */
 const ENTER = {
-  duration: 0.55,
+  duration: 1.72,
   stagger: 0.065,
   y: 17,
   blur: 6,
@@ -56,7 +58,7 @@ export function initTitleReveal() {
 
           return ScrollTrigger.create({
             trigger: title,
-            start: 'top 85%',
+            start: title.dataset.titleRevealStart || 'top 85%',
             once: true,
             onEnter: () => {
               title.dataset.revealed = 'true';

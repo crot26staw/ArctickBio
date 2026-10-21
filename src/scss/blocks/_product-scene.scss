@@ -1,9 +1,10 @@
 @use '../base' as *;
 
-// Секция с открытой пачкой между камнями
+// Секция с открытой пачкой между камнями, на весь экран.
+// В конце её закрепляет sachet-journey.js, и catalog наезжает сверху (z-index в _catalog.scss)
 .product-scene {
   position: relative;
-  height: rem(800);
+  height: 100svh;
   overflow: hidden;
   background-color: var(--color-bg-light);
 

@@ -12,6 +12,11 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-m);
 
+  // На однотонном фоне (футер): размытие там не видно, а на скролле стоит дорого — без него
+  &--solid {
+    backdrop-filter: none;
+  }
+
   // Без собственного стекла — внутри слайдера, стекло даёт его рамка (hero)
   &--bare {
     background-color: transparent;

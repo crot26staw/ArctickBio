@@ -1,0 +1,41 @@
+@use '../base' as *;
+
+// Облачная завеса перехода hero → about (js/modules/hero-cover.js).
+// Высота 3 экрана: картинка облаков (прозрачный верх → облака → сплошной белый) + заливка на 2 экрана —
+// закрывает hero (он над about) и первый экран about. JS поднимает завесу быстрее скролла и растворяет её.
+.cloud-veil {
+  position: absolute;
+  top: -200svh;
+  left: 0;
+  z-index: 4; // выше карточек about (3) и летящего стика (2)
+  width: 100%;
+  height: 300svh;
+  pointer-events: none;
+  opacity: 0; // без JS / при reduced motion завесы нет
+  will-change: transform, opacity;
+
+  &__clouds {
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: 100svh;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  // Заходит под картинку на 1px, чтобы не было шва
+  &__fill {
+    height: calc(200svh + 1px);
+    margin-top: -1px;
+    background-color: var(--color-white);
+  }
+
+  // Зона, где завеса уже плотная: над ней шапка переключается на светлую тему
+  &__theme {
+    position: absolute;
+    top: 64svh; // картинка становится плотной с ~64% высоты
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+}

@@ -1,14 +1,18 @@
 import { gsap, prefersReducedMotion } from './motion.js';
 
 /**
- * Карточки выезжают снизу лесенкой с проявлением — по скроллу (scrub), как карточки в about (sachet-journey.js).
- * Разметка: контейнер [data-js-cards-rise] с карточками [data-js-cards-rise-item].
- * Старт — когда ряд карточек показывается снизу экрана, финиш — когда секция доходит до верха экрана.
+ * Появление карточек по скроллу — как в about (sachet-journey.js, фаза 1):
+ * секция доходит до верха экрана и закрепляется (pin на RISE.pin экрана),
+ * карточки по одной выезжают снизу из прозрачности, в конце — короткая пауза. Всё по скроллу (scrub).
+ * Разметка: контейнер [data-js-cards-rise] с карточками [data-js-cards-rise-item]; закрепляется ближайшая section.
  */
 
 const RISE = {
-  y: 120,
-  stagger: 0.1,
+  pin: 2.5, // длина закрепления, в экранах скролла
+  y: 300,
+  duration: 0.3,
+  stagger: 0.2,
+  pause: 0.15,
   ease: 'power2.out',
 };
 
@@ -20,18 +24,23 @@ export function initCardsRise() {
     const section = list.closest('section') ?? list;
     if (!cards.length) return;
 
-    gsap.from(cards, {
-      y: RISE.y,
-      opacity: 0,
-      stagger: RISE.stagger,
-      ease: RISE.ease,
-      scrollTrigger: {
-        trigger: list,
-        start: 'top bottom',
-        endTrigger: section,
-        end: 'top top',
-        scrub: 0.6,
-      },
-    });
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: `+=${RISE.pin * 100}%`,
+          pin: true,
+          scrub: 1,
+        },
+      })
+      .from(cards, {
+        y: RISE.y,
+        opacity: 0,
+        duration: RISE.duration,
+        stagger: RISE.stagger,
+        ease: RISE.ease,
+      })
+      .to({}, { duration: RISE.pause });
   });
 }

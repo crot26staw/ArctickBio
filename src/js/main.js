@@ -1,21 +1,31 @@
+import { initSmoothScroll } from './modules/smooth-scroll.js';
 import { initHeader } from './modules/header.js';
+import { initHeroCover } from './modules/hero-cover.js';
 import { initAccordions } from './modules/accordion.js';
 import { initDragSliders } from './modules/drag-slider.js';
+import { initFakeGlass } from './modules/fake-glass.js';
 import { initTitleReveal } from './modules/title-reveal.js';
 import { initSachetJourney } from './modules/sachet-journey.js';
 import { initProductSliders } from './modules/product-slider.js';
 import { initResearch } from './modules/research.js';
+import { initRibbons } from './modules/ribbon.js';
 import { initCardsRise } from './modules/cards-rise.js';
 import { initSwipeButtons } from './modules/swipe-button.js';
+import { initCursorFollow } from './modules/cursor-follow.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  initSmoothScroll();
   initSwipeButtons();
+  initHeroCover();
   initHeader();
   initAccordions();
   initDragSliders();
+  initFakeGlass();
   initTitleReveal();
   initSachetJourney();
   initProductSliders();
   initResearch();
+  initRibbons();
   initCardsRise();
+  initCursorFollow();
 });

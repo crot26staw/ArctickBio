@@ -1,8 +1,12 @@
 @use '../base' as *;
 
+// На весь экран; композиция из макета (высота 800) — по центру по вертикали, камни прижаты к низу
 .compound {
   position: relative;
-  height: rem(800);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100svh;
   overflow: hidden;
   background-color: var(--color-bg-light);
 
@@ -22,8 +26,10 @@
   // Сцена фиксированной ширины 1440, все элементы позиционируются от неё
   &__stage {
     position: relative;
+    flex-shrink: 0;
+    width: 100%;
     max-width: $container-width;
-    height: 100%;
+    height: rem(800);
     margin-inline: auto;
     padding-top: rem(120);
   }

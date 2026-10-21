@@ -45,6 +45,31 @@
   backdrop-filter: blur($blur);
 }
 
+// «Стекло» без живого размытия (js/modules/fake-glass.js): когда у области есть .is-fake-glass,
+// backdrop-filter выключается, а в слое ::before — тонировка $tint поверх заранее размытого фона секции
+// (картинку задаёт секция в --glass-image, выравнивание — JS в --glass-*). Без JS остаётся обычный backdrop-filter.
+@mixin fake-glass($tint) {
+  .is-fake-glass & {
+    position: relative;
+    isolation: isolate;
+    background-color: transparent;
+    background-image: none;
+    backdrop-filter: none;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        $tint,
+        var(--glass-image) var(--glass-x) var(--glass-y) / var(--glass-w) var(--glass-h) no-repeat;
+      border-radius: inherit;
+      transition: opacity $transition;
+    }
+  }
+}
+
 // ---------- Типографика (стили из Figma) ----------
 
 @mixin h1 {

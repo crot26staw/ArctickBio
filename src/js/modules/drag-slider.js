@@ -25,6 +25,9 @@ function initSlider(viewport) {
     gsap.set(track, { x: (minX + maxX) / 2 });
   };
 
+  // Сообщить о сдвиге ленты (fake-glass.js выравнивает по нему подложку карточек)
+  const notify = () => viewport.dispatchEvent(new CustomEvent('drag-slider:update', { bubbles: true }));
+
   centerTrack();
 
   const [draggable] = Draggable.create(track, {
@@ -34,6 +37,8 @@ function initSlider(viewport) {
     inertia: !prefersReducedMotion(),
     dragClickables: true,
     zIndexBoost: false,
+    onDrag: notify,
+    onThrowUpdate: notify,
   });
 
   let resizeTimer;
@@ -43,6 +48,7 @@ function initSlider(viewport) {
       draggable.applyBounds(getBounds());
       centerTrack();
       draggable.update();
+      notify();
     }, 150);
   });
 }

@@ -89,6 +89,13 @@
     backdrop-filter: blur(15.8px);
   }
 
+  // В светлой теме плашки непрозрачные белые: размытие под ними не видно, а на каждом кадре скролла стоит дорого
+  &[data-theme='light'] &__menu a,
+  &[data-theme='light'] &__phone,
+  &[data-theme='light'] &__icon-btn {
+    backdrop-filter: none;
+  }
+
   &__logo .logo__img {
     background-color: var(--header-logo);
     transition: background-color $transition;

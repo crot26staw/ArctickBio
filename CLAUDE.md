@@ -29,12 +29,12 @@
 - Лента товаров в футере — статичный ряд или слайдер/бегущая строка (отзывы уже листаются перетаскиванием).
 - Слайдер товаров в hero: 5 вкусов из меню футера (брусника, черника, голубика, клюква, морошка), у всех одна картинка и цена 1440₽ — нужны реальные фото/цены. Точки под фото — пагинация слайдера (Swiper Pagination в `.hero__products-dots`, свои точки карточек скрыты); точек = число товаров (в макете 3).
 - «Исследования», пункт 4: ссылки на PDF-документы пока `#`, размер «8.5 MB» из макета; ховер документа в макете не задан.
-- Попапы шагов «Процесса» (`partials/production-step.html`) сделаны у всех 4 шагов, но в макете есть только попап шага 3 (заголовок «Измельчение», хотя шаг — «Сортировка»). У шагов 1, 2, 4 заголовок = название шага, описание и фото — заглушки из шага 3. Нужен реальный контент.
+- Попапы шагов «Процесса» (`partials/production-step.html`) сделаны у всех 16 шагов, но в макете есть только попап шага 3 (заголовок «Измельчение», хотя шаг — «Сортировка»). У остальных заголовок = название шага, описание и фото — заглушки из шага 3. Нужен реальный контент. Шаги 5 и 9 в макете оба называются «Подготовка», шаг 14 — та же картинка, что у шага 1.
 
 ## Стек
 - Vite 8 (multi-page): `root` = `src/`, каждая страница — отдельный `.html` в `src/`, все прописаны в `vite.config.js` → `pages`.
 - SCSS (модульный синтаксис `@use`), минификация Lightning CSS (встроена в Vite 8).
-- Ванильный JS (ES-модули), без фреймворков. GSAP для анимаций. Слайдеры — только после согласования, предпочтительно Swiper (установлен; CSS подключается в `main.scss` в секции Vendor, не из JS — иначе перебивает наши стили).
+- Ванильный JS (ES-модули), без фреймворков. GSAP для анимаций. **Lenis** — плавный скролл (`js/modules/smooth-scroll.js`, CSS `lenis/dist/lenis.css` в секции Vendor `main.scss`). Слайдеры — только после согласования, предпочтительно Swiper (установлен; CSS подключается в `main.scss` в секции Vendor, не из JS — иначе перебивает наши стили).
 - Partials — собственный плагин `vite/html-include.js` (см. ниже).
 
 ## Partials (vite/html-include.js)
@@ -62,23 +62,43 @@ src/
     main.scss    — точка входа (подключает всё через @use)
   js/
     main.js      — точка входа
-    modules/     — header.js (шапка position: fixed; is-scrolled → кнопки-плашки «стекло»;
+    modules/     — smooth-scroll.js (Lenis, инициализируется первым в main.js; синхронизирован с GSAP — см. «Анимации»),
+                   header.js (шапка position: fixed; is-scrolled → кнопки-плашки «стекло»;
                    data-theme = data-header-theme секции под шапкой: light → белые плашки, тёмный текст/лого.
                    У КАЖДОЙ новой секции ставить data-header-theme="light|dark". Макет: ноды 18115:24184, 18181:42374, 18117:25912),
                    motion.js (GSAP + ScrollTrigger + prefersReducedMotion),
+                   hero-cover.js (переход hero → about «через облака», референс white-desert.com: hero и about — по 100svh;
+                   hero закреплён pin (без pinSpacing) на 1 экран, about отодвинут на VEIL.gap (0.5 экрана, margin-top из JS);
+                   облачная завеса .cloud-veil (в .sachet-journey, картинка about-clouds.webp + белая заливка) поднимается в 1.7 раза быстрее скролла
+                   и закрывает hero, hero прячется (autoAlpha 0), about выходит из рассеивающейся завесы.
+                   Путь — 1 + gap = 1.5 экрана (настройки — VEIL в начале файла), старт/конец таймлайна числами (trigger на закреплённом hero сдвигается).
+                   header.js берёт ПОСЛЕДНИЙ [data-header-theme] под шапкой — он лежит поверх; у завесы своя метка .cloud-veil__theme),
                    accordion.js (в [data-js-accordion-group] открыт только один пункт),
                    drag-slider.js (лента, листаемая зажатием/свайпом: GSAP Draggable + Inertia)
                    product-slider.js (Swiper: товары в hero, loop + autoplay + fade, [data-js-product-slider];
                    стекло — у рамки .hero__products, карточки внутри — .mini-card--bare)
-                   research.js (список «Исследований»: открыт один пункт, по умолчанию первый; раскрывается при наведении/фокусе/тапе,
+                   research.js (список «Исследований»: открыт один пункт, по умолчанию первый; пункты сменяются по скроллу — секция закреплена (pin),
+                   на пункт STEP = 0.7 экрана, секция 100svh; фокус с клавиатуры тоже раскрывает; при reduced motion — наведение/фокус/тап,
                    анимация в CSS через grid-template-rows 0fr↔1fr. Макет состояний: 18126:48798–18126:48801)
                    number-ticker.js (счётчик 0 → data-value, как magicui number-ticker: GSAP expo.out 1.6s;
                    разметка <span data-js-number-ticker data-value="98">98</span>, в research — при появлении и при раскрытии пункта)
-                   cards-rise.js (карточки выезжают снизу лесенкой с проявлением по скроллу, как в about: y 120, stagger 0.1, scrub;
+                   cards-rise.js (появление карточек как в about: секция закрепляется у верха (pin 2.5 экрана), карточки по одной выезжают снизу
+                   из прозрачности (y 300, stagger 0.2, scrub 1), в конце пауза; секция — 100svh;
                    [data-js-cards-rise] > [data-js-cards-rise-item]; сейчас в benefits, макет 18126:51002)
+                   fake-glass.js («стекло» без живого backdrop-filter: в карточку [data-js-fake-glass-item] подкладывается заранее размытая
+                   копия фона [data-js-fake-glass-source] области [data-js-fake-glass], выровненная по нему; CSS — миксин fake-glass($tint),
+                   картинка — --glass-image у секции (размыть копию фона через sharp: сигма = blur в px, уменьшить вдвое).
+                   Сейчас — карточки reviews и benefits. Пока область в кадре, пересчёт каждый кадр тикера GSAP)
+                   ribbon.js (горизонтальная лента, которую проматывает обычный скролл: секция [data-js-ribbon] закреплена (pin),
+                   лента [data-js-ribbon-track] уезжает влево на лишнюю ширину, путь скролла = этой ширине, scrub: true.
+                   Сейчас — «Процесс изготовления», 16 шагов, макеты ленты 18627:75508/75681/75748/75817 в копии файла Pky7FDIkoyGiepPQCMknnV)
+                   cursor-follow.js (элемент [data-js-cursor-follow] плавно следует за курсором (слева сверху от него, 5px) в пределах [data-js-cursor-follow-area]
+                   (GSAP quickTo, не выходит за края, курсор ушёл — возвращается на место; только мышь, не при reduced motion).
+                   Центрирование такого элемента — `translate: -50% -50%`, не transform. Сейчас — кнопка .video__play)
                    swipe-button.js (ховер всех кнопок как animata swipe-button: содержимое уезжает вверх, снизу въезжают копия и фон --swipe-bg;
                    [data-js-swipe] на кнопке, [data-js-swipe-group] — все ссылки внутри (меню), [data-swipe-trigger] — ховер предка,
-                   [data-swipe-static] — не двигать (бейдж корзины). Стили components/_swipe.scss. НОВЫЕ КНОПКИ: ставить data-js-swipe и --swipe-bg вместо hover-фона)
+                   [data-swipe-static] — не двигать (бейдж корзины). Стили components/_swipe.scss. НОВЫЕ КНОПКИ: ставить data-js-swipe и --swipe-bg вместо hover-фона;
+                   исключение по просьбе пользователя — плюс/минус в FAQ без эффекта)
   assets/
     images/  — webp (фото), logo.png (маска логотипа)
     icons/   — svg
@@ -93,6 +113,7 @@ vite/          — плагины сборки
 - Семантичная разметка, один `h1` на страницу.
 - Цвета — CSS custom properties (`var(--color-accent)` и т.д.) из `_variables.scss`; шрифты, контейнер, брейкпоинты — SCSS-переменные.
 - Размеры — `rem(px)` (функция из `_functions.scss`), `px` — для бордеров/мелочей.
+- **Резиновый rem (px-to-rem)**: `html { font-size }` в `_global.scss` считается от ширины окна (`fluid-root-size()`, ширины макетов — `$design-widths`). 1rem = 16px на 1440 и пропорционально меньше на узких экранах. Макета под 1920 нет: выше 1440 вёрстка растёт вдвое медленнее окна (`$fluid-growth: 0.5`) и останавливается на 1920 (`$fluid-max-width`, там 1rem ≈ 18.67px, контейнер ≈ 1680px). Масштабируем только целиком — сцены с абсолютными позициями в rem иначе разъедутся. Поэтому всё, что должно масштабироваться, пишем в `rem()`, а не в `px`. Для планшета и мобилки в `_global.scss` уже лежат закомментированные строки (база 768 / 375) — включить, когда начнём адаптив.
 - Типографика — миксины из `_mixins.scss`, названия как стили в Figma: `h1`, `h2`, `h3`, `body-l`, `display-l`, `display-s`, `body-m`, `body-m-strong`, `body-s`, `body-s-strong`, `desc-l-strong`, `desc-m`, `desc-s`.
 - Контейнер `.container`: max-width 1440, отступы по 50px.
 - Сцены с абсолютным позиционированием из макета (пачка с саше, состав, процесс) — позиции в rem от «сцены» 1440.
@@ -101,6 +122,9 @@ vite/          — плагины сборки
 - Картинки: `<img>` с `alt`, `width`/`height`, `loading="lazy"` ниже первого экрана. Фото — webp (конвертировать через sharp, ресайзить под размер показа ×2), иконки — svg.
 - JS вешается на `data-js-*` атрибуты, не на БЭМ-классы.
 - Тексты берём из макета, не lorem ipsum.
+- **backdrop-filter дорогой при скролле** (видеокарта размывает фон каждого такого элемента на каждом кадре; замер — ощутимо на 120 Гц):
+  не ставить его на непрозрачные плашки и на однотонный фон (там размытие не видно — пример: шапка в светлой теме, `mini-card--solid` в футере);
+  для карточек поверх статичной фото-подложки — `fake-glass.js`.
 - **Не писать `-webkit-backdrop-filter` вручную**: Lightning CSS склеивает его с `backdrop-filter` и выкидывает непрефиксную версию — размытие пропадает. Префиксы он расставляет сам.
 
 ## Подготовка под WordPress / WooCommerce
@@ -135,9 +159,17 @@ npm run preview   — просмотр сборки
 ## Анимации
 - **GSAP** (`gsap` + ScrollTrigger), импорт через `js/modules/motion.js`. Анимации — отдельными модулями в `js/modules/`, инициализация по `data-js-*`.
 - Учитывать `prefers-reduced-motion` (`prefersReducedMotion()` из `motion.js`).
-- **Появление about** (комментарии в Figma): пока about поднимается от 80% экрана к верху, стик проявляется снизу из прозрачности, потом карточки (`data-js-sachet-journey-card`) выезжают снизу лесенкой. Всё по скроллу (scrub), фаза 1 в `sachet-journey.js`; двигает `<img>` стика, а перелёт — его обёртку.
+- **Плавный скролл — Lenis** (`smooth-scroll.js`). Крутит GSAP-тикер (`gsap.ticker` → `lenis.raf`, `lagSmoothing(0)`), на каждый кадр скролла вызывается `ScrollTrigger.update`, поэтому ScrollTrigger-анимации работают как обычно, без scrollerProxy. Скролл остаётся нативным (window), `scrollY` и событие `scroll` работают.
+  - При `prefers-reduced-motion` Lenis не включается.
+  - Программный скролл — `getLenis()?.scrollTo(target)` (не `window.scrollTo`), якорные ссылки `href="#id"` Lenis скроллит сам (`anchors: true`).
+  - Модалки/меню: `getLenis()?.stop()` при открытии, `start()` при закрытии.
+  - Блок со своим внутренним скроллом (список, попап) — атрибут `data-lenis-prevent`.
+  - Не задавать `scroll-behavior: smooth` в CSS — конфликтует с Lenis.
+- **Появление about** (комментарии в Figma + скрины пользователя): about доходит до верха экрана и закрепляется (pin всей `.sachet-journey` на `APPEAR.pin` = 2.2 экрана). Сначала стика и карточек нет; по скроллу стик проявляется снизу из фейда, затем карточки (`data-js-sachet-journey-card`) по одной выезжают снизу и наслаиваются, в конце короткая пауза. Всё по скроллу (scrub), фаза 1 в `sachet-journey.js`; двигает `<img>` стика, а перелёт — его обёртку. Перелёт стартует от конца пина (start/end числами — у закреплённой обёртки ScrollTrigger сдвигает позиции).
 - **Переход about → product-scene** (макет: 18126:51425, 18126:51426, 18126:51464): в `index.html` обёртка `.sachet-journey` вокруг двух секций, в ней летящий стик; `sachet-journey.js` (ScrollTrigger, scrub) переносит его в позицию `[data-js-sachet-journey-target]` в пачке с уменьшением. Слои через z-index: карточки about 3 > стик 2 > камни; передняя стенка пачки 3. У `.product-scene__product` и цели нельзя использовать transform (ломает слои и расчёт offset).
-- **Заголовки** (h1/h2 секций): атрибут `data-js-title-reveal` → `title-reveal.js` (GSAP SplitText по строкам, эффект «mask reveal up» — референс animata.design/docs/text/mask-reveal-up: y 17px, blur 6px, opacity 0 → 0, 0.55s, stagger 0.065s, ease cubic-bezier(0.22,1,0.36,1); запуск при появлении, один раз). Ставить на все новые заголовки секций. До разбивки заголовок скрыт (класс `js` на `<html>` + `.is-split`). Внутрь такого заголовка не класть абсолютно позиционированные элементы — выносить в обёртку (как TM в «Процессе»).
+- **Переход product-scene → catalog**: product-scene — 100svh. После перелёта стика внешняя обёртка `.sachet-journey-cover` закрепляется (pin без pinSpacing) на высоту product-scene, catalog (`z-index: 2`) наезжает сверху (фаза 3, `initCover` в `sachet-journey.js`). Второй pin — именно на внешней обёртке: два пина на `.sachet-journey` ломают первый. У обёртки `display: flow-root`, чтобы margin-top из hero-cover.js не схлопывался наружу. GSAP оставляет на закрепляемой обёртке `transform`, а внутри элемента с transform `position: fixed` не держится, поэтому у пина about стоит `pinReparent: true`: на время закрепления `.sachet-journey` переносится в `body`. Стили `.sachet-journey` и всего, что внутри, не должны зависеть от родителей.
+- **Наезд следующей секции на предыдущую (без JS)**: обёртка `.overlap-stack` (`scss/blocks/_overlap-stack.scss`) — первая секция внутри `position: sticky; top: 0`, последняя поверх (`z-index: 1`). Обе секции — 100svh. Сейчас: compound → video. Внутри GSAP-пинов не использовать (там — пин, как у product-scene → catalog).
+- **Заголовки** (h1/h2 секций): атрибут `data-js-title-reveal` → `title-reveal.js` (GSAP SplitText по строкам, эффект «mask reveal up» — референс animata.design/docs/text/mask-reveal-up: y 17px, blur 6px, opacity 0 → 0, 1.72s, stagger 0.065s, ease cubic-bezier(0.22,1,0.36,1); запуск при появлении, один раз). Ставить на все новые заголовки секций. Работает и для абзацев (текст в about). Свой момент запуска — `data-title-reveal-start` (по умолчанию `top 85%`; в about `top 20%`, чтобы анимация не прошла под облачной завесой). До разбивки заголовок скрыт (класс `js` на `<html>` + `.is-split`). Внутрь такого заголовка не класть абсолютно позиционированные элементы — выносить в обёртку (как TM в «Процессе»).
 
 ## Шрифты
 Локально, woff2, `@font-face` в `scss/base/_fonts.scss`:

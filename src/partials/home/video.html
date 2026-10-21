@@ -1,10 +1,11 @@
-<section class="video" data-header-theme="dark">
+<section class="video" data-header-theme="dark" data-js-cursor-follow-area>
   <div class="video__bg" aria-hidden="true">
     <img src="./assets/images/video-bg.webp" alt="" width="2880" height="1622" loading="lazy">
   </div>
   <img class="video__light" src="./assets/images/video-light.webp" alt="" width="1920" height="1088" loading="lazy" aria-hidden="true">
 
-  <button class="video__play" type="button" data-js-video-open data-js-swipe>
+  <!-- Следует за курсором в пределах блока (js/modules/cursor-follow.js) -->
+  <button class="video__play" type="button" data-js-video-open data-js-swipe data-js-cursor-follow>
     <img src="./assets/icons/icn-play.svg" alt="" width="12" height="12">
     Смотреть (2:35)
   </button>

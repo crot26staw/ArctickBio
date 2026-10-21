@@ -5,6 +5,7 @@
 // Слои: карточки about (z 3) > стик (z 2) > камни product-scene (auto); передняя стенка пачки (z 3) > стик.
 .sachet-journey {
   position: relative;
+  z-index: 1; // наезжает на закреплённый hero (js/modules/hero-cover.js)
 
   // Стартовая позиция — блок about из макета
   &__sachet {
@@ -23,4 +24,10 @@
       height: 100%;
     }
   }
+}
+
+// Внешняя обёртка — закрепляется в конце, чтобы catalog наехал на product-scene (фаза 3 в sachet-journey.js).
+// flow-root: margin-top из hero-cover.js не должен схлопываться наружу — иначе сбивается расчёт пина
+.sachet-journey-cover {
+  display: flow-root;
 }

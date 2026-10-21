@@ -1,4 +1,20 @@
+@use 'sass:map';
 @use 'index' as *;
+
+// Резиновый rem (px-to-rem): все размеры заданы через rem(px от макета),
+// поэтому вёрстка масштабируется вместе с шириной окна.
+// До 1440 — пропорционально макету, 1440–1920 — медленнее (см. $fluid-growth), шире 1920 — не растёт.
+html {
+  font-size: fluid-root-desktop(map.get($design-widths, desktop), $fluid-growth, $fluid-max-width);
+
+  // Включить при адаптиве, когда будут готовы планшет и мобилка:
+  // @include media(tablet) {
+  //   font-size: fluid-root-size(map.get($design-widths, tablet));
+  // }
+  // @include media(mobile) {
+  //   font-size: fluid-root-size(map.get($design-widths, mobile));
+  // }
+}
 
 body {
   @include body-m;

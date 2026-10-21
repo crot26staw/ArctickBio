@@ -95,6 +95,9 @@ src/
                    cursor-follow.js (элемент [data-js-cursor-follow] плавно следует за курсором (слева сверху от него, 5px) в пределах [data-js-cursor-follow-area]
                    (GSAP quickTo, не выходит за края, курсор ушёл — возвращается на место; только мышь, не при reduced motion).
                    Центрирование такого элемента — `translate: -50% -50%`, не transform. Сейчас — кнопка .video__play)
+                   reveal-sequence.js (поочерёдное появление блоков секции ПО СКРОЛЛУ (scrub, без pin, top 90% → top -20%):
+                   section[data-js-reveal-sequence] > [data-js-reveal-sequence-item], по порядку в DOM, снизу + проявление;
+                   [data-reveal-sequence-split] — бить на строки (заголовок, такому НЕ ставить data-js-title-reveal). Сейчас — comparison: заголовок → фото → таблица; usage: заголовок → фото → карточки по одной)
                    swipe-button.js (ховер всех кнопок как animata swipe-button: содержимое уезжает вверх, снизу въезжают копия и фон --swipe-bg;
                    [data-js-swipe] на кнопке, [data-js-swipe-group] — все ссылки внутри (меню), [data-swipe-trigger] — ховер предка,
                    [data-swipe-static] — не двигать (бейдж корзины). Стили components/_swipe.scss. НОВЫЕ КНОПКИ: ставить data-js-swipe и --swipe-bg вместо hover-фона;

@@ -37,7 +37,7 @@
 }
 
 // Внешняя обёртка — закрепляется в конце, чтобы catalog наехал на product-scene (фаза 3 в sachet-journey.js).
-// flow-root: margin-top из hero-cover.js не должен схлопываться наружу — иначе сбивается расчёт пина
+// flow-root: margin-top детей не должен схлопываться наружу — иначе сбивается расчёт пина
 .sachet-journey-cover {
   display: flow-root;
 }

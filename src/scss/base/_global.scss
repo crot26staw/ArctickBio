@@ -55,11 +55,21 @@ body {
   }
 }
 
-// Заголовки с анимацией скрыты, пока title-reveal.js не разобьёт их на строки (без мигания)
+// Анимируемые заголовки и элементы скрыты, пока title-reveal.js / fade-up.js их не подготовят (без мигания)
 @media (prefers-reduced-motion: no-preference) {
-  .js [data-js-title-reveal]:not(.is-split) {
+  .js [data-js-title-reveal]:not(.is-split),
+  .js [data-js-fade-up]:not(.is-fade-ready),
+  .js [data-js-fade-up-group]:not(.is-fade-ready) {
     visibility: hidden;
   }
+}
+
+// Маска строки (SplitText mask: 'lines' — title-reveal.js, reveal-sequence.js).
+// Межстрочный интервал 0.9–1.2, поэтому маска выше строки на запас (хвосты у/р/д и диакритика не обрезаются),
+// отрицательный margin возвращает строки на место
+.title-line-mask {
+  margin-block: -0.15em;
+  padding-block: 0.15em;
 }
 
 .visually-hidden {

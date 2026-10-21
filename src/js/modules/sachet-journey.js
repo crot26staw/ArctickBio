@@ -5,21 +5,48 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from './motion.js';
  *
  * Фаза 1 — появление (комментарии в Figma к блоку about):
  *   about доходит до верха экрана и закрепляется (pin всей обёртки на APPEAR.pin экрана);
- *   по скроллу стик проявляется снизу из прозрачности, затем карточки по очереди выезжают снизу и наслаиваются.
+ *   по скроллу стик проявляется снизу из прозрачности, затем появляются карточки (initCards, референс — asana-spa.ru).
  * Фаза 2 — перелёт (ноды 18126:51425, 18126:51426, 18126:51464):
  *   от конца пина до «product-scene у верха экрана» стик опускается,
  *   уменьшается до размера саше в пачке и встаёт на место [data-js-sachet-journey-target].
+ *
+ * Облачная завеса (initVeil, референс — white-desert.com): в конце пина about снизу поднимается завеса,
+ *   закрывает about (он прячется), и product-scene выходит из рассеивающихся облаков. Стик летит поверх облаков.
  *
  * Фаза 3 — catalog наезжает на закреплённую product-scene (initCover).
  *
  * Фаза 1 двигает картинку стика, фаза 2 — его обёртку, поэтому они не конфликтуют.
  */
 
+// Шкала появления — условные единицы на весь пин (APPEAR.length = путь пина)
 const APPEAR = {
-  pin: 2.2, // длина закрепления about, в экранах скролла
-  sachetY: 400,
-  cardY: 300,
-  ease: 'power2.out',
+  pin: 2.6, // длина закрепления about, в экранах скролла
+  length: 1.5, // стик (0–0.3) + карточки (0.3–~1.2) + пауза: в ней поднимается завеса (initVeil)
+  // Стик выезжает снизу и проявляется почти сразу (комментарий дизайнера: долгий полупрозрачный подъём — «как привидение»)
+  sachetY: 160,
+  sachetDuration: 0.3,
+  sachetFade: 0.06, // за сколько шкалы стик становится непрозрачным
+  ease: 'power3.out',
+};
+
+// Появление карточек (референс дизайнера — asana-spa.ru, блок с тремя карточками)
+const CARDS = {
+  start: 0.3, // после стика
+  // Десктоп: карточки по очереди целиком поднимаются из прозрачности, следом — их содержимое; фон чуть «отъезжает» (scale)
+  cardY: 80,
+  cardDuration: 0.45,
+  cardStagger: 0.16,
+  cardDelay: 0.06,
+  contentY: 44,
+  contentDuration: 0.42,
+  contentDelay: 0.1, // после начала появления карточки
+  iconScale: 0.9,
+  bgScale: 1.07,
+  // Планшет/мобилка (стопка): следующая карточка въезжает снизу и ложится на предыдущую, потом — её содержимое
+  stackFrom: 90, // старт — ниже позиции «колонкой» (без наложения)
+  stackDuration: 0.36,
+  stackStep: 0.26,
+  ease: 'power3.out',
 };
 
 // Позиция элемента относительно корня по offset* (не зависит от transform)
@@ -39,8 +66,6 @@ function offsetWithin(el, root) {
 
 // Возвращает ScrollTrigger пина — от его конца стартует перелёт
 function initAppear(root, sachetImg) {
-  const cards = root.querySelectorAll('[data-js-sachet-journey-card]');
-
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: root,
@@ -53,12 +78,93 @@ function initAppear(root, sachetImg) {
     },
   });
 
-  // Шкала = путь пина: стик, затем карточки по одной; в конце небольшая пауза перед перелётом
-  tl.from(sachetImg, { y: APPEAR.sachetY, opacity: 0, duration: 0.3, ease: APPEAR.ease }, 0)
-    .from(cards, { y: APPEAR.cardY, opacity: 0, duration: 0.3, stagger: 0.2, ease: APPEAR.ease }, 0.3)
-    .to({}, { duration: 0.15 });
+  // Шкала = путь пина: стик, дальше — карточки (initCards, своя шкала на тот же путь) и пауза перед перелётом
+  tl.from(sachetImg, { y: APPEAR.sachetY, duration: APPEAR.sachetDuration, ease: APPEAR.ease }, 0)
+    .from(sachetImg, { opacity: 0, duration: APPEAR.sachetFade, ease: 'none' }, 0)
+    .to({}, { duration: APPEAR.length - APPEAR.sachetDuration });
 
   return tl.scrollTrigger;
+}
+
+// Содержимое карточки поднимается из прозрачности, иконка ещё и «дозревает» (прозрачность, масштаб)
+function revealContent(tl, card, position) {
+  const icon = card.querySelector('[data-js-sachet-journey-card-icon]');
+  const content = [...card.children];
+
+  tl.fromTo(
+    content,
+    { y: CARDS.contentY, opacity: 0 },
+    { y: 0, opacity: 1, duration: CARDS.contentDuration, ease: CARDS.ease },
+    position,
+  );
+  if (icon) {
+    tl.fromTo(
+      icon,
+      { scale: CARDS.iconScale },
+      { scale: 1, duration: CARDS.contentDuration * 0.7, ease: 'power2.out' },
+      position + 0.1,
+    );
+  }
+}
+
+/**
+ * Карточки about — отдельная шкала на тот же путь, что у пина (start/end — числами из pinTrigger),
+ * чтобы менять её по брейкпоинту (gsap.matchMedia), не пересоздавая пин: от него считаются перелёт и завеса.
+ */
+function initCards(root, pinTrigger) {
+  const cards = [...root.querySelectorAll('[data-js-sachet-journey-card]')];
+  const bg = root.querySelector('[data-js-sachet-journey-bg]');
+  if (!cards.length) return;
+
+  const createTimeline = () =>
+    gsap.timeline({
+      scrollTrigger: {
+        start: () => pinTrigger.start,
+        end: () => pinTrigger.end,
+        scrub: 1,
+        invalidateOnRefresh: true,
+      },
+    });
+
+  const mm = gsap.matchMedia();
+
+  // Десктоп: карточки в ряд
+  mm.add('(min-width: 1200px)', () => {
+    const tl = createTimeline();
+
+    if (bg) {
+      gsap.set(bg, { transformOrigin: '50% 100%' });
+      tl.fromTo(bg, { scale: CARDS.bgScale }, { scale: 1, duration: APPEAR.length - CARDS.start, ease: 'none' }, CARDS.start);
+    }
+    cards.forEach((card, i) => {
+      const start = CARDS.start + CARDS.cardDelay + i * CARDS.cardStagger;
+
+      tl.fromTo(
+        card,
+        { y: CARDS.cardY, opacity: 0 },
+        { y: 0, opacity: 1, duration: CARDS.cardDuration, ease: CARDS.ease },
+        start,
+      );
+      revealContent(tl, card, start + CARDS.contentDelay);
+    });
+    tl.to({}, { duration: 0 }, APPEAR.length);
+  });
+
+  // Планшет/мобилка: карточки стопкой (CSS), первая на месте, остальные въезжают снизу из позиции «колонкой»
+  mm.add('(max-width: 1199px)', () => {
+    const tl = createTimeline();
+    // Сдвиг от позиции в стопке до позиции «колонкой» (одна под другой) + CARDS.stackFrom
+    const fromY = (card, i) => cards[0].offsetTop + i * cards[0].offsetHeight - card.offsetTop + CARDS.stackFrom;
+
+    cards.slice(1).forEach((card, n) => {
+      const i = n + 1;
+      const start = CARDS.start + n * CARDS.stackStep;
+
+      tl.fromTo(card, { y: () => fromY(card, i) }, { y: 0, duration: CARDS.stackDuration, ease: CARDS.ease }, start);
+      revealContent(tl, card, start + 0.08);
+    });
+    tl.to({}, { duration: 0 }, APPEAR.length);
+  });
 }
 
 function initFlight(root, item, target, endSection, pinTrigger) {
@@ -107,6 +213,87 @@ function initFlight(root, item, target, endSection, pinTrigger) {
   });
 }
 
+// Всё — в экранах скролла (1 = высота окна), отсчёт от конца пина about (0)
+const VEIL = {
+  speed: 2, // скорость подъёма завесы на экране (страница — 1)
+  startY: 0.2, // верх завесы на экране в момент конца пина (0 — верх, 1 — низ окна); плотная часть уже под низом окна
+  dense: 0.4, // с какой доли высоты картинки облака закрывают карточки — тогда стик поднимается над завесой
+  hideAbout: 0.45, // экран полностью закрыт (плотная часть с 0.64 высоты картинки облаков) — прячем about
+  fadeStart: 0.5, // начинаем рассеивать: под завесой — фон страницы и product-scene
+  fadeEnd: 0.8, // завеса рассеялась, стик возвращается за переднюю стенку пачки
+  length: 1, // до конца — product-scene у верха экрана
+};
+
+/**
+ * Стик «за карточками about» (они стеклянные — стик просвечивает сквозь них размытым): z 2 < карточки 3 < завеса 4.
+ * Когда облака плотно накрыли верх карточек под стиком (или about уже спрятан), стик поднимается над завесой (z 5)
+ * и виден целиком — в облаках карточки уже не видны, перескок слоя незаметен.
+ */
+function isStickAboveVeil(item, cards, about, veil) {
+  if (about.style.visibility === 'hidden') return true;
+
+  const stick = item.getBoundingClientRect();
+  // Верх самой высокой карточки, которая по горизонтали пересекается со стиком
+  const cardsTop = Math.min(
+    ...[...cards]
+      .map((card) => card.getBoundingClientRect())
+      .filter((card) => card.right > stick.left && card.left < stick.right)
+      .map((card) => card.top),
+  );
+  if (stick.bottom <= cardsTop) return true; // на карточку не заходит
+
+  // Картинка облаков — первый экран завесы, плотнеет книзу
+  const denseTop = veil.getBoundingClientRect().top + window.innerHeight * VEIL.dense;
+  return denseTop <= cardsTop;
+}
+
+/**
+ * Завеса [data-js-cloud-veil] — внутри .sachet-journey (иначе стик не поднять над ней: у обёртки свой z-index).
+ * Её y — в координатах обёртки: во время пина обёртка стоит, после — уезжает со скроллом,
+ * поэтому шкала из двух отрезков с одинаковой скоростью на экране.
+ */
+function initVeil(veil, item, about, pinTrigger) {
+  const cards = about.querySelectorAll('[data-js-sachet-journey-card]');
+  const updateLayer = () => {
+    gsap.set(item, { zIndex: isStickAboveVeil(item, cards, about, veil) ? 5 : '' });
+  };
+  // Слой стика проверяем каждый кадр, пока завеса не рассеялась (VEIL.fadeEnd)
+  const setActive = (active) => {
+    if (active) {
+      gsap.ticker.add(updateLayer);
+    } else {
+      gsap.ticker.remove(updateLayer);
+      gsap.set(item, { zIndex: '' });
+    }
+  };
+
+  const vh = () => window.innerHeight;
+  const lead = (1 - VEIL.startY) / VEIL.speed; // сколько экранов до конца пина завеса уже поднимается
+
+  gsap
+    .timeline({
+      scrollTrigger: {
+        // Числами: обёртка закреплена, позиции внутри ScrollTrigger сдвигает
+        start: () => pinTrigger.end - lead * vh(),
+        end: () => pinTrigger.end + VEIL.length * vh(),
+        scrub: 0.6,
+        invalidateOnRefresh: true,
+      },
+    })
+    .set(veil, { opacity: 1 }, 0.001)
+    // Стик за карточками или над облаками (isStickAboveVeil), пока завеса не рассеялась
+    .call(setActive, [false], 0.001)
+    .call(setActive, [true], 0.002)
+    // Пин: обёртка стоит — завеса поднимается со своей скоростью
+    .fromTo(veil, { y: () => vh() }, { y: () => VEIL.startY * vh(), duration: lead, ease: 'none' }, 0)
+    // После пина обёртка уезжает со скоростью 1 — завесе остаётся разница
+    .to(veil, { y: () => (VEIL.startY - (VEIL.speed - 1) * VEIL.length) * vh(), duration: VEIL.length, ease: 'none' })
+    .set(about, { autoAlpha: 0 }, lead + VEIL.hideAbout)
+    .to(veil, { opacity: 0, duration: VEIL.fadeEnd - VEIL.fadeStart, ease: 'power1.in' }, lead + VEIL.fadeStart)
+    .call(setActive, [true], lead + VEIL.fadeEnd - 0.001)
+    .call(setActive, [false], lead + VEIL.fadeEnd);
+}
+
 export function initSachetJourney() {
   const root = document.querySelector('[data-js-sachet-journey]');
   if (!root) return;
@@ -118,6 +305,11 @@ export function initSachetJourney() {
   if (!item || !sachetImg || !target || !endSection) return;
 
   const pinTrigger = prefersReducedMotion() ? null : initAppear(root, sachetImg);
+  if (pinTrigger) initCards(root, pinTrigger);
+
+  const veil = root.querySelector('[data-js-cloud-veil]');
+  const about = root.querySelector('[data-js-sachet-journey-card]')?.closest('section');
+  if (veil && about && pinTrigger) initVeil(veil, item, about, pinTrigger);
 
   initFlight(root, item, target, endSection, pinTrigger);
 

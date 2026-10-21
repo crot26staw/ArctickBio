@@ -21,7 +21,7 @@ export function initHeader() {
 
     // Точка проверки — середина шапки
     const probe = header.offsetHeight / 2;
-    // findLast: элемент ниже по DOM лежит поверх (облачная завеса и about — над hero)
+    // findLast: элемент ниже по DOM лежит поверх (about — над hero, облачная завеса — над about)
     const current = sections.findLast((section) => {
       const { top, bottom } = section.getBoundingClientRect();
       return top <= probe && bottom > probe;

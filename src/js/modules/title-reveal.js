@@ -4,35 +4,36 @@ import { SplitText } from 'gsap/SplitText';
 gsap.registerPlugin(SplitText);
 
 /**
- * Анимация заголовков «mask reveal up» (референс: animata.design/docs/text/mask-reveal-up):
- * заголовок бьётся на строки, строки по очереди поднимаются снизу, проявляются и теряют размытие.
+ * Появление заголовков и описаний «строка из-под маски» (референс дизайнера: kononenkogroup.com):
+ * текст бьётся на строки, каждая строка в своей маске (overflow: clip) и по очереди выезжает снизу.
  * Заголовки первого экрана анимируются сразу, остальные — при появлении во вьюпорте (один раз).
- * Разметка: [data-js-title-reveal]; подходит и для абзацев.
+ * Разметка: [data-js-title-reveal] — заголовки секций и описания под ними.
  * [data-title-reveal-start] — свой момент запуска (start ScrollTrigger), по умолчанию 'top 85%'.
- *   В about — 'top 20%': иначе анимация проходит под облачной завесой (hero-cover.js).
+ *   В about — 'top 20%': about наезжает на hero, строки выезжают, когда он почти у верха экрана.
+ * Запас маски по вертикали (под выносные элементы букв) — .title-line-mask в base/_global.scss.
  */
-const ENTER = {
-  duration: 1.72,
-  stagger: 0.065,
-  y: 17,
-  blur: 6,
-  ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
+export const LINE_REVEAL = {
+  duration: 1.1,
+  stagger: 0.1,
+  // Строка уезжает за маску с запасом: маска выше строки на padding (_global.scss)
+  yPercent: 130,
+  ease: 'cubic-bezier(0.17, 0.84, 0.44, 1)',
 };
 
-function animate(lines) {
-  return gsap.fromTo(
-    lines,
-    { opacity: 0, y: ENTER.y, filter: `blur(${ENTER.blur}px)` },
-    {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      duration: ENTER.duration,
-      stagger: ENTER.stagger,
-      ease: ENTER.ease,
-      clearProps: 'filter,willChange',
-    },
-  );
+export function splitLines(el, options = {}) {
+  // SplitText ломает строку на любом <br>, даже скрытом (переносы только для мобилки: about__text-br) —
+  // невидимые на этой ширине убираем до разбивки. Смена брейкпоинта без перезагрузки их не вернёт
+  el.querySelectorAll('br').forEach((br) => {
+    if (getComputedStyle(br).display === 'none') br.remove();
+  });
+
+  return SplitText.create(el, {
+    type: 'lines',
+    mask: 'lines',
+    linesClass: 'title-line',
+    aria: 'auto',
+    ...options,
+  });
 }
 
 export function initTitleReveal() {
@@ -41,20 +42,15 @@ export function initTitleReveal() {
 
   document.fonts.ready.then(() => {
     titles.forEach((title) => {
-      SplitText.create(title, {
-        type: 'lines',
-        linesClass: 'title-line',
+      splitLines(title, {
         autoSplit: true,
-        aria: 'auto',
         onSplit(self) {
-          gsap.set(self.lines, { opacity: 0, willChange: 'transform, opacity, filter' });
           title.classList.add('is-split');
 
           // При пересплите (resize) анимацию не повторяем
-          if (title.dataset.revealed) {
-            gsap.set(self.lines, { opacity: 1, willChange: 'auto' });
-            return undefined;
-          }
+          if (title.dataset.revealed) return undefined;
+
+          gsap.set(self.lines, { yPercent: LINE_REVEAL.yPercent });
 
           return ScrollTrigger.create({
             trigger: title,
@@ -62,7 +58,12 @@ export function initTitleReveal() {
             once: true,
             onEnter: () => {
               title.dataset.revealed = 'true';
-              animate(self.lines);
+              gsap.to(self.lines, {
+                yPercent: 0,
+                duration: LINE_REVEAL.duration,
+                stagger: LINE_REVEAL.stagger,
+                ease: LINE_REVEAL.ease,
+              });
             },
           });
         },

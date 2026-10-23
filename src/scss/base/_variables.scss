@@ -7,6 +7,8 @@ $font-display: 'Wix Madefor Display', 'Arial', sans-serif;
 
 // Сетка
 $container-width: rem(1440);
+// Контейнер тянется на всю ширину окна с полями $container-padding и перестаёт расти вместе с rem ($fluid-max-width)
+$container-max-width: 1920px;
 $container-padding: rem(50);
 $container-padding-tablet: rem(20);
 $container-padding-mobile: rem(10);

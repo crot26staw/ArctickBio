@@ -24,7 +24,7 @@
   &__body {
     display: flex;
     gap: rem(50);
-    max-width: calc(#{$container-width} - #{rem(40)});
+    max-width: calc(#{$container-max-width} - #{rem(40)});
     margin-inline: auto;
 
     // Планшет: макет 18133:47184

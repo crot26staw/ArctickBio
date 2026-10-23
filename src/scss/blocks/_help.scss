@@ -33,7 +33,7 @@
     display: flex;
     gap: rem(264);
     align-items: center;
-    max-width: $container-width;
+    max-width: $container-max-width;
     margin-inline: auto;
     padding: 0 rem(20) rem(50);
 
@@ -79,7 +79,7 @@
     position: relative;
     display: flex;
     align-items: flex-start;
-    max-width: calc(#{$container-width} - #{rem(40)});
+    max-width: calc(#{$container-max-width} - #{rem(40)});
     margin-inline: auto;
     padding: rem(75) rem(20);
     color: var(--color-fg);

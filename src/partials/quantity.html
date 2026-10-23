@@ -1,0 +1,11 @@
+<!-- Счётчик количества (разметка WooCommerce: .quantity > input.qty), кнопки — js/modules/quantity.js.
+     name — "quantity" у поля формы; без name (копия в нижней панели мобилки) поле не отправляется -->
+<div class="quantity" data-js-quantity>
+  <button class="quantity__btn" type="button" aria-label="Уменьшить количество" data-js-quantity-minus>
+    <img src="./assets/icons/icn-minus-24.svg" alt="" width="24" height="24">
+  </button>
+  <input class="quantity__input input-text qty text" type="number" name="{{ name }}" value="1" min="1" max="99" step="1" inputmode="numeric" aria-label="Количество" data-js-quantity-input>
+  <button class="quantity__btn" type="button" aria-label="Увеличить количество" data-js-quantity-plus>
+    <img src="./assets/icons/icn-add-24.svg" alt="" width="24" height="24">
+  </button>
+</div>

@@ -170,6 +170,37 @@
     height: auto;
   }
 
+  // Компактный, на панели карточки товара (макет 18160:49525): строка 44 без полей, текст ответа темнее
+  &--compact {
+    background-color: transparent;
+  }
+
+  &--compact &__header {
+    min-height: rem(44);
+    padding: 0;
+  }
+
+  &--compact &__question {
+    @include body-m-strong;
+    color: var(--color-fg);
+  }
+
+  &--compact &__answer {
+    padding: rem(16) 0;
+    color: var(--color-fg-soft);
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+    align-items: flex-start;
+
+    a {
+      color: var(--color-accent);
+    }
+  }
+
   &__answer {
     padding: 0 rem(20) rem(20);
     color: var(--color-fg-muted);

@@ -20,6 +20,8 @@
 @use 'components/review-card';
 @use 'components/team-card';
 @use 'components/product-plan';
+@use 'components/quantity';
+@use 'components/ingredient-card';
 
 // Blocks
 @use 'blocks/header';
@@ -49,3 +51,4 @@
 @use 'blocks/news';
 @use 'blocks/catalog-grid';
 @use 'blocks/offer';
+@use 'blocks/product-main';

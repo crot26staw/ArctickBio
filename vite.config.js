@@ -10,6 +10,7 @@ const pages = {
   index: 'index.html',
   about: 'about.html',
   catalog: 'catalog.html',
+  product: 'product.html',
 };
 
 export default defineConfig({

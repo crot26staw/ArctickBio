@@ -1,0 +1,52 @@
+@use '../base' as *;
+
+// Счётчик количества (карточка товара, макет 18160:49406)
+.quantity {
+  display: flex;
+  flex-shrink: 0;
+  gap: rem(4);
+  align-items: center;
+  justify-content: center;
+  width: rem(117);
+  height: rem(42);
+  padding: rem(12);
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-m);
+
+  &__btn {
+    display: flex;
+    flex-shrink: 0;
+    transition: opacity $transition;
+
+    img {
+      width: rem(24);
+      height: rem(24);
+    }
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.3;
+    }
+
+    @include hover {
+      opacity: 0.6;
+    }
+  }
+
+  &__input {
+    @include body-m-strong;
+    width: rem(18);
+    padding: 0;
+    color: var(--color-fg-soft);
+    text-align: center;
+    background: none;
+    border: 0;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      margin: 0;
+      appearance: none;
+    }
+  }
+}

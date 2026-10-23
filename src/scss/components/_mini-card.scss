@@ -24,6 +24,33 @@
     border-color: transparent;
   }
 
+  // Белая, на светлой панели карточки товара: без стекла и рамки, кнопка — акцентная с белым плюсом
+  &--light {
+    background-color: var(--color-white);
+    backdrop-filter: none;
+    border-color: transparent;
+  }
+
+  &--light &__title {
+    color: var(--color-fg);
+  }
+
+  &--light &__subtitle {
+    color: var(--color-fg-muted);
+  }
+
+  &--light &__price {
+    color: var(--color-fg);
+  }
+
+  &--light &__add {
+    background-color: var(--color-accent);
+
+    img {
+      filter: brightness(0) invert(1);
+    }
+  }
+
   &__media {
     display: flex;
     flex-direction: column;

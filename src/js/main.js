@@ -18,6 +18,9 @@ import { initSwipeButtons } from './modules/swipe-button.js';
 import { initRollText } from './modules/roll-text.js';
 import { initCursorFollow } from './modules/cursor-follow.js';
 import { initRevealSequence } from './modules/reveal-sequence.js';
+import { initQuantities } from './modules/quantity.js';
+import { initProductFormats } from './modules/product-format.js';
+import { initStickyBuy } from './modules/sticky-buy.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
@@ -27,6 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initMobileMenu();
   initAccordions();
+  initQuantities();
+  initProductFormats();
+  initStickyBuy();
   initDragSliders();
   initFakeGlass();
   initTitleReveal();

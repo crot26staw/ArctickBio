@@ -57,4 +57,49 @@
       letter-spacing: rem(-1);
     }
   }
+
+  // Вариант товара в карточке товара (partials/product-format.html, макет 16653:115159): светлая плашка-радиокнопка,
+  // выбранная — с акцентной рамкой 2px (вторая линия — box-shadow, чтобы плашка не прыгала)
+  &--option {
+    position: relative;
+    width: 100%;
+    color: var(--color-fg);
+    cursor: pointer;
+    background-color: var(--color-white);
+    transition:
+      border-color $transition,
+      box-shadow $transition;
+
+    &:has(:checked) {
+      border-color: var(--color-accent);
+      box-shadow: inset 0 0 0 1px var(--color-accent);
+    }
+
+    &:has(:focus-visible) {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  &__input {
+    @include visually-hidden;
+  }
+
+  // Фото пачки вписано в квадрат 44 с полями, как в макете
+  &--option &__img {
+    padding: rem(10.3) rem(6.4) rem(9.4);
+    object-fit: contain;
+  }
+
+  &--option &__subtitle {
+    color: var(--color-fg-muted);
+  }
+
+  &--option &__price {
+    color: var(--color-fg-soft);
+
+    del {
+      color: #97a5b9;
+    }
+  }
 }

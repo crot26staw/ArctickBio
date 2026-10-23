@@ -1,0 +1,160 @@
+<!-- Первый экран карточки товара: галерея фото + панель покупки, макет 16581:44492.
+     Разметка панели под WooCommerce: .product_title, .price, form.cart (вариант, .quantity, .single_add_to_cart_button) -->
+<section class="product-main product" data-header-theme="dark">
+  <div class="product-main__bg" aria-hidden="true">
+    <img src="./assets/images/product-bg.webp" alt="" width="936" height="1024" fetchpriority="high">
+  </div>
+
+  <!-- На десктопе — сетка, на планшете/мобилке — лента, листается свайпом, если шире экрана (js/modules/drag-slider.js) -->
+  <div class="product-main__gallery woocommerce-product-gallery" data-js-drag-slider data-drag-slider-align="start">
+    <div class="product-main__photos" data-js-drag-slider-track>
+      <img class="product-main__photo product-main__photo--main" src="./assets/images/product-1.webp" alt="Премиальный морской коллаген с дикой черникой" width="1332" height="1181" fetchpriority="high">
+      <img class="product-main__photo" src="./assets/images/product-2.webp" alt="Упаковка коллагена на камнях у моря" width="782" height="782">
+      <img class="product-main__photo" src="./assets/images/product-3.webp" alt="Упаковка коллагена на берегу Баренцева моря" width="782" height="782">
+      <img class="product-main__photo" src="./assets/images/product-4.webp" alt="Упаковка коллагена среди ягод черники" width="782" height="765" loading="lazy">
+      <img class="product-main__photo" src="./assets/images/product-5.webp" alt="Саше коллагена и черника во льду" width="782" height="782" loading="lazy">
+      <img class="product-main__photo" src="./assets/images/product-6.webp" alt="Упаковка коллагена на мху" width="782" height="782" loading="lazy">
+      <img class="product-main__photo" src="./assets/images/product-7.webp" alt="Упаковка коллагена среди кристаллов льда" width="1100" height="619" loading="lazy">
+    </div>
+  </div>
+
+  <!-- Светлая панель: когда она уходит под шапку, шапка переключается на светлую тему (header.js берёт последний [data-header-theme]) -->
+  <div class="product-main__panel summary entry-summary" data-header-theme="light">
+    <div class="product-main__heading">
+      <h1 class="product-main__title product_title" data-js-title-reveal data-title-reveal-start="top bottom">Премиальный морской коллаген c дикой черникой</h1>
+      <p class="product-main__price price" data-js-product-price>1440₽</p>
+    </div>
+
+    <form class="product-main__form cart" action="#" method="post" data-js-sticky-buy-form>
+      <fieldset class="product-main__formats">
+        <legend class="product-main__subtitle">Выберите формат</legend>
+        <div class="product-main__formats-list">
+          <include src="partials/product-format.html" data='{"name": "attribute_format", "value": "15", "title": "15 саше", "subtitle": "Попробовать · 15 дней", "price": "1440₽", "old_price": "1440₽"}'></include>
+          <include src="partials/product-format.html" data='{"name": "attribute_format", "value": "30", "title": "30 саше", "subtitle": "Попробовать · 15 дней", "price": "1440₽", "old_price": "1440₽", "checked": "checked"}'></include>
+        </div>
+      </fieldset>
+
+      <div class="product-main__buy">
+        <div class="product-main__actions" data-js-sticky-buy-source>
+          <include src="partials/quantity.html" data='{"name": "quantity"}'></include>
+          <button class="product-main__cart btn btn--accent single_add_to_cart_button button" type="submit" name="add-to-cart" value="1" data-js-swipe>
+            <span>В корзину</span>
+            <span data-js-product-price>1440₽</span>
+          </button>
+        </div>
+        <p class="product-main__delivery">
+          <img src="./assets/icons/icn-box.svg" alt="" width="24" height="24">
+          Бесплатная доставка от 3 000 ₽ Ozon
+        </p>
+      </div>
+    </form>
+
+    <!-- Описание товара: аккордеоны (js/modules/accordion.js), открыт один пункт -->
+    <div class="product-main__details" data-js-accordion-group>
+      <div class="accordion accordion--compact is-open" data-js-accordion>
+        <button class="accordion__header" type="button" aria-expanded="true" aria-controls="product-about" data-js-accordion-toggle>
+          <span class="accordion__question">О продукте</span>
+          <span class="accordion__icon icon-btn icon-btn--24" aria-hidden="true">
+            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+            <img src="./assets/icons/icn-minus.svg" alt="" width="18" height="18">
+          </span>
+        </button>
+        <div class="accordion__panel" id="product-about" data-js-accordion-panel>
+          <ul class="accordion__answer">
+            <li>Содержит 100 % суточной нормы 20 витаминов и минералов</li>
+            <li>Помогает восполнить суточную потребность в питательных веществах благодаря точному дозированию</li>
+            <li>Разработано для усвоения на всех этапах желудочно-кишечного тракта</li>
+            <li>Содержит биодоступные питательные вещества, которые может использовать ваш организм</li>
+            <li>Поддерживает здоровое старение и иммунную функцию</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="accordion accordion--compact" data-js-accordion>
+        <button class="accordion__header" type="button" aria-expanded="false" aria-controls="product-delivery" data-js-accordion-toggle>
+          <span class="accordion__question">Доставка</span>
+          <span class="accordion__icon icon-btn icon-btn--24" aria-hidden="true">
+            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+            <img src="./assets/icons/icn-minus.svg" alt="" width="18" height="18">
+          </span>
+        </button>
+        <div class="accordion__panel" id="product-delivery" data-js-accordion-panel>
+          <p class="accordion__answer">Бесплатная доставка от 3 000 ₽ Ozon</p>
+        </div>
+      </div>
+
+      <div class="accordion accordion--compact" data-js-accordion>
+        <button class="accordion__header" type="button" aria-expanded="false" aria-controls="product-docs" data-js-accordion-toggle>
+          <span class="accordion__question">Документы</span>
+          <span class="accordion__icon icon-btn icon-btn--24" aria-hidden="true">
+            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+            <img src="./assets/icons/icn-minus.svg" alt="" width="18" height="18">
+          </span>
+        </button>
+        <div class="accordion__panel" id="product-docs" data-js-accordion-panel>
+          <ul class="accordion__answer accordion__links" data-js-roll-group>
+            <li><a href="#" download>Аминокислотный профиль</a></li>
+            <li><a href="#" download>Протоколы испытаний продукции</a></li>
+            <li><a href="#" download>Отчет РАН</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="accordion accordion--compact" data-js-accordion>
+        <button class="accordion__header" type="button" aria-expanded="false" aria-controls="product-benefits" data-js-accordion-toggle>
+          <span class="accordion__question">Преимущества</span>
+          <span class="accordion__icon icon-btn icon-btn--24" aria-hidden="true">
+            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+            <img src="./assets/icons/icn-minus.svg" alt="" width="18" height="18">
+          </span>
+        </button>
+        <div class="accordion__panel" id="product-benefits" data-js-accordion-panel>
+          <ul class="accordion__answer">
+            <li>Упругость и эластичность кожи</li>
+            <li>Подвижность суставов</li>
+            <li>Связки при физических нагрузках суставов</li>
+            <li>Соединительную ткань при ежедневных нагрузках</li>
+            <li>Здоровый рост волос и ногтей</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ряды шире панели листаются зажатием/свайпом (js/modules/drag-slider.js) -->
+    <div class="product-main__block">
+      <h2 class="product-main__subtitle">Ингредиенты</h2>
+      <div class="product-main__viewport" data-js-drag-slider data-drag-slider-align="start">
+        <ul class="product-main__track product-main__track--ingredients" data-js-drag-slider-track>
+          <include src="partials/ingredient-card.html" data='{"img": "ingredient-1.webp", "title": "Витамин С", "text": "Поступает из цельных северных ягод. Выступает кофактором синтеза собственного коллагена организмом"}'></include>
+          <include src="partials/ingredient-card.html" data='{"img": "ingredient-2.webp", "title": "Витамин E", "text": "Защищает клетки от окислительного стресса. Помогает сохранять целостность клеточных мембран"}'></include>
+          <include src="partials/ingredient-card.html" data='{"img": "ingredient-3.webp", "title": "Витамин K", "text": "Участвует в процессе нормального свертывания крови. Способствует поддержанию здоровья костной ткани"}'></include>
+          <include src="partials/ingredient-card.html" data='{"img": "ingredient-4.webp", "title": "Витамин H", "text": "Участвует в обмене белков и жиров. Способствует поддержанию нормального состояния кожи и волос"}'></include>
+          <include src="partials/ingredient-card.html" data='{"img": "ingredient-5.webp", "title": "Витамин PP", "text": "Участвует в энергетическом обмене клеток. Помогает поддерживать нормальное состояние кожи и нервной системы"}'></include>
+          <include src="partials/ingredient-card.html" data='{"img": "ingredient-6.webp", "title": "Витамин A", "text": "Способствует обновлению клеток кожи. Поддерживает нормальное состояние слизистых оболочек и зрения"}'></include>
+        </ul>
+      </div>
+    </div>
+
+    <div class="product-main__block product-main__block--related">
+      <h2 class="product-main__subtitle">Другие вкусы Arctic Berries</h2>
+      <div class="product-main__viewport" data-js-drag-slider data-drag-slider-align="start">
+        <div class="product-main__track" data-js-drag-slider-track>
+          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой брусникой", "price": "1440₽", "link": "#", "id": "2", "mod": "mini-card--light"}'></include>
+          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой голубикой", "price": "1440₽", "link": "#", "id": "3", "mod": "mini-card--light"}'></include>
+          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой клюквой", "price": "1440₽", "link": "#", "id": "4", "mod": "mini-card--light"}'></include>
+          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с дикой морошкой", "price": "1440₽", "link": "#", "id": "5", "mod": "mini-card--light"}'></include>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Мобилка: нижняя панель покупки (макет 18160:50932) — видна, когда кнопка «В корзину» в панели ушла с экрана.
+       Количество синхронизировано с формой, кнопка отправляет её (js/modules/sticky-buy.js) -->
+  <div class="product-main__sticky-buy" data-js-sticky-buy aria-hidden="true" inert>
+    <include src="partials/quantity.html"></include>
+    <button class="product-main__cart btn btn--accent" type="button" data-js-sticky-buy-submit data-js-swipe>
+      <span>В корзину</span>
+      <span data-js-product-price>1440₽</span>
+    </button>
+  </div>
+</section>

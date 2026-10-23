@@ -1,0 +1,301 @@
+@use '../base' as *;
+
+// Карточка товара, первый экран: галерея + панель покупки (макет 16581:44492)
+.product-main {
+  position: relative;
+  display: flex;
+  gap: rem(12);
+  align-items: flex-start;
+  padding: rem(120) rem(30) rem(30);
+  // clip, а не hidden: hidden делает секцию контейнером прокрутки, и панель перестаёт прилипать
+  overflow: clip;
+  background-color: var(--color-bg-light);
+
+  // Планшет (макет 18160:47380): лента фото на всю ширину, под ней панель
+  @include media(tablet) {
+    flex-direction: column;
+    gap: 0;
+    align-items: stretch;
+    padding: rem(80) 0 rem(10);
+  }
+
+  // Мобилка (макет 18160:48002): шапка 60, лента 311×319, панель без нижнего поля секции
+  @include media(mobile) {
+    padding: rem(60) 0 0;
+  }
+
+  // Фон (небо и снег) в макете шире секции и выше её
+  &__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: -11.41%;
+      width: 122.83%;
+      height: 107.08%;
+      max-width: none;
+      object-fit: cover;
+    }
+  }
+
+  &__gallery {
+    position: relative;
+    flex: 1 0 0;
+    min-width: 1px;
+
+    @include media(tablet) {
+      flex: none;
+      overflow: hidden;
+    }
+
+    &.is-draggable {
+      @include drag-track;
+    }
+  }
+
+  &__photos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(8);
+
+    @include media(tablet) {
+      display: flex;
+      width: max-content;
+      padding: rem(20);
+    }
+
+    @include media(mobile) {
+      padding: rem(10);
+    }
+  }
+
+  &__photo {
+    width: 100%;
+    height: rem(390);
+    object-fit: cover;
+    border-radius: var(--radius-m);
+
+    @include media(tablet) {
+      width: rem(600);
+      height: rem(600);
+    }
+
+    @include media(mobile) {
+      width: rem(311);
+      height: rem(319);
+    }
+
+    &--main {
+      grid-column: 1 / -1;
+      height: rem(700);
+
+      @include media(tablet) {
+        height: rem(600);
+      }
+
+      @include media(mobile) {
+        height: rem(319);
+      }
+    }
+  }
+
+  // Прилипает под шапкой (80) при скролле. Панель выше экрана: её низ открывается,
+  // когда галерея доходит до конца и секция уводит панель вверх
+  &__panel {
+    position: sticky;
+    top: rem(80);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: rem(32);
+    width: rem(578);
+    padding: rem(32);
+    overflow: hidden;
+    background-color: var(--color-bg-light);
+    border-radius: var(--radius-m);
+
+    @include media(tablet) {
+      position: relative;
+      top: auto;
+      width: auto;
+      padding: rem(32) rem(20);
+      border-radius: 0;
+    }
+
+    @include media(mobile) {
+      padding: rem(32) rem(16) rem(75);
+    }
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+
+    @include media(mobile) {
+      gap: rem(16);
+    }
+  }
+
+  &__title,
+  &__price {
+    @include display-m;
+  }
+
+  // Мобилка: заголовок — Involve 20, цена — Wix Madefor Display 20
+  &__title {
+    max-width: rem(422);
+    color: var(--color-fg);
+
+    @include media(mobile) {
+      max-width: none;
+      font-family: $font-involve;
+      font-weight: 500;
+      font-size: rem(20);
+      letter-spacing: 0;
+    }
+  }
+
+  &__price {
+    color: var(--color-fg-soft);
+
+    @include media(mobile) {
+      font-family: $font-display;
+      font-size: rem(20);
+      letter-spacing: 0;
+    }
+  }
+
+  &__subtitle {
+    @include h4;
+    color: var(--color-fg-soft);
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: rem(32);
+  }
+
+  // Выбор формата (вариации товара)
+  &__formats {
+    padding: rem(16);
+    background-color: rgba(1, 39, 62, 0.05);
+    border: 1px solid var(--color-border-muted);
+    border-radius: rem(10);
+
+    // legend нельзя сделать flex-элементом fieldset — отступ до списка задаётся ему самому
+    legend {
+      float: left;
+      width: 100%;
+      margin-bottom: rem(12);
+    }
+  }
+
+  &__formats-list {
+    display: flex;
+    clear: both;
+    flex-direction: column;
+    gap: rem(8);
+  }
+
+  &__buy {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+  }
+
+  &__actions {
+    display: flex;
+    gap: rem(4);
+    align-items: center;
+  }
+
+  &__cart {
+    flex: 1 0 0;
+    gap: rem(10);
+    min-width: 1px;
+    font-family: $font-text;
+    border-radius: var(--radius-m);
+  }
+
+  &__delivery {
+    @include body-m-strong;
+    display: flex;
+    gap: rem(8);
+    align-items: center;
+    color: var(--color-fg-soft);
+
+    img {
+      width: rem(24);
+      height: rem(24);
+    }
+  }
+
+  // Ленты обрезаются по внутреннему краю панели
+  &__block {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+    overflow: hidden;
+
+    &--related {
+      gap: rem(12);
+    }
+  }
+
+  &__viewport {
+    &.is-draggable {
+      @include drag-track;
+    }
+  }
+
+  &__track {
+    display: flex;
+    gap: rem(12);
+    width: max-content;
+  }
+
+  // Нижняя панель покупки — только мобилка (js/modules/sticky-buy.js, макет 18160:50932)
+  &__sticky-buy {
+    display: none;
+
+    @include media(mobile) {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 9;
+      display: flex;
+      gap: rem(4);
+      align-items: center;
+      padding: rem(10);
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(15.8px);
+      transform: translateY(100%);
+      transition:
+        transform $transition,
+        visibility $transition;
+      visibility: hidden;
+
+      &.is-visible {
+        transform: none;
+        visibility: visible;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+}
+
+// Под нижней панелью покупки не должен прятаться низ футера
+.page:has(.product-main__sticky-buy) {
+  @include media(mobile) {
+    padding-bottom: rem(64);
+  }
+}

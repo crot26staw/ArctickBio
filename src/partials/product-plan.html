@@ -1,0 +1,12 @@
+<!-- Плашка товара со скидкой (набор). Цена — разметка WooCommerce: del (старая) + ins (новая) -->
+<a class="product-plan" href="{{ link }}" data-js-fade-up>
+  <img class="product-plan__img" src="./assets/images/offer-plan.webp" alt="" width="88" height="88" loading="lazy">
+  <span class="product-plan__text">
+    <span class="product-plan__title">{{ title }}</span>
+    <span class="product-plan__subtitle">{{ subtitle }}</span>
+  </span>
+  <span class="product-plan__price price">
+    <del aria-label="Старая цена">{{ old_price }}</del>
+    <ins aria-label="Цена">{{ price }}</ins>
+  </span>
+</a>

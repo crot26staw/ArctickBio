@@ -28,6 +28,39 @@
     }
   }
 
+  // Каталог (макет 16636:87810): ниже, без затемнения фото
+  &--short {
+    height: rem(400);
+  }
+
+  &--short &__bg::after {
+    content: none;
+  }
+
+  // Планшет: кадр сдвинут к пачке (макет 18160:42540)
+  &--short &__bg img {
+    @include media(tablet) {
+      object-position: 66% center;
+    }
+
+    @include media(mobile) {
+      object-position: 72% center;
+    }
+  }
+
+  // Мобилка: макет 18160:45268
+  &--short {
+    @include media(mobile) {
+      height: rem(250);
+    }
+  }
+
+  &--short &__inner {
+    @include media(mobile) {
+      padding: 0 rem(10) rem(32);
+    }
+  }
+
   &__inner {
     position: relative;
     padding-bottom: rem(50);

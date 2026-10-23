@@ -1,0 +1,45 @@
+@use '../base' as *;
+
+// Каталог: сетка товаров по 3 в ряд (макет 16647:89415)
+.catalog-grid {
+  padding: rem(20);
+  background-color: var(--color-bg-light);
+
+  // Мобилка: заголовок над сеткой (макет 18160:45361)
+  @include media(mobile) {
+    display: flex;
+    flex-direction: column;
+    gap: rem(32);
+    padding: rem(75) rem(10);
+  }
+
+  // Заголовок виден только на мобилке, выше — для скринридеров
+  &__title {
+    @include visually-hidden;
+
+    @include media(mobile) {
+      position: static;
+      width: rem(252);
+      height: auto;
+      margin: 0 auto;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+    }
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: rem(20) rem(8);
+
+    // Планшет: по 2 в ряд (макет 18160:42543)
+    @include media(tablet) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include media(mobile) {
+      gap: rem(8);
+    }
+  }
+}

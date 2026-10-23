@@ -9,6 +9,7 @@ const root = fileURLToPath(new URL('./src', import.meta.url));
 const pages = {
   index: 'index.html',
   about: 'about.html',
+  catalog: 'catalog.html',
 };
 
 export default defineConfig({

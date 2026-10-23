@@ -75,6 +75,74 @@
       color $transition;
   }
 
+  // Широкая карточка каталога (макет 16647:89421): название и цена столбиком, кнопки справа
+  &--wide &__img {
+    top: 14.15%;
+    left: 18.79%;
+    width: 62.21%;
+    height: 71.47%;
+  }
+
+  &--wide &__info {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  &--wide &__heading {
+    flex: 1 0 0;
+    flex-direction: column;
+    gap: rem(4);
+    align-items: flex-start;
+    min-width: 1px;
+  }
+
+  &--wide &__title {
+    max-width: 100%;
+  }
+
+  &--wide &__more {
+    flex: none;
+  }
+
+  // Мобилка (макет 18160:45468): фото 173, под ним название, цена и кнопки на всю ширину
+  &--wide {
+    @include media(mobile) {
+      height: auto;
+    }
+  }
+
+  &--wide &__media {
+    @include media(mobile) {
+      flex: none;
+      height: rem(173);
+    }
+  }
+
+  &--wide &__img {
+    @include media(mobile) {
+      top: 20.31%;
+      left: 11.48%;
+      width: 77.11%;
+      height: 60.01%;
+    }
+  }
+
+  &--wide &__info {
+    @include media(mobile) {
+      flex-direction: column;
+      align-items: stretch;
+      padding: rem(20) rem(10);
+    }
+  }
+
+  &--wide &__more {
+    @include media(mobile) {
+      flex: 1 0 0;
+      background-color: var(--color-white);
+      border-radius: 2px;
+    }
+  }
+
   // Ховер-состояние из макета: фото-фон, светлый текст, «стеклянная» кнопка
   @include hover {
     color: var(--color-fg-light);

@@ -1,0 +1,97 @@
+@use '../base' as *;
+
+// Баннер «3 месяца по особой цене»: текст слева, фото справа (макет 16632:84186)
+.offer {
+  display: flex;
+  height: rem(800);
+  color: var(--color-white);
+  background-color: #00121c;
+
+  // Планшет: фото сверху, текст под ним (макет 18160:42552)
+  @include media(tablet) {
+    flex-direction: column;
+    height: auto;
+  }
+
+  &__content {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    gap: rem(50);
+    align-items: center;
+    justify-content: center;
+    min-width: 1px;
+    padding: rem(30) rem(15);
+
+    @include media(tablet) {
+      flex: none;
+      gap: rem(80);
+      padding: rem(75) rem(15) rem(120);
+    }
+
+    // Мобилка: макет 18160:45301
+    @include media(mobile) {
+      padding: rem(32) rem(15) rem(75);
+    }
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+    align-items: center;
+  }
+
+  &__title {
+    width: rem(483);
+
+    @include media(mobile) {
+      width: auto;
+    }
+  }
+
+  &__list {
+    @include body-m;
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+
+    li {
+      display: flex;
+      gap: rem(8);
+      align-items: center;
+
+      &::before {
+        content: '';
+        flex-shrink: 0;
+        width: 3px;
+        height: 3px;
+        background-color: currentcolor;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &__media {
+    position: relative;
+    flex: 1 0 0;
+    min-width: 1px;
+    overflow: hidden;
+
+    @include media(tablet) {
+      flex: none;
+      order: -1;
+      height: rem(748);
+    }
+
+    @include media(mobile) {
+      height: rem(375);
+    }
+
+    img {
+      @include cover-img;
+    }
+  }
+}

@@ -19,6 +19,7 @@
 @use 'components/product-card';
 @use 'components/review-card';
 @use 'components/team-card';
+@use 'components/product-plan';
 
 // Blocks
 @use 'blocks/header';
@@ -46,3 +47,5 @@
 @use 'blocks/team';
 @use 'blocks/media';
 @use 'blocks/news';
+@use 'blocks/catalog-grid';
+@use 'blocks/offer';

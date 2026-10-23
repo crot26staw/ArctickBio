@@ -1,0 +1,60 @@
+@use '../base' as *;
+
+// Плашка набора со старой ценой (баннер каталога, макет 18519:136194)
+.product-plan {
+  display: flex;
+  gap: rem(8);
+  align-items: center;
+  width: rem(308);
+  padding: rem(6) rem(12) rem(6) rem(6);
+  color: var(--color-fg-light);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-m);
+
+  &__img {
+    flex-shrink: 0;
+    width: rem(44);
+    height: rem(44);
+    object-fit: cover;
+  }
+
+  &__text {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    align-self: flex-end;
+    min-width: 1px;
+    padding-top: rem(4);
+    white-space: nowrap;
+  }
+
+  &__title {
+    @include body-m-strong;
+  }
+
+  &__subtitle {
+    @include body-s;
+    color: var(--color-fg-light-soft);
+    letter-spacing: 0;
+  }
+
+  // В разметке WooCommerce старая цена идёт первой, в макете — после новой
+  &__price {
+    @include body-s;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: rem(4);
+    align-self: flex-end;
+    white-space: nowrap;
+
+    ins {
+      text-decoration: none;
+    }
+
+    del {
+      color: var(--color-fg-light-soft);
+      letter-spacing: rem(-1);
+    }
+  }
+}

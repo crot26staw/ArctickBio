@@ -1,0 +1,212 @@
+@use '../base' as *;
+
+// «Контакты»: стеклянная карточка поверх фото на весь экран (макет 18147:33971, планшет 18156:36058, мобилка 18144:30039)
+.contacts {
+  position: relative;
+  display: flex;
+  min-height: 100svh;
+  padding: rem(60) rem(20) rem(20);
+  color: var(--color-white);
+  background-color: var(--color-bg-dark);
+
+  @include media(tablet) {
+    padding-top: rem(80);
+  }
+
+  // Мобилка: заголовок сверху на фоне, стеклянный список прижат к низу экрана
+  @include media(mobile) {
+    padding: rem(60) 0 0;
+  }
+
+  // Планшет/мобилка: под фото — переход от чёрного к цвету стола (в мобилке у низа экрана, фото по высоте не тянется)
+  &__bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+
+    @include media(tablet) {
+      background-image: linear-gradient(var(--color-black) 56%, #92a1b5 68.4%);
+    }
+
+    @include media(mobile) {
+      background-image: linear-gradient(to top, #92a1b5 rem(172), var(--color-black) rem(272));
+    }
+  }
+
+  // Десктоп: фрагмент исходника, вырезанный и растянутый под кадр 1440×795, как в макете.
+  // Планшет: свой кадр 768×1024, в макете он под статус-баром (44) — сдвиг вверх
+  &__photo {
+    @include cover-img;
+
+    @include media(tablet) {
+      object-position: 50% 25%;
+    }
+
+    // Мобилка: весь кадр целиком, мелко — саше по центру, низ фото уходит под список
+    @include media(mobile) {
+      top: auto;
+      bottom: rem(159);
+      left: calc(50% - #{rem(1032)});
+      width: rem(1224);
+      max-width: none;
+      height: auto;
+      object-fit: initial;
+    }
+  }
+
+  &__shade {
+    @include cover-img;
+
+    @include media(tablet) {
+      display: none;
+    }
+
+    @include media(mobile) {
+      display: block;
+    }
+  }
+
+  // Подложка из макета — эллиптический градиент (белый → чёрный → белый) с непрозрачностью 0.2 и размытие фона
+  &__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: rem(48);
+    justify-content: space-between;
+    width: rem(500);
+    padding-block: rem(50);
+    background-image: radial-gradient(
+      ellipse rem(659) rem(462) at rem(175) rem(436),
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(0, 0, 0, 0.2) 63.5%,
+      rgba(255, 255, 255, 0.06) 100%
+    );
+    border-radius: var(--radius-l);
+    backdrop-filter: blur(28px);
+
+    @include media(tablet) {
+      width: rem(402);
+      background-image: radial-gradient(
+        ellipse rem(555) rem(475) at rem(141) rem(458),
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(0, 0, 0, 0.2) 63.5%,
+        rgba(255, 255, 255, 0.06) 100%
+      );
+    }
+
+    // Мобилка: карточка — только обёртка, стекло — у списка
+    @include media(mobile) {
+      flex: 1;
+      gap: rem(130);
+      width: 100%;
+      padding: 0;
+      background: none;
+      border-radius: 0;
+      backdrop-filter: none;
+    }
+  }
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+    padding-inline: rem(32);
+
+    @include media(mobile) {
+      padding: rem(32) rem(16) 0;
+    }
+  }
+
+  &__lead {
+    @include body-s;
+    color: var(--color-fg-muted);
+  }
+
+  &__title {
+    @include h2;
+    color: var(--color-white);
+
+    // Мобилка: стиль mobile/h1 из макета
+    @include media(mobile) {
+      font-weight: 400;
+      font-size: rem(36);
+      line-height: 0.9;
+      letter-spacing: rem(-1);
+    }
+  }
+
+  &__text {
+    @include body-l;
+    margin-top: rem(8);
+    color: var(--color-fg-light-soft);
+  }
+
+  @include media(mobile) {
+    &__list {
+      margin: 0 rem(10) rem(10);
+      background-image: radial-gradient(ellipse rem(288) rem(130) at 50% 0, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.5));
+      border-radius: var(--radius-l);
+      backdrop-filter: blur(28px);
+    }
+  }
+
+  &__row {
+    display: flex;
+    gap: rem(24);
+    align-items: center;
+    justify-content: space-between;
+    padding: rem(24) rem(50);
+
+    & + & {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    &--top {
+      align-items: flex-start;
+    }
+
+    @include media(mobile) {
+      padding: rem(24) rem(16);
+    }
+  }
+
+  &__label {
+    @include body-m;
+    color: rgba(255, 255, 255, 0.5);
+
+    @include media(mobile) {
+      @include body-s;
+    }
+  }
+
+  &__value {
+    @include body-l;
+
+    @include media(mobile) {
+      @include body-s;
+    }
+  }
+
+  &__address {
+    @include body-m;
+    width: rem(301);
+    font-style: normal;
+    text-align: right;
+
+    // Планшет: в карточке 402 адрес 301 не помещается рядом с подписью — сжимается
+    @include media(tablet) {
+      width: auto;
+    }
+
+    @include media(mobile) {
+      @include body-s;
+      width: rem(238);
+    }
+  }
+
+  // Подложка иконок в макете — белая 10%
+  &__socials .socials__link {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}

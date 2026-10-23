@@ -1,0 +1,45 @@
+<section class="contacts" data-header-theme="dark">
+  <!-- Фон: фото (фрагмент кадра, как в макете) + затемнение поверх -->
+  <div class="contacts__bg" aria-hidden="true">
+    <picture>
+      <source media="(max-width: 767px)" srcset="./assets/images/contacts-bg-mobile.webp" width="2448" height="593">
+      <source media="(max-width: 1199px)" srcset="./assets/images/contacts-bg-tablet.webp" width="1086" height="1448">
+      <img class="contacts__photo" src="./assets/images/contacts-bg.webp" alt="" width="2880" height="1590" fetchpriority="high">
+    </picture>
+    <img class="contacts__shade" src="./assets/images/contacts-shade.webp" alt="" width="1080" height="612">
+  </div>
+
+  <div class="contacts__card">
+    <div class="contacts__intro">
+      <p class="contacts__lead" data-js-title-reveal data-title-reveal-start="top bottom">Остались вопросы?</p>
+      <h1 class="contacts__title" data-js-title-reveal data-title-reveal-start="top bottom">Контакты</h1>
+      <p class="contacts__text" data-js-title-reveal data-title-reveal-start="top bottom">Напишите нам — поможем <br>с выбором продукта или заказом</p>
+    </div>
+
+    <dl class="contacts__list">
+      <div class="contacts__row">
+        <dt class="contacts__label">Телефон</dt>
+        <dd class="contacts__value"><a href="tel:+79153832414" data-js-roll>+7 (915) 383-24-14</a></dd>
+      </div>
+      <div class="contacts__row">
+        <dt class="contacts__label">Задать вопрос</dt>
+        <dd>
+          <ul class="socials socials--large contacts__socials">
+            <li><a class="socials__link" href="#" target="_blank" rel="noopener" data-js-swipe aria-label="ВКонтакте"><img src="./assets/icons/icn-vk-32.svg" alt="" width="32" height="32"></a></li>
+            <li><a class="socials__link" href="#" target="_blank" rel="noopener" data-js-swipe aria-label="WhatsApp"><img src="./assets/icons/icn-whatsapp-32.svg" alt="" width="32" height="32"></a></li>
+            <li><a class="socials__link" href="#" target="_blank" rel="noopener" data-js-swipe aria-label="Instagram"><img src="./assets/icons/icn-inst-32.svg" alt="" width="32" height="32"></a></li>
+            <li><a class="socials__link" href="#" target="_blank" rel="noopener" data-js-swipe aria-label="Telegram"><img src="./assets/icons/icn-telegram-32.svg" alt="" width="32" height="32"></a></li>
+          </ul>
+        </dd>
+      </div>
+      <div class="contacts__row contacts__row--top">
+        <dt class="contacts__label">Адрес</dt>
+        <dd><address class="contacts__address">184365, Мурманская обл., Кольский м.р-н, Молочный пгт., ул. Строителей, д. 13</address></dd>
+      </div>
+      <div class="contacts__row">
+        <dt class="contacts__label">Почта</dt>
+        <dd class="contacts__value"><a href="mailto:info@laserandme.com" data-js-roll>info@laserandme.com</a></dd>
+      </div>
+    </dl>
+  </div>
+</section>

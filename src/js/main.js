@@ -21,6 +21,7 @@ import { initRevealSequence } from './modules/reveal-sequence.js';
 import { initQuantities } from './modules/quantity.js';
 import { initProductFormats } from './modules/product-format.js';
 import { initStickyBuy } from './modules/sticky-buy.js';
+import { initAnchorNavs } from './modules/anchor-nav.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initQuantities();
   initProductFormats();
   initStickyBuy();
+  initAnchorNavs();
   initDragSliders();
   initFakeGlass();
   initTitleReveal();

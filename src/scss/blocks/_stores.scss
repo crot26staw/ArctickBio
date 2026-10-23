@@ -1,0 +1,138 @@
+@use '../base' as *;
+
+// «Где нас купить?»: список городов с адресами и карта (макет 18132:44748)
+.stores {
+  padding: rem(120) rem(20) rem(100);
+  background-color: var(--color-bg-muted);
+
+  // Мобилка: макет 18133:47984
+  @include media(mobile) {
+    padding: rem(75) rem(20) rem(50);
+  }
+
+  &__title {
+    @include h2;
+    margin-bottom: rem(75);
+    color: var(--color-black);
+    text-align: center;
+
+    @include media(mobile) {
+      margin-bottom: rem(32);
+    }
+  }
+
+  &__body {
+    display: flex;
+    gap: rem(50);
+    max-width: calc(#{$container-width} - #{rem(40)});
+    margin-inline: auto;
+
+    // Планшет: макет 18133:47184
+    @include media(tablet) {
+      gap: rem(8);
+    }
+
+    // Мобилка: список над картой
+    @include media(mobile) {
+      flex-direction: column;
+    }
+  }
+
+  // Список прокручивается внутри карточки, полоса прокрутки — у правого края (4px, макет 18132:46059)
+  &__list {
+    flex-shrink: 0;
+    width: rem(371);
+    height: rem(406);
+    padding: rem(24);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-color: var(--color-white);
+    border-radius: var(--radius-m);
+
+    @include media(tablet) {
+      width: rem(300);
+    }
+
+    // Мобилка: карточка по высоте содержимого
+    @include media(mobile) {
+      width: 100%;
+      height: auto;
+      padding: rem(16);
+    }
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: var(--color-neutral);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--color-fg-soft);
+    }
+
+    @supports not selector(::-webkit-scrollbar) {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-fg-soft) var(--color-neutral);
+    }
+  }
+
+  &__map {
+    position: relative;
+    flex: 1 0 0;
+    min-width: 0;
+    height: rem(406);
+    overflow: hidden;
+
+    @include media(mobile) {
+      flex: none;
+      width: 100%;
+    }
+
+    img {
+      @include cover-img;
+    }
+  }
+}
+
+// Город в списке «Где нас купить?»: аккордеон (js/modules/accordion.js)
+.store-city {
+  &__header {
+    display: flex;
+    gap: rem(16);
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: rem(44);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border-muted);
+  }
+
+  &:last-child &__header {
+    border-bottom: 0;
+  }
+
+  &__name {
+    @include body-l;
+    color: var(--color-fg);
+  }
+
+  &__panel {
+    height: 0;
+    overflow: hidden;
+  }
+
+  &.is-open &__panel {
+    height: auto;
+  }
+
+  &__addresses li {
+    @include body-m;
+    display: flex;
+    align-items: center;
+    min-height: rem(44);
+    line-height: 1;
+    color: var(--color-fg-muted);
+  }
+}

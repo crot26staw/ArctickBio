@@ -1,0 +1,84 @@
+<section class="stores" id="where-to-buy" data-header-theme="light">
+  <h2 class="stores__title" data-js-title-reveal>Где нас купить?</h2>
+
+  <div class="stores__body" data-js-fade-up-group>
+    <!-- Города: аккордеоны (js/modules/accordion.js), открыт один; список прокручивается внутри карточки -->
+    <div class="stores__list" data-js-accordion-group data-lenis-prevent>
+      <div class="store-city is-open" data-js-accordion>
+        <button class="store-city__header" type="button" aria-expanded="true" aria-controls="store-city-1" data-js-accordion-toggle>
+          <span class="store-city__name">г. Екатеринбург</span>
+          <span class="store-city__icon icon-btn icon-btn--24" aria-hidden="true">
+            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+          </span>
+        </button>
+        <div class="store-city__panel" id="store-city-1" data-js-accordion-panel>
+          <ul class="store-city__addresses">
+            <li>ул. Сакко и Ванцетти, д.48</li>
+            <li>ул. Ленина, д. 24</li>
+            <li>ул. Ленина, д. 24</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="store-city" data-js-accordion>
+        <button class="store-city__header" type="button" aria-expanded="false" aria-controls="store-city-2" data-js-accordion-toggle>
+          <span class="store-city__name">г. Москва</span>
+          <span class="store-city__icon icon-btn icon-btn--24" aria-hidden="true">
+            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+          </span>
+        </button>
+        <div class="store-city__panel" id="store-city-2" data-js-accordion-panel>
+          <ul class="store-city__addresses">
+            <li>ул. Ленина, д. 24</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="store-city" data-js-accordion>
+        <button class="store-city__header" type="button" aria-expanded="false" aria-controls="store-city-3" data-js-accordion-toggle>
+          <span class="store-city__name">г. Владивосток</span>
+          <span class="store-city__icon icon-btn icon-btn--24" aria-hidden="true">
+            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+          </span>
+        </button>
+        <div class="store-city__panel" id="store-city-3" data-js-accordion-panel>
+          <ul class="store-city__addresses">
+            <li>ул. Ленина, д. 24</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="store-city" data-js-accordion>
+        <button class="store-city__header" type="button" aria-expanded="false" aria-controls="store-city-4" data-js-accordion-toggle>
+          <span class="store-city__name">г. Санкт-Петербург</span>
+          <span class="store-city__icon icon-btn icon-btn--24" aria-hidden="true">
+            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+          </span>
+        </button>
+        <div class="store-city__panel" id="store-city-4" data-js-accordion-panel>
+          <ul class="store-city__addresses">
+            <li>ул. Ленина, д. 24</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="store-city" data-js-accordion>
+        <button class="store-city__header" type="button" aria-expanded="false" aria-controls="store-city-5" data-js-accordion-toggle>
+          <span class="store-city__name">г. Тюмень</span>
+          <span class="store-city__icon icon-btn icon-btn--24" aria-hidden="true">
+            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+          </span>
+        </button>
+        <div class="store-city__panel" id="store-city-5" data-js-accordion-panel>
+          <ul class="store-city__addresses">
+            <li>ул. Ленина, д. 24</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="stores__map">
+      <img src="./assets/images/buyers-map.webp" alt="Карта магазинов" width="1958" height="812" loading="lazy">
+    </div>
+  </div>
+</section>

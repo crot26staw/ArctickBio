@@ -1,0 +1,244 @@
+@use '../base' as *;
+
+// «Покупателям»: заголовок и панель частых вопросов на общем фоне (макет 18132:44702)
+.help {
+  position: relative;
+  padding-top: rem(200);
+  color: var(--color-fg-light);
+  background-color: var(--color-bg-dark);
+
+  @include media(tablet) {
+    padding-top: rem(100);
+  }
+
+  // Фон в макете — картинка с обрезкой (122.83% × 107.08%, сдвиг влево), растянута на всю секцию
+  &__bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: -11.41%;
+      width: 122.83%;
+      max-width: none;
+      height: 107.08%;
+    }
+  }
+
+  &__intro {
+    position: relative;
+    display: flex;
+    gap: rem(264);
+    align-items: center;
+    max-width: $container-width;
+    margin-inline: auto;
+    padding: 0 rem(20) rem(50);
+
+    // Планшет: подпись строкой над заголовком (макет 18133:47133)
+    @include media(tablet) {
+      flex-direction: column;
+      gap: rem(16);
+      align-items: flex-start;
+      padding-bottom: rem(16);
+    }
+
+    @include media(mobile) {
+      padding: 0 rem(10) rem(24);
+    }
+  }
+
+  &__lead {
+    @include body-m;
+    flex-shrink: 0;
+    width: rem(172);
+
+    @include media(tablet) {
+      width: auto;
+      color: var(--color-fg-light-soft);
+
+      br {
+        display: none;
+      }
+    }
+  }
+
+  &__title {
+    @include h1;
+    color: var(--color-white);
+
+    @include media(mobile) {
+      font-size: rem(36);
+      letter-spacing: rem(-1);
+    }
+  }
+
+  &__panel {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    max-width: calc(#{$container-width} - #{rem(40)});
+    margin-inline: auto;
+    padding: rem(75) rem(20);
+    color: var(--color-fg);
+    background-color: var(--color-bg-light);
+    border-radius: var(--radius-m);
+
+    // Планшет: меню разделов — вкладки над панелью, на тёмном фоне (макет 18133:47139)
+    @include media(tablet) {
+      display: block;
+      margin: rem(56 + 20) rem(20) 0;
+    }
+
+    // Мобилка: панель без верхнего поля — его даёт отступ первого раздела (макет 18133:47939)
+    @include media(mobile) {
+      margin: rem(56 + 10) rem(10) 0;
+      padding: 0 rem(16);
+    }
+  }
+
+  // Меню разделов прилипает под шапкой («Скроллится вниз» — заметка в макете)
+  &__aside {
+    position: sticky;
+    top: rem(80 + 20);
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: rem(24);
+    width: rem(371);
+    padding: rem(24);
+    background-color: var(--color-white);
+    border-radius: var(--radius-m);
+
+    @include media(tablet) {
+      position: absolute;
+      top: rem(-(56 + 20));
+      right: 0;
+      left: 0;
+      width: auto;
+      padding: 0;
+      background-color: transparent;
+    }
+
+    // Мобилка: вкладки не помещаются — листаются по горизонтали до края экрана
+    @include media(mobile) {
+      top: rem(-(56 + 10));
+      right: rem(-10);
+      overflow-x: auto;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+
+    li {
+      padding-bottom: rem(15);
+      border-bottom: 1px solid var(--color-border-muted);
+    }
+
+    @include media(tablet) {
+      flex-direction: row;
+      gap: rem(16);
+
+      li {
+        flex-shrink: 0;
+        padding: 0;
+        border: 0;
+      }
+    }
+
+    @include media(mobile) {
+      padding-right: rem(10);
+    }
+  }
+
+  &__link {
+    @include body-l;
+    color: var(--color-fg-muted);
+    transition: color $transition;
+
+    &.is-active {
+      font-weight: 500;
+      color: var(--color-fg);
+    }
+
+    @include media(tablet) {
+      display: inline-flex;
+      align-items: center;
+      height: rem(56);
+      padding-inline: rem(12);
+      white-space: nowrap;
+      border-radius: var(--radius-m);
+      transition:
+        color $transition,
+        background-color $transition;
+
+      &.is-active {
+        font-weight: 400;
+        color: var(--color-fg-light);
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+
+  &__note {
+    font-family: $font-text;
+    font-size: rem(12);
+    line-height: 1;
+    letter-spacing: rem(-0.5);
+    color: var(--color-heading);
+
+    a {
+      text-decoration: underline;
+      text-underline-position: from-font;
+    }
+
+    @include media(tablet) {
+      display: none;
+    }
+  }
+
+  &__content {
+    flex: 1 0 0;
+    min-width: 0;
+    padding-inline: rem(50);
+
+    @include media(tablet) {
+      padding-inline: 0;
+    }
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: rem(32);
+    scroll-margin-top: rem(80 + 20);
+
+    & + & {
+      padding-top: rem(50);
+    }
+
+    @include media(mobile) {
+      padding-top: rem(50);
+    }
+  }
+
+  &__group-title {
+    @include h3;
+    color: var(--color-heading);
+
+    @include media(mobile) {
+      font-size: rem(18);
+      line-height: 1.1;
+    }
+  }
+}

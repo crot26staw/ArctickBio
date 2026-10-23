@@ -11,6 +11,8 @@ const pages = {
   about: 'about.html',
   catalog: 'catalog.html',
   product: 'product.html',
+  buyers: 'buyers.html',
+  contacts: 'contacts.html',
 };
 
 export default defineConfig({

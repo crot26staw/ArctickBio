@@ -190,6 +190,43 @@
     color: var(--color-fg-soft);
   }
 
+  // Строкой между линиями, «Покупателям» (макет 18132:44718): без подложки и боковых полей,
+  // у раскрытого пункта шапка ниже (16 вместо 20), вопрос темнее
+  &--line {
+    background-color: transparent;
+
+    &:first-child {
+      border-top: 1px solid var(--color-border-muted);
+    }
+  }
+
+  &--line &__header {
+    padding: rem(20) 0;
+    transition: padding $transition;
+
+    // Мобилка: строка 72 (min-height 70 + линии), вопрос в две строки (макет 18133:47939)
+    @include media(mobile) {
+      padding: rem(16) 0;
+    }
+  }
+
+  &--line.is-open &__header {
+    padding-block: rem(16);
+  }
+
+  &--line &__question {
+    color: var(--color-fg-soft);
+    transition: color $transition;
+  }
+
+  &--line.is-open &__question {
+    color: var(--color-fg);
+  }
+
+  &--line &__answer {
+    padding: 0 0 rem(20);
+  }
+
   &__links {
     display: flex;
     flex-direction: column;

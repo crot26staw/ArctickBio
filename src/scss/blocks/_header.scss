@@ -168,6 +168,16 @@
     height: rem(14.732);
   }
 
+  // Вошедший пользователь: вместо иконки — первая буква имени (макет 18182:43263)
+  &__user {
+    font-family: $font-display;
+    font-weight: 500;
+    font-size: rem(15);
+    line-height: 1;
+    letter-spacing: rem(-0.3);
+    text-transform: uppercase;
+  }
+
   &__cart &__icon {
     transform: translateX(-1.18px);
   }

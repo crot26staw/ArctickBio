@@ -18,12 +18,14 @@
 
     <div class="header__actions">
       <a class="header__phone" href="tel:+79818435454" data-js-swipe>+7 (981) 843 54-54</a>
-      <a class="header__icon-btn" href="#" aria-label="Личный кабинет" data-js-swipe>
+      <!-- Гость: кнопка открывает попап входа (partials/auth-modal.html). Вошедший пользователь (макет 18182:43263) —
+           ссылка на кабинет с первой буквой имени: <a class="header__icon-btn header__user" href="…/my-account/" aria-label="Личный кабинет" data-js-swipe>А</a> -->
+      <button class="header__icon-btn" type="button" aria-label="Войти в личный кабинет" aria-haspopup="dialog" aria-controls="auth" data-js-auth-open="login" data-js-swipe>
         <svg class="header__icon" width="15" height="15" viewBox="0 0 14.7321 14.7321" fill="none" stroke="currentColor" stroke-width="1.33929" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12.2824 12.8862V11.6585C12.2824 11.0073 12.0237 10.3828 11.5632 9.92225C11.1027 9.46181 10.4782 9.20312 9.82699 9.20312H4.91629C4.26509 9.20312 3.64056 9.46181 3.18009 9.92225C2.71962 10.3828 2.46094 11.0073 2.46094 11.6585V12.8862"/>
           <path d="M7.36549 6.75444C8.72158 6.75444 9.82087 5.65516 9.82087 4.29911C9.82087 2.94305 8.72158 1.84375 7.36549 1.84375C6.00946 1.84375 4.91016 2.94305 4.91016 4.29911C4.91016 5.65516 6.00946 6.75444 7.36549 6.75444Z"/>
         </svg>
-      </a>
+      </button>
       <a class="header__icon-btn header__cart" href="#" aria-label="Корзина" data-js-swipe>
         <svg class="header__icon" width="15" height="15" viewBox="0 0 14.7321 14.7321" fill="none" stroke="currentColor" stroke-width="1.33929" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M6.36607 13.3884C6.55099 13.3884 6.70089 13.2385 6.70089 13.0536C6.70089 12.8687 6.55099 12.7188 6.36607 12.7188C6.18116 12.7188 6.03125 12.8687 6.03125 13.0536C6.03125 13.2385 6.18116 13.3884 6.36607 13.3884Z"/>
@@ -37,4 +39,6 @@
       </button>
     </div>
   </div>
+
+  <include src="partials/auth-modal.html"></include>
 </header>

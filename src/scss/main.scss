@@ -22,6 +22,7 @@
 @use 'components/product-plan';
 @use 'components/quantity';
 @use 'components/ingredient-card';
+@use 'components/field';
 
 // Blocks
 @use 'blocks/header';
@@ -55,3 +56,4 @@
 @use 'blocks/help';
 @use 'blocks/stores';
 @use 'blocks/contacts';
+@use 'blocks/auth';

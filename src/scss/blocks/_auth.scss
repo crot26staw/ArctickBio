@@ -1,0 +1,189 @@
+@use '../base' as *;
+
+// Попап входа (partials/auth-modal.html, js/modules/auth.js; макет 18126:59052).
+// Десктоп и планшет — панель 400px справа с отступами 20 от краёв окна, страница под ней не затемняется;
+// мобилка — на весь экран. Содержимое по центру панели, при нехватке высоты панель скроллится.
+// Появление в макете не задано: панель выезжает справа на 24px из прозрачности.
+$auth-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+.auth {
+  position: fixed;
+  inset: 0;
+  z-index: 20; // над .header__inner
+  visibility: hidden;
+  transition: visibility 0s linear 0.4s;
+
+  &.is-open {
+    visibility: visible;
+    transition: none;
+  }
+
+  // Прозрачная подложка: клик мимо панели закрывает попап
+  &__overlay {
+    position: absolute;
+    inset: 0;
+  }
+
+  &__dialog {
+    position: absolute;
+    top: rem(20);
+    right: rem(20);
+    bottom: rem(20);
+    display: flex;
+    flex-direction: column;
+    width: rem(400);
+    padding: rem(32);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    color: var(--color-fg-light);
+    background-color: rgba(0, 8, 13, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-l);
+    backdrop-filter: blur(13.05px);
+    opacity: 0;
+    transform: translateX(rem(24));
+    transition:
+      opacity $auth-transition,
+      transform $auth-transition;
+
+    @include media(mobile) {
+      inset: 0;
+      width: 100%;
+      padding: rem(32) rem(16);
+      border: 0;
+    }
+  }
+
+  &.is-open &__dialog {
+    opacity: 1;
+    transform: none;
+  }
+
+  &__icon-btn {
+    position: absolute;
+    top: rem(6);
+    display: flex;
+    width: rem(44);
+    height: rem(44);
+    color: var(--color-fg-light);
+    border-radius: var(--radius-s);
+
+    svg {
+      width: rem(44);
+      height: rem(44);
+    }
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &__close {
+    right: rem(6);
+  }
+
+  &__back {
+    left: rem(6);
+  }
+
+  // Экран: по центру панели (margin auto в колонке — при нехватке высоты прижимается к верху и скроллится)
+  &__view {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+    width: 100%;
+    margin-block: auto;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &__head {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+    text-align: center;
+  }
+
+  &__title {
+    @include h3;
+  }
+
+  &__text {
+    color: var(--color-fg-light-soft);
+
+    &--narrow {
+      max-width: rem(264);
+      margin-inline: auto;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+
+    // «Забыли пароль», «Письмо отправлено», «Новый пароль»: поля и кнопка одной колонкой через 12
+    &--compact {
+      gap: rem(12);
+    }
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+  }
+
+  &__password {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+    align-items: center;
+  }
+
+  &__submit {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+    align-items: center;
+    width: 100%;
+  }
+
+  &__btn {
+    width: 100%;
+  }
+
+  &__consent {
+    @include desc-m;
+    max-width: rem(301);
+    color: var(--color-fg-light-soft);
+    text-align: center;
+  }
+
+  &__switch {
+    @include body-s;
+    text-align: center;
+  }
+
+  // Подчёркнутая текстовая ссылка. Подчёркивание — фоном у самой ссылки:
+  // text-decoration не доходит до букв roll-эффекта (inline-grid, roll-text.js)
+  &__link {
+    color: inherit;
+    letter-spacing: inherit;
+    text-align: left;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+
+    &--muted {
+      align-self: flex-start;
+      color: var(--color-fg-muted);
+    }
+  }
+}

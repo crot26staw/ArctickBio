@@ -22,6 +22,8 @@ import { initQuantities } from './modules/quantity.js';
 import { initProductFormats } from './modules/product-format.js';
 import { initStickyBuy } from './modules/sticky-buy.js';
 import { initAnchorNavs } from './modules/anchor-nav.js';
+import { initFields } from './modules/field.js';
+import { initAuth } from './modules/auth.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
@@ -30,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroCover();
   initHeader();
   initMobileMenu();
+  initFields();
+  initAuth();
   initAccordions();
   initQuantities();
   initProductFormats();

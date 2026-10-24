@@ -1,0 +1,78 @@
+@use '../base' as *;
+
+// Чекбокс (макет Checkbox 18519:135281): квадрат 16 с рамкой 2px в поле 20, подпись body-s.
+// Ошибка (.is-error, js/modules/checkout.js) — рамка цвета ошибки
+.checkbox {
+  display: flex;
+  gap: rem(8);
+  align-items: flex-start;
+  cursor: pointer;
+
+  &__input {
+    @include visually-hidden;
+  }
+
+  &__box {
+    position: relative;
+    flex-shrink: 0;
+    width: rem(20);
+    height: rem(20);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: rem(2);
+      border: 2px solid rgba(68, 83, 113, 0.25);
+      border-radius: 3px;
+      transition:
+        background-color $transition,
+        border-color $transition;
+    }
+
+    // Галочка
+    &::after {
+      content: '';
+      position: absolute;
+      top: rem(5);
+      left: rem(7.5);
+      width: rem(5);
+      height: rem(9);
+      border: solid var(--color-white);
+      border-width: 0 2px 2px 0;
+      opacity: 0;
+      transform: rotate(45deg);
+      transition: opacity $transition;
+    }
+  }
+
+  &__input:checked + &__box::before {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  &__input:checked + &__box::after {
+    opacity: 1;
+  }
+
+  &__input:focus-visible + &__box::before {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  &.is-error &__box::before {
+    border-color: var(--color-error);
+  }
+
+  &__label {
+    @include body-s;
+    flex: 1;
+    padding-top: rem(3);
+    color: var(--color-fg-muted);
+
+    // Подчёркивание фоном: text-decoration не доходит до букв roll-эффекта
+    a {
+      color: inherit;
+      background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+    }
+  }
+}

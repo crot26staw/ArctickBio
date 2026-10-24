@@ -35,6 +35,12 @@
     background-color: var(--color-neutral);
   }
 
+  // Чёрная (кабинет: «Добавить адрес», макет 16692:130835)
+  &--dark {
+    color: var(--color-white);
+    background-color: var(--color-fg);
+  }
+
   &--small {
     height: rem(32);
     padding-inline: rem(12);

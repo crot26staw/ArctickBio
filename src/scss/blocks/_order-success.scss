@@ -1,0 +1,114 @@
+@use '../base' as *;
+
+// «Заказ оформлен» (order-received.html, partials/order/received.html; макет 18252:77498 → 18253:80920).
+// Белая карточка на всю высоту под шапкой (поля 20, мобилка — 10), блок 478 с галочкой; анимация — js/modules/order-success.js
+.order-success {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0 rem(20) rem(20);
+
+  @include media(mobile) {
+    padding: 0 rem(10) rem(10);
+  }
+
+  &__card {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(400);
+    padding: rem(40) rem(20);
+    background-color: var(--color-white);
+    border-radius: var(--radius-l);
+  }
+
+  // Высота как в макете (252), чтобы галочка не прыгала, когда появляется текст
+  &__box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: rem(478);
+    max-width: 100%;
+    min-height: rem(252);
+    padding-inline: rem(45);
+    text-align: center;
+
+    @include media(mobile) {
+      padding-inline: 0;
+    }
+  }
+
+  // Галочка 44 в трёх кольцах: 60 / 84 / 108
+  &__icon {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: rem(108);
+    height: rem(108);
+  }
+
+  &__ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+
+    &--1 {
+      width: rem(108);
+      height: rem(108);
+      background-color: #e7f5f0;
+    }
+
+    &--2 {
+      width: rem(84);
+      height: rem(84);
+      background-color: #c3e6da;
+    }
+
+    &--3 {
+      width: rem(60);
+      height: rem(60);
+      background-color: #87cdb4;
+    }
+  }
+
+  &__check {
+    position: relative;
+    width: rem(44);
+    height: rem(44);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+    align-items: center;
+
+    // До анимации скрыт (класс js — на <html> сразу, order-success.js показывает)
+    .js & {
+      opacity: 0;
+    }
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+    align-items: center;
+  }
+
+  &__title {
+    @include h3;
+    color: var(--color-fg);
+  }
+
+  &__desc {
+    max-width: rem(239);
+    color: var(--color-fg-muted);
+  }
+}

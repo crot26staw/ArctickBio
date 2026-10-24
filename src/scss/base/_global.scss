@@ -38,6 +38,12 @@ body {
 
 .main {
   flex-grow: 1;
+
+  // Секция растягивается на всю высоту под шапкой («Заказ оформлен»)
+  &--flex {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .container {

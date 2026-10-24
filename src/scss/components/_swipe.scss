@@ -44,9 +44,15 @@ $swipe-transition: 0.3s ease-in-out;
     transition: transform $swipe-transition;
   }
 
+  // В покое копия скрыта: если высота кнопки замерена до применения стилей (сдвиг меньше кнопки),
+  // она иначе видна под текстом. Прячется после того, как уехала вниз (задержка = длительность перехода)
   &__label--clone {
     color: var(--swipe-fg, var(--color-fg-light));
+    visibility: hidden;
     transform: translateY(var(--swipe-shift, 100%));
+    transition:
+      transform $swipe-transition,
+      visibility 0s linear 0.3s;
 
     img {
       filter: var(--swipe-img-filter, none);
@@ -68,7 +74,9 @@ $swipe-transition: 0.3s ease-in-out;
     }
 
     .swipe__label--clone {
+      visibility: visible;
       transform: none;
+      transition: transform $swipe-transition;
     }
 
     [data-swipe-static] {

@@ -1,0 +1,178 @@
+<!--
+  Оформление заказа (макет «Оформление заказа» в секции 18126:59053 копии Pky7FDIkoyGiepPQCMknnV):
+  десктоп 18270:36245 (ошибки — 18649:81751, выбран ПВЗ — 18271:39375, курьер — 18271:40435), планшет 18281:45602,
+  мобилка 18270:36258 (товары раскрыты — 18281:46200).
+  Форма — разметка WooCommerce (form.checkout, поля billing_*, payment_method, shipping_method, terms); логика — js/modules/checkout.js.
+  Пункт выдачи и адрес курьера выбираются в попапах (partials/checkout/pickup-modal.html, address-modal.html).
+-->
+<section class="checkout-wrap" data-header-theme="dark">
+  <form class="checkout__card checkout woocommerce-checkout" name="checkout" action="./order-received.html" method="post" novalidate data-js-checkout>
+    <div class="checkout__main">
+      <div class="checkout__head">
+        <a class="checkout__back" href="./catalog.html" aria-label="Назад">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10.7984 12.0039L15.3984 16.6039L13.9984 18.0039L7.99844 12.0039L13.9984 6.00391L15.3984 7.40391L10.7984 12.0039Z"/></svg>
+        </a>
+        <h1 class="checkout__title">Оформление заказа</h1>
+      </div>
+
+      <fieldset class="checkout__section woocommerce-billing-fields">
+        <legend class="checkout__subtitle">Контактные данные</legend>
+        <div class="checkout__fields">
+          <include src="partials/form-field.html" data='{"id": "billing_phone", "type": "tel", "name": "billing_phone", "label": "Телефон", "autocomplete": "tel", "mod": "field--light", "attrs": "data-validate=\"required\" data-message=\"Обязательное поле\""}'></include>
+          <include src="partials/form-field.html" data='{"id": "billing_email", "type": "email", "name": "billing_email", "label": "Email", "autocomplete": "email", "mod": "field--light", "attrs": "data-validate=\"email\" data-message=\"Обязательное поле\""}'></include>
+          <include src="partials/form-field.html" data='{"id": "billing_first_name", "type": "text", "name": "billing_first_name", "label": "Имя", "autocomplete": "given-name", "mod": "field--light", "attrs": "data-validate=\"required\" data-message=\"Обязательное поле\""}'></include>
+          <include src="partials/form-field.html" data='{"id": "billing_last_name", "type": "text", "name": "billing_last_name", "label": "Фамилия", "autocomplete": "family-name", "mod": "field--light", "attrs": "data-validate=\"required\" data-message=\"Обязательное поле\""}'></include>
+        </div>
+      </fieldset>
+
+      <fieldset class="checkout__section wc_payment_methods">
+        <legend class="checkout__subtitle">Способ оплаты</legend>
+        <div class="checkout__options">
+          <label class="checkout-pay">
+            <input class="checkout-pay__input input-radio" type="radio" name="payment_method" value="sbp" checked>
+            <img class="checkout-pay__icon checkout-pay__icon--sbp" src="./assets/icons/icn-sbp.svg" alt="" width="19.4" height="24">
+            <span class="checkout-pay__label">СБП</span>
+          </label>
+          <label class="checkout-pay">
+            <input class="checkout-pay__input input-radio" type="radio" name="payment_method" value="card">
+            <img class="checkout-pay__icon" src="./assets/icons/icn-card.svg" alt="" width="32" height="32">
+            <span class="checkout-pay__label">Оплатить картой</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="checkout__section checkout__section--delivery woocommerce-shipping-methods">
+        <legend class="checkout__subtitle">Способ получения</legend>
+        <div class="checkout__options checkout__options--delivery">
+          <label class="checkout-ship">
+            <input class="checkout-ship__input shipping_method" type="radio" name="shipping_method[0]" value="pickup" checked data-js-checkout-shipping>
+            <span class="checkout-ship__title">Пункт выдачи</span>
+            <span class="checkout-ship__meta">Завтра, <span class="checkout-ship__free">бесплатно</span></span>
+          </label>
+          <label class="checkout-ship">
+            <input class="checkout-ship__input shipping_method" type="radio" name="shipping_method[0]" value="courier" data-js-checkout-shipping>
+            <span class="checkout-ship__title">Курьер</span>
+            <span class="checkout-ship__meta">Завтра, <span class="checkout-ship__free">бесплатно</span></span>
+          </label>
+        </div>
+
+        <!-- Пункт выдачи: пока не выбран — кнопка «Пункт выдачи», после выбора — служба и адрес (макет 18271:39375) -->
+        <div class="checkout__delivery" data-js-checkout-panel="pickup">
+          <button class="checkout-target" type="button" aria-haspopup="dialog" aria-controls="pickup" data-js-modal-open="pickup">
+            <span class="checkout-target__icon" data-js-checkout-pickup-icon>
+              <img src="./assets/icons/icn-location.svg" alt="" width="24" height="24">
+            </span>
+            <span class="checkout-target__body">
+              <span class="checkout-target__title"><span data-js-checkout-pickup-title>Пункт выдачи</span>
+                <svg class="checkout-target__chevron" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.5 10L6.66667 6.16667L7.83333 5L12.8333 10L7.83333 15L6.66667 13.8333L10.5 10Z"/></svg>
+              </span>
+              <span class="checkout-target__text" hidden data-js-checkout-pickup-text></span>
+            </span>
+          </button>
+          <input type="hidden" name="pickup_point" value="" data-js-checkout-pickup-value>
+          <p class="checkout__error" hidden data-js-checkout-error="pickup">Выберите пункт выдачи</p>
+        </div>
+
+        <!-- Курьер: адрес и дата доставки (макет 18271:40435) -->
+        <div class="checkout__delivery" hidden data-js-checkout-panel="courier">
+          <button class="checkout-target" type="button" aria-haspopup="dialog" aria-controls="address" data-js-modal-open="address">
+            <span class="checkout-target__icon">
+              <img src="./assets/icons/icn-location.svg" alt="" width="24" height="24">
+            </span>
+            <span class="checkout-target__body">
+              <span class="checkout-target__title">Адрес доставки
+                <svg class="checkout-target__chevron" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.5 10L6.66667 6.16667L7.83333 5L12.8333 10L7.83333 15L6.66667 13.8333L10.5 10Z"/></svg>
+              </span>
+              <span class="checkout-target__text" data-js-checkout-address-text>Екатеринбург, Уральская ул., 70</span>
+            </span>
+          </button>
+          <input type="hidden" name="shipping_address_1" value="Екатеринбург, Уральская ул., 70" data-js-checkout-address-value>
+
+          <p class="checkout__dates-title">
+            <img src="./assets/icons/icn-package.svg" alt="" width="32" height="32">
+            <span>30 сентября - 1 октября</span>
+          </p>
+          <div class="checkout__dates" data-js-drag-slider data-drag-slider-align="start">
+            <div class="checkout__dates-track" data-js-drag-slider-track>
+              <include src="partials/checkout/delivery-date.html" data='{"day": "Ср, 30 сент", "value": "2026-09-30", "price": "0 ₽", "checked": "checked"}'></include>
+              <include src="partials/checkout/delivery-date.html" data='{"day": "Чт, 1 окт", "value": "2026-10-01", "price": "0 ₽"}'></include>
+              <include src="partials/checkout/delivery-date.html" data='{"day": "Пт, 2 окт", "value": "2026-10-02", "price": "0 ₽"}'></include>
+              <include src="partials/checkout/delivery-date.html" data='{"day": "Сб, 3 окт", "value": "2026-10-03", "price": "0 ₽"}'></include>
+              <include src="partials/checkout/delivery-date.html" data='{"day": "Вс, 4 окт", "value": "2026-10-04", "price": "0 ₽"}'></include>
+              <include src="partials/checkout/delivery-date.html" data='{"day": "Пн, 5 окт", "value": "2026-10-05", "price": "0 ₽"}'></include>
+              <include src="partials/checkout/delivery-date.html" data='{"day": "Вт, 6 окт", "value": "2026-10-06", "price": "0 ₽"}'></include>
+              <include src="partials/checkout/delivery-date.html" data='{"day": "Ср, 7 окт", "value": "2026-10-07", "price": "0 ₽"}'></include>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <aside class="checkout__aside" aria-label="Ваш заказ">
+      <div class="checkout__order">
+        <h2 class="checkout__order-title">Ваш заказ</h2>
+        <button class="checkout__toggle" type="button" aria-expanded="true" aria-controls="checkout-order-list" data-js-checkout-toggle>
+          <span class="checkout__toggle-thumb">
+            <img src="./assets/images/checkout-product.webp" alt="" width="64" height="48">
+          </span>
+          <span class="checkout__toggle-text">
+            <span class="checkout__toggle-label">Оформляем 2 товара</span>
+            <span class="checkout__toggle-mobile">Итого</span>
+            <span class="checkout__toggle-count">2 товара</span>
+          </span>
+          <span class="checkout__toggle-price">1440₽</span>
+          <svg class="checkout__toggle-chevron" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.74935 10.7507L13.5827 6.91732L14.7493 8.08398L9.74935 13.084L4.74935 8.08398L5.91602 6.91732L9.74935 10.7507Z"/></svg>
+        </button>
+        <ul class="checkout__order-list woocommerce-checkout-review-order-table" id="checkout-order-list" data-js-checkout-list>
+          <include src="partials/checkout/order-item.html" data='{"title": "Коллаген с брусникой", "qty": "1", "price": "1440₽"}'></include>
+          <include src="partials/checkout/order-item.html" data='{"title": "Коллаген с брусникой", "qty": "1", "price": "1440₽"}'></include>
+        </ul>
+      </div>
+
+      <div class="checkout__summary">
+        <div class="checkout__totals">
+          <dl class="checkout__rows">
+            <div class="checkout__row">
+              <dt>2 товара</dt>
+              <dd>1 120 ₽</dd>
+            </div>
+            <div class="checkout__row">
+              <dt>Скидка</dt>
+              <dd class="checkout__discount">- 200 ₽</dd>
+            </div>
+            <div class="checkout__row">
+              <dt>Доставка</dt>
+              <dd class="checkout__free">Бесплатно</dd>
+            </div>
+          </dl>
+          <p class="checkout__total order-total"><span>Итого</span> <span>1 120 ₽</span></p>
+        </div>
+        <button class="btn btn--accent checkout__pay" type="submit" name="woocommerce_checkout_place_order" id="place_order" data-js-swipe>Оплатить 1 120 ₽</button>
+      </div>
+
+      <div class="checkout__promo promo checkout_coupon" data-js-checkout-promo>
+        <label class="visually-hidden" for="coupon_code">Промокод</label>
+        <input class="promo__input" id="coupon_code" type="text" name="coupon_code" placeholder="Промокод" autocomplete="off">
+        <button class="promo__btn" type="button" name="apply_coupon" data-js-swipe>Применить</button>
+      </div>
+
+      <label class="checkbox checkout__terms woocommerce-form__label-for-checkbox" data-js-checkout-terms>
+        <input class="checkbox__input input-checkbox" type="checkbox" name="terms" id="terms">
+        <span class="checkbox__box" aria-hidden="true"></span>
+        <span class="checkbox__label">Я принимаю <a href="#" target="_blank" rel="noopener" data-js-roll>Публичную оферту</a> и&nbsp;<a href="#" target="_blank" rel="noopener" data-js-roll>Политику обработки персональных данных</a></span>
+      </label>
+    </aside>
+
+    <footer class="checkout__footer">
+      <ul class="checkout__links" data-js-roll-group>
+        <li><a href="./buyers.html#help-payment">Оплата</a></li>
+        <li><a href="./buyers.html#help-delivery">Доставка</a></li>
+        <li><a href="./buyers.html#help-returns">Правила возврата</a></li>
+      </ul>
+      <div class="checkout__support">
+        <p>Служба поддержки 24/7</p>
+        <a class="checkout__support-phone" href="tel:88122007550" data-js-roll>8 (812) 200-75-50</a>
+      </div>
+    </footer>
+  </form>
+</section>

@@ -1,0 +1,17 @@
+<!-- Адрес в «Мои адреса» (макет 18275:43216): радиокнопка — адрес по умолчанию, «Изменить», удалить (js/modules/account.js) -->
+<li class="address-card" data-js-address-card>
+  <label class="address-card__main">
+    <input class="address-card__input" type="radio" name="default_address" value="{{ id }}" {{ checked }}>
+    <span class="address-card__radio" aria-hidden="true"></span>
+    <span class="address-card__text">
+      <span class="address-card__name" data-js-address-card-name>{{ name }}</span>
+      <span class="address-card__address" data-js-address-card-address>{{ address }}</span>
+    </span>
+  </label>
+  <div class="address-card__actions">
+    <button class="btn btn--neutral btn--small" type="button" data-js-address-edit data-js-swipe>Изменить</button>
+    <button class="address-card__remove" type="button" aria-label="Удалить адрес" data-js-address-remove data-js-swipe>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 21C6.45 21 5.97917 20.8042 5.5875 20.4125C5.19583 20.0208 5 19.55 5 19V6H4V4H9V3H15V4H20V6H19V19C19 19.55 18.8042 20.0208 18.4125 20.4125C18.0208 20.8042 17.55 21 17 21H7ZM17 6H7V19H17V6Z"/></svg>
+    </button>
+  </div>
+</li>

@@ -32,10 +32,14 @@ function setup(el) {
   el.prepend(inner);
   el.classList.add('swipe');
 
-  // Сдвиг слоёв = высота кнопки, чтобы текст полностью уходил за край
-  const setShift = () => el.style.setProperty('--swipe-shift', `${el.clientHeight}px`);
+  // Сдвиг слоёв = высота кнопки, чтобы текст полностью уходил за край.
+  // Пересчёт и перед ховером/фокусом: первый замер мог пройти до применения стилей
+  const setShift = () => el.style.setProperty('--swipe-shift', `${el.offsetHeight}px`);
   setShift();
   new ResizeObserver(setShift).observe(el);
+  el.addEventListener('pointerenter', setShift);
+  el.addEventListener('focusin', setShift);
+  el.closest('[data-swipe-trigger]')?.addEventListener('pointerenter', setShift);
 }
 
 export function initSwipeButtons() {

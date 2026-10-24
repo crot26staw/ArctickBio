@@ -1,0 +1,41 @@
+<!--
+  «Мои адреса» (макет: нет адресов — 16692:130470, форма — 16692:130572, с адресом — 16692:130673;
+  планшет 18275:43279 / 18277:43532 / 18277:43628, мобилка 18275:43390 / 18277:43758 / 18277:43854).
+  «Добавить адрес» открывает форму, «Назад» — обратно к списку; «Изменить» открывает форму с данными адреса (account.js).
+  Форма — поля WooCommerce edit-address (shipping_*).
+-->
+<div class="account__head">
+  <h1 class="account__title">Аккаунт</h1>
+</div>
+<include src="partials/account/tabs.html" data='{"addresses_mod": "is-active", "addresses_attrs": "aria-current=\"page\""}'></include>
+<div class="account__body" data-js-addresses>
+  <h2 class="account-form__title">Управление адресами</h2>
+
+  <div class="account-addresses" data-js-addresses-list>
+    <ul class="account-addresses__list" data-js-addresses-items>
+      <include src="partials/account/address-card.html" data='{"id": "1", "name": "Зайнтдинов Ренат Данилович", "address": "140016, Люберцы, Некрасовский проезд, 8", "checked": "checked"}'></include>
+    </ul>
+    <!-- Шаблон нового адреса для демо до WordPress -->
+    <template data-js-addresses-template>
+      <include src="partials/account/address-card.html" data='{"id": "", "name": "", "address": ""}'></include>
+    </template>
+    <button class="btn btn--dark account-addresses__add" type="button" data-js-addresses-add data-js-swipe>Добавить адрес</button>
+  </div>
+
+  <form class="account-form account-form--address" action="#" method="post" novalidate hidden data-js-addresses-form>
+    <div class="account-form__fields">
+      <include src="partials/form-field.html" data='{"id": "shipping_name", "type": "text", "name": "shipping_full_name", "label": "Имя и Фамилия", "autocomplete": "name", "mod": "field--light", "attrs": "data-validate=\"required\" data-message=\"Обязательное поле\""}'></include>
+      <include src="partials/form-field.html" data='{"id": "shipping_phone", "type": "tel", "name": "shipping_phone", "label": "Телефон", "autocomplete": "tel", "mod": "field--light"}'></include>
+      <include src="partials/form-field.html" data='{"id": "shipping_address_1", "type": "text", "name": "shipping_address_1", "label": "Адрес*", "autocomplete": "address-line1", "mod": "field--light", "attrs": "data-validate=\"required\" data-message=\"Обязательное поле\""}'></include>
+      <include src="partials/form-field.html" data='{"id": "shipping_address_2", "type": "text", "name": "shipping_address_2", "label": "Квартира, номер", "autocomplete": "address-line2", "mod": "field--light"}'></include>
+      <include src="partials/form-field.html" data='{"id": "shipping_country", "type": "text", "name": "shipping_country", "label": "Страна", "autocomplete": "country-name", "mod": "field--light"}'></include>
+      <include src="partials/form-field.html" data='{"id": "shipping_city", "type": "text", "name": "shipping_city", "label": "Город", "autocomplete": "address-level2", "mod": "field--light"}'></include>
+      <include src="partials/form-field.html" data='{"id": "shipping_postcode", "type": "text", "name": "shipping_postcode", "label": "Почтовый индекс", "autocomplete": "postal-code", "mod": "field--light"}'></include>
+    </div>
+    <div class="account-form__actions">
+      <button class="btn btn--dark" type="submit" name="save_address" data-js-addresses-submit data-js-swipe>Добавить адрес</button>
+      <button class="btn account-form__back" type="button" data-js-addresses-back data-js-swipe>Назад</button>
+    </div>
+  </form>
+</div>
+<include src="partials/account/logout.html" data='{"mod": "account-logout--page"}'></include>

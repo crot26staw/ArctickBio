@@ -24,6 +24,14 @@ import { initStickyBuy } from './modules/sticky-buy.js';
 import { initAnchorNavs } from './modules/anchor-nav.js';
 import { initFields } from './modules/field.js';
 import { initAuth } from './modules/auth.js';
+import { initCart } from './modules/cart.js';
+import { initModals } from './modules/modal.js';
+import { initPickup } from './modules/pickup.js';
+import { initAddress } from './modules/address.js';
+import { initCheckout } from './modules/checkout.js';
+import { initOrderSuccess } from './modules/order-success.js';
+import { initAccount } from './modules/account.js';
+import { initOrderTracks } from './modules/order-track.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
@@ -34,6 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initFields();
   initAuth();
+  initCart();
+  initModals();
+  initPickup();
+  initAddress();
+  initCheckout();
+  initOrderSuccess();
+  initAccount();
+  initOrderTracks();
   initAccordions();
   initQuantities();
   initProductFormats();

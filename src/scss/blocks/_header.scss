@@ -221,3 +221,24 @@
       linear-gradient(currentColor, currentColor) 0 100% / #{rem(10.798)} #{rem(1.174)} no-repeat;
   }
 }
+
+// Крестик вместо иконки корзины: на мобилке корзина открывается под шапкой и закрывается этой же кнопкой (cart.js)
+.header__cart-close {
+  display: none;
+}
+
+@include media(mobile) {
+  // Корзина лежит внутри шапки (partials/header.html): кнопки шапки — над ней
+  .header.is-cart-open .header__inner {
+    z-index: 10;
+  }
+
+  .header.is-cart-open .header__cart-icon,
+  .header.is-cart-open .header__cart-count {
+    display: none;
+  }
+
+  .header.is-cart-open .header__cart-close {
+    display: block;
+  }
+}

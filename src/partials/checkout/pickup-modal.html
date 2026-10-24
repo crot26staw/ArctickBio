@@ -1,0 +1,97 @@
+<!--
+  Попап выбора пункта выдачи (макет 18270:36436, список служб — 18271:38011; планшет 18270:37670; мобилка — 18263:87991 «На карте» и 18263:88439 «Списком»).
+  Открывает [data-js-modal-open="pickup"] (js/modules/modal.js), выбор — js/modules/pickup.js.
+  Карта — статичная картинка из макета: в WordPress на её месте Яндекс Карты (контейнер [data-js-pickup-map], метки — из того же списка пунктов).
+-->
+<div class="map-modal" id="pickup" data-js-modal="pickup" data-js-pickup inert>
+  <div class="map-modal__overlay" data-js-modal-close></div>
+
+  <div class="map-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="pickup-title" data-view="map" data-js-modal-dialog data-js-pickup-dialog>
+    <!-- Мобилка: «Назад» и вкладки -->
+    <div class="map-modal__bar">
+      <button class="map-modal__back" type="button" aria-label="Назад" data-js-modal-close>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10.7984 12.0039L15.3984 16.6039L13.9984 18.0039L7.99844 12.0039L13.9984 6.00391L15.3984 7.40391L10.7984 12.0039Z"/></svg>
+      </button>
+      <div class="map-modal__tabs" role="tablist" aria-label="Вид">
+        <button class="map-modal__tab" type="button" role="tab" aria-selected="true" data-js-pickup-tab="map">На карте</button>
+        <button class="map-modal__tab" type="button" role="tab" aria-selected="false" data-js-pickup-tab="list">Списком</button>
+      </div>
+    </div>
+
+    <div class="map-modal__map" data-js-pickup-map>
+      <img class="map-modal__map-img" src="./assets/images/checkout-map.webp" alt="" width="1152" height="998">
+      <button class="map-modal__marker" type="button" style="--x: 59.9%; --y: 31.2%;" aria-label="ПВЗ Озон, Москва улица Хамовнический Вал 24" data-js-pickup-marker="p1" data-service="ozon">
+        <img src="./assets/icons/map-marker-ozon.svg" alt="" width="35" height="35">
+      </button>
+      <button class="map-modal__marker" type="button" style="--x: 43.3%; --y: 25.8%;" aria-label="ПВЗ Озон, Москва улица Хамовнический Вал 24" data-js-pickup-marker="p2" data-service="ozon">
+        <img src="./assets/icons/map-marker-ozon.svg" alt="" width="35" height="35">
+      </button>
+      <button class="map-modal__marker" type="button" style="--x: 47.1%; --y: 42.5%;" aria-label="ПВЗ Озон, Москва улица Хамовнический Вал 24" data-js-pickup-marker="p3" data-service="ozon">
+        <img src="./assets/icons/map-marker-ozon.svg" alt="" width="35" height="35">
+      </button>
+      <button class="map-modal__marker" type="button" style="--x: 21.3%; --y: 81.3%;" aria-label="ПВЗ Озон, Москва улица Хамовнический Вал 24" data-js-pickup-marker="p4" data-service="ozon">
+        <img src="./assets/icons/map-marker-ozon.svg" alt="" width="35" height="35">
+      </button>
+
+      <button class="map-modal__city" type="button">
+        <span>Москва</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.74935 10.7507L13.5827 6.91732L14.7493 8.08398L9.74935 13.084L4.74935 8.08398L5.91602 6.91732L9.74935 10.7507Z"/></svg>
+      </button>
+
+      <!-- Фильтр служб на карте -->
+      <div class="map-modal__services">
+        <button class="service-chip" type="button" aria-pressed="true" data-js-pickup-chip="ozon">
+          <img class="service-chip__logo" src="./assets/icons/logo-ozon.svg" alt="" width="24" height="24">
+          <span>Озон</span>
+        </button>
+        <button class="service-chip" type="button" aria-pressed="false" data-js-pickup-chip="cdek">
+          <img class="service-chip__logo" src="./assets/images/logo-cdek.webp" alt="" width="24" height="24">
+          <span>СДЭК</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="map-modal__panel" data-lenis-prevent>
+      <div class="map-modal__head">
+        <h2 class="map-modal__title" id="pickup-title">Пункт выдачи</h2>
+        <button class="map-modal__close" type="button" aria-label="Закрыть" data-js-modal-close data-js-swipe>
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="currentColor" aria-hidden="true">
+            <path d="M23.414 22L30 15.414L28.586 14L22 20.586L15.414 14L14 15.414L20.586 22L14 28.586L15.414 30L22 23.414L28.586 30L30 28.586L23.414 22Z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="map-modal__controls">
+        <button class="map-modal__city-edit" type="button">
+          <span>Москва, Россия</span>
+          <img src="./assets/icons/icn-edit.svg" alt="" width="16" height="16">
+        </button>
+
+        <div class="select" data-js-pickup-select>
+          <button class="select__btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="pickup-services" data-js-pickup-select-btn>
+            <span class="select__value" data-js-pickup-select-value>Службы выдачи</span>
+            <svg class="select__chevron" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.6992 12.9008L16.2992 8.30078L17.6992 9.70078L11.6992 15.7008L5.69922 9.70078L7.09922 8.30078L11.6992 12.9008Z"/></svg>
+          </button>
+          <ul class="select__list" id="pickup-services" role="listbox" aria-label="Службы выдачи" hidden data-js-pickup-select-list>
+            <li class="select__option" role="option" tabindex="-1" aria-selected="false" data-value="ozon">Озон</li>
+            <li class="select__option" role="option" tabindex="-1" aria-selected="false" data-value="cdek">СДЭК</li>
+          </ul>
+        </div>
+
+        <!-- Мобилка, вкладка «Списком» -->
+        <div class="map-modal__search">
+          <include src="partials/form-field.html" data='{"id": "pickup-search", "type": "search", "name": "pickup_search", "label": "Найти адрес", "autocomplete": "off", "mod": "field--light", "attrs": "data-js-pickup-search"}'></include>
+        </div>
+      </div>
+
+      <ul class="map-modal__list" data-js-pickup-list>
+        <include src="partials/checkout/pickup-point.html" data='{"id": "p1", "service": "ozon", "title": "ПВЗ Озон", "address": "Москва улица Хамовнический Вал 24", "price": "бесплатно", "date": "завтра"}'></include>
+        <include src="partials/checkout/pickup-point.html" data='{"id": "p2", "service": "ozon", "title": "ПВЗ Озон", "address": "Москва улица Хамовнический Вал 24", "price": "бесплатно", "date": "завтра"}'></include>
+        <include src="partials/checkout/pickup-point.html" data='{"id": "p3", "service": "ozon", "title": "ПВЗ Озон", "address": "Москва улица Хамовнический Вал 24", "price": "бесплатно", "date": "завтра"}'></include>
+        <include src="partials/checkout/pickup-point.html" data='{"id": "p4", "service": "ozon", "title": "ПВЗ Озон", "address": "Москва улица Хамовнический Вал 24", "price": "бесплатно", "date": "завтра"}'></include>
+        <include src="partials/checkout/pickup-point.html" data='{"id": "p5", "service": "cdek", "title": "ПВЗ СДЭК", "address": "Москва улица Хамовнический Вал 24", "price": "бесплатно", "date": "завтра"}'></include>
+        <include src="partials/checkout/pickup-point.html" data='{"id": "p6", "service": "cdek", "title": "ПВЗ СДЭК", "address": "Москва улица Хамовнический Вал 24", "price": "бесплатно", "date": "завтра"}'></include>
+      </ul>
+    </div>
+  </div>
+</div>

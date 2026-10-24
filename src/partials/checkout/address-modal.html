@@ -1,0 +1,50 @@
+<!--
+  Попап адреса доставки курьером (макет 18271:39931, подсказки адреса — 18271:40002). Только десктоп в макете;
+  планшет — как попап пункта выдачи, мобилка — панель на весь экран без карты.
+  Открывает [data-js-modal-open="address"] (js/modules/modal.js), подсказки и сохранение — js/modules/address.js.
+  Подсказки до WordPress — демо-список; дальше — геокодер Яндекса (ymaps.suggest) и метка на карте.
+-->
+<div class="map-modal map-modal--address" id="address" data-js-modal="address" data-js-address inert>
+  <div class="map-modal__overlay" data-js-modal-close></div>
+
+  <div class="map-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="address-title" data-js-modal-dialog>
+    <div class="map-modal__map">
+      <img class="map-modal__map-img" src="./assets/images/checkout-map.webp" alt="" width="1152" height="998">
+      <img class="map-modal__pin" src="./assets/icons/map-pin.svg" alt="" width="28" height="34">
+    </div>
+
+    <form class="map-modal__panel" action="#" method="post" novalidate data-lenis-prevent data-js-address-form>
+      <div class="map-modal__head">
+        <button class="map-modal__back" type="button" aria-label="Назад" data-js-modal-close>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10.7984 12.0039L15.3984 16.6039L13.9984 18.0039L7.99844 12.0039L13.9984 6.00391L15.3984 7.40391L10.7984 12.0039Z"/></svg>
+        </button>
+        <h2 class="map-modal__title" id="address-title">Укажите адрес доставки</h2>
+        <button class="map-modal__close" type="button" aria-label="Закрыть" data-js-modal-close data-js-swipe>
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="currentColor" aria-hidden="true">
+            <path d="M23.414 22L30 15.414L28.586 14L22 20.586L15.414 14L14 15.414L20.586 22L14 28.586L15.414 30L22 23.414L28.586 30L30 28.586L23.414 22Z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="map-modal__fields">
+        <div class="map-modal__suggest">
+          <include src="partials/form-field.html" data='{"id": "address-street", "type": "text", "name": "shipping_address_1", "label": "Адрес", "autocomplete": "off", "mod": "field--light", "attrs": "role=\"combobox\" aria-expanded=\"false\" aria-controls=\"address-suggest\" aria-autocomplete=\"list\" data-validate=\"required\" data-message=\"Укажите адрес\" data-js-address-input"}'></include>
+          <ul class="map-modal__suggest-list" id="address-suggest" role="listbox" aria-label="Подсказки адреса" hidden data-js-address-suggest></ul>
+        </div>
+        <div class="map-modal__row">
+          <include src="partials/form-field.html" data='{"id": "address-flat", "type": "text", "name": "shipping_flat", "label": "Квартира", "autocomplete": "off", "mod": "field--light"}'></include>
+          <include src="partials/form-field.html" data='{"id": "address-floor", "type": "text", "name": "shipping_floor", "label": "Этаж", "autocomplete": "off", "mod": "field--light"}'></include>
+        </div>
+        <div class="map-modal__row">
+          <include src="partials/form-field.html" data='{"id": "address-entrance", "type": "text", "name": "shipping_entrance", "label": "Подъезд", "autocomplete": "off", "mod": "field--light"}'></include>
+          <include src="partials/form-field.html" data='{"id": "address-intercom", "type": "text", "name": "shipping_intercom", "label": "Домофон", "autocomplete": "off", "mod": "field--light"}'></include>
+        </div>
+        <include src="partials/form-field.html" data='{"id": "address-comment", "type": "text", "name": "order_comments", "label": "Комментарий для курьера", "autocomplete": "off", "mod": "field--light"}'></include>
+      </div>
+
+      <div class="map-modal__footer">
+        <button class="btn btn--accent map-modal__submit" type="submit" data-js-swipe>Привезти сюда</button>
+      </div>
+    </form>
+  </div>
+</div>

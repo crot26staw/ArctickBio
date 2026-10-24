@@ -1,0 +1,54 @@
+@use '../base' as *;
+
+// Поле промокода с кнопкой «Применить» (макет Promocode 18208:49729): корзина-попап и оформление заказа.
+// --outline — с рамкой (корзина, мобилка оформления), --compact — высота 44 (корзина)
+.promo {
+  display: flex;
+  gap: rem(8);
+  align-items: center;
+  height: rem(56);
+  padding-inline: rem(12);
+  background-color: var(--color-white);
+  border: 1px solid transparent;
+  border-radius: var(--radius-s);
+  transition: border-color $transition;
+
+  &--outline {
+    border-color: var(--color-border-muted);
+  }
+
+  &--compact {
+    height: rem(44);
+    padding-right: rem(4);
+  }
+
+  &:focus-within {
+    border-color: var(--color-accent);
+  }
+
+  &__input {
+    @include body-m;
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    color: var(--color-fg);
+    background: none;
+    border: 0;
+    outline: none;
+
+    &::placeholder {
+      color: var(--color-fg-muted);
+    }
+  }
+
+  &__btn {
+    @include body-m-strong;
+    flex-shrink: 0;
+    height: rem(32);
+    padding-inline: rem(12);
+    color: var(--color-fg-muted);
+    white-space: nowrap;
+    background-color: rgba(1, 39, 62, 0.03);
+    border-radius: 2px;
+  }
+}

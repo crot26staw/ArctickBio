@@ -1,0 +1,17 @@
+<!-- Пункт выдачи в списке попапа (макет 18248:74613, выбранный — 18271:37842): радиокнопка, у выбранного — «Привезти сюда».
+     data-service — служба (фильтр), data-js-pickup-point — id, по нему же связана метка на карте -->
+<li class="pickup-point" data-service="{{ service }}" data-js-pickup-point="{{ id }}">
+  <label class="pickup-point__label">
+    <input class="pickup-point__input" type="radio" name="pickup_choice" value="{{ id }}" data-js-pickup-input>
+    <span class="pickup-point__radio" aria-hidden="true"></span>
+    <span class="pickup-point__body">
+      <span class="pickup-point__title" data-js-pickup-point-title>{{ title }}</span>
+      <span class="pickup-point__info">
+        <span data-js-pickup-point-address>{{ address }}</span>
+        <span class="pickup-point__price">стоимость <span aria-hidden="true">—</span> {{ price }}</span>
+        <span>дата доставки — {{ date }}</span>
+      </span>
+    </span>
+  </label>
+  <button class="btn btn--accent pickup-point__btn" type="button" data-js-pickup-choose data-js-swipe>Привезти сюда</button>
+</li>

@@ -1,0 +1,376 @@
+@use '../base' as *;
+
+// Корзина-попап (partials/cart.html, js/modules/cart.js; макет «Корзина поп-ап» в секции 18126:59053).
+// Десктоп и планшет — панель 335 на всю высоту справа, страница под ней размыта и затемнена;
+// мобилка — панель под шапкой с полями 10 (шапка остаётся сверху, кнопка корзины в ней — крестик).
+// Появление в макете не задано: панель выезжает справа (мобилка — снизу на 24px) из прозрачности.
+$cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+.cart {
+  position: fixed;
+  inset: 0;
+  z-index: 20; // над .header
+  visibility: hidden;
+  transition: visibility 0s linear 0.4s;
+
+  @include media(mobile) {
+    z-index: 9; // под кнопками шапки (.header.is-cart-open .header__inner)
+  }
+
+  &.is-open {
+    visibility: visible;
+    transition: none;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(16px);
+    opacity: 0;
+    transition: opacity $cart-transition;
+  }
+
+  &.is-open &__overlay {
+    opacity: 1;
+  }
+
+  &__dialog {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    width: rem(335);
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(30px);
+    opacity: 0;
+    transform: translateX(rem(40));
+    transition:
+      opacity $cart-transition,
+      transform $cart-transition;
+
+    @include media(mobile) {
+      top: rem(60);
+      right: rem(10);
+      bottom: rem(10);
+      left: rem(10);
+      width: auto;
+      transform: translateY(rem(24));
+    }
+  }
+
+  &.is-open &__dialog {
+    opacity: 1;
+    transform: none;
+  }
+
+  &__head {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    height: rem(56);
+    padding-inline: rem(16);
+    background-color: var(--color-white);
+
+    @include media(mobile) {
+      justify-content: center;
+      height: rem(44);
+    }
+  }
+
+  &__title {
+    @include h3;
+    color: var(--color-fg-soft);
+
+    @include media(mobile) {
+      @include body-l;
+      font-weight: 500;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 50%;
+    right: rem(6);
+    display: flex;
+    width: rem(44);
+    height: rem(44);
+    color: var(--color-fg);
+    border-radius: var(--radius-s);
+    transform: translateY(-50%);
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    // Мобилка: закрывает крестик в шапке (кнопка корзины)
+    @include media(mobile) {
+      display: none;
+    }
+  }
+
+  &__body,
+  &__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  // ---------- Пустая корзина ----------
+  &__empty {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: rem(16);
+    align-items: center;
+    justify-content: center;
+    padding: rem(18) rem(16);
+    text-align: center;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &__empty-img {
+    width: rem(72);
+    height: rem(72);
+  }
+
+  &__empty-text {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+    align-items: center;
+  }
+
+  &__empty-title {
+    @include body-m-strong;
+    color: var(--color-fg-soft);
+  }
+
+  &__empty-desc {
+    @include body-s;
+    max-width: rem(271);
+    color: var(--color-fg-muted);
+  }
+
+  &__content[hidden] {
+    display: none;
+  }
+
+  // ---------- Товары ----------
+  // Список и «Попробуйте также» скроллятся, итог прижат к низу панели
+  &__scroll {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: rem(40);
+    padding: rem(18) rem(16);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+  }
+
+  &__more {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+    margin-top: auto;
+  }
+
+  &__more-title {
+    font-family: $font-text;
+    font-size: rem(11);
+    line-height: rem(19.8);
+    color: var(--color-fg-soft);
+    text-transform: uppercase;
+  }
+
+  &__more-viewport {
+    overflow: hidden;
+
+    &.is-draggable {
+      @include drag-track;
+    }
+  }
+
+  &__more-track {
+    display: flex;
+    gap: rem(8);
+    width: max-content;
+  }
+
+  // ---------- Итог ----------
+  &__summary {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: rem(16);
+    padding: rem(16) rem(16) rem(24);
+    background-color: var(--color-white);
+  }
+
+  &__totals {
+    display: flex;
+    flex-direction: column;
+    gap: rem(4);
+  }
+
+  &__row {
+    @include body-m;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #1d1c21;
+    white-space: nowrap;
+
+    &--total {
+      color: var(--color-fg-soft);
+
+      dt {
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__total {
+    @include body-l;
+  }
+
+  &__discount {
+    color: #f1117e;
+  }
+
+  &__free {
+    color: rgba(51, 179, 67, 0.9);
+  }
+
+  &__checkout {
+    width: 100%;
+
+    &.is-disabled {
+      color: rgba(1, 39, 62, 0.5);
+      background-color: rgba(34, 34, 34, 0.1);
+      pointer-events: none;
+    }
+  }
+
+  // Есть разобранные товары, оформить нельзя (макет 18269:34349): без итога и промокода, кнопка неактивна
+  &.is-blocked &__totals,
+  &.is-blocked &__promo-form {
+    display: none;
+  }
+}
+
+// Товар в корзине (partials/cart-item.html)
+.cart-item {
+  display: flex;
+  gap: rem(8);
+  align-items: flex-start;
+  min-height: rem(85);
+  padding: rem(8) rem(16) rem(8) rem(8);
+  overflow: hidden;
+  background-color: var(--color-white);
+  border-radius: var(--radius-m);
+
+  &__media {
+    position: relative;
+    flex-shrink: 0;
+    width: rem(72);
+    height: rem(60);
+  }
+
+  &__img {
+    position: absolute;
+    top: 12.2%;
+    left: 9.41%;
+    width: 80.49%;
+    height: 74.95%;
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: rem(16);
+    justify-content: center;
+    min-width: 0;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    white-space: nowrap;
+  }
+
+  &__title {
+    @include body-m;
+    overflow: hidden;
+    color: var(--color-fg);
+    text-overflow: ellipsis;
+  }
+
+  &__subtitle {
+    @include body-s;
+    overflow: hidden;
+    color: var(--color-fg-muted);
+    text-overflow: ellipsis;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__controls {
+    display: flex;
+    gap: rem(8);
+    align-items: center;
+    height: rem(20);
+    padding: 2px;
+  }
+
+  // Подчёркивание — фоном: text-decoration не доходит до букв roll-эффекта
+  &__remove {
+    @include desc-s;
+    color: var(--color-fg-muted);
+    background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+  }
+
+  &__sold {
+    @include desc-s;
+    display: none;
+    color: #ce7b00;
+  }
+
+  &__price {
+    @include body-s;
+    color: var(--color-fg);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &--sold &__quantity,
+  &--sold &__remove,
+  &--sold &__price {
+    display: none;
+  }
+
+  &--sold &__sold {
+    display: block;
+  }
+}

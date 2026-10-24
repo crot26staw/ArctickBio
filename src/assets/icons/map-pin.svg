@@ -1,0 +1,20 @@
+<svg width="28" height="34" viewBox="-1.4 0 27.8136 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<filter id="pin-shadow" x="-1.4" y="0" width="27.8136" height="30.776" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="1.39891"/>
+<feGaussianBlur stdDeviation="0.699454"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+</filter>
+<filter id="pin-ground" x="7.41" y="29.1" width="10.2587" height="4.88507" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feGaussianBlur stdDeviation="0.488507"/>
+</filter>
+</defs>
+<ellipse cx="12.54" cy="31.54" rx="4.15231" ry="1.46552" fill="black" fill-opacity="0.2" filter="url(#pin-ground)"/>
+<path filter="url(#pin-shadow)" fill-rule="evenodd" clip-rule="evenodd" d="M12.508 0C19.416 0 25.016 5.597 25.016 12.501C25.016 18.549 20.718 23.594 15.008 24.752L12.896 27.774C12.853 27.837 12.794 27.889 12.727 27.924C12.659 27.96 12.584 27.978 12.508 27.978C12.432 27.978 12.357 27.96 12.289 27.924C12.221 27.889 12.163 27.837 12.119 27.774L10.007 24.752C4.298 23.594 0 18.549 0 12.501C0 5.597 5.6 0 12.508 0Z" fill="#3D5AEA"/>
+<circle cx="12.59" cy="30.6" r="1.39891" fill="#3D5AEA"/>
+</svg>

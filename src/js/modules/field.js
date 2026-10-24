@@ -3,7 +3,7 @@
  *
  * Показ пароля: [data-js-password-toggle] переключает type у поля из aria-controls.
  * Проверка: у поля [data-js-field-input] атрибут data-validate:
- *   email    — пустое / не похоже на email;
+ *   email    — пустое (текст ошибки в data-message) / не похоже на email;
  *   required — пустое, текст ошибки в data-message;
  *   repeat   — пустое / не совпадает с полем из data-repeat (id).
  * Ошибка — класс is-error у [data-js-field] и текст в [data-js-field-hint]. Сервер может отдать поле
@@ -25,7 +25,7 @@ function getError(input) {
 
   switch (input.dataset.validate) {
     case 'email':
-      if (!value) return MESSAGES.emailEmpty;
+      if (!value) return input.dataset.message || MESSAGES.emailEmpty;
       return EMAIL_RE.test(value) ? '' : MESSAGES.emailFormat;
     case 'required':
       return value ? '' : input.dataset.message || MESSAGES.required;

@@ -50,3 +50,38 @@
     }
   }
 }
+
+// Мини-счётчик в корзине (макет QuantitySelector 18182:42870): кнопки 16px на акцентном фоне, число 10px
+.quantity--mini {
+  gap: 1px;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+
+  .quantity__btn {
+    align-items: center;
+    justify-content: center;
+    width: rem(16);
+    height: rem(16);
+    color: var(--color-white);
+    background-color: var(--color-accent);
+    border-radius: 2px;
+
+    svg {
+      width: rem(16);
+      height: rem(18);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+
+  .quantity__input {
+    @include desc-s;
+    width: rem(18);
+    color: var(--color-accent);
+  }
+}

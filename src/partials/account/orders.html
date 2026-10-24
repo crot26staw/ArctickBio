@@ -1,0 +1,19 @@
+<!-- «Мои заказы» (макет 16692:130971, планшет 18277:44075, мобилка 18277:44613): вкладки «Активные» / «Завершенные» (account.js) -->
+<div class="account__head">
+  <h1 class="account__title">Мои заказы</h1>
+</div>
+<div class="account-tabs" role="tablist" aria-label="Заказы" data-js-account-tabs>
+  <button class="account-tabs__tab" type="button" role="tab" id="orders-tab-active" aria-selected="false" aria-controls="orders-active" data-js-account-tab>Активные</button>
+  <button class="account-tabs__tab" type="button" role="tab" id="orders-tab-done" aria-selected="true" aria-controls="orders-done" data-js-account-tab>Завершенные</button>
+</div>
+<div class="account__body">
+  <ul class="account__orders woocommerce-orders-table" id="orders-active" role="tabpanel" aria-labelledby="orders-tab-active" hidden>
+    <include src="partials/account/order-card.html" data='{"number": "#ABM-2024-0847", "date": "02.11.2024", "status": "В сборке", "count": "2 товара", "total": "1 120 ₽"}'></include>
+  </ul>
+  <ul class="account__orders woocommerce-orders-table" id="orders-done" role="tabpanel" aria-labelledby="orders-tab-done">
+    <include src="partials/account/order-card.html" data='{"number": "#ABM-2024-0891", "date": "18.08.2024", "status": "Получен", "count": "1 товар", "total": "4 500 ₽"}'></include>
+    <include src="partials/account/order-card.html" data='{"number": "#ABM-2024-0891", "date": "18.08.2024", "status": "Получен", "count": "1 товар", "total": "4 500 ₽"}'></include>
+    <include src="partials/account/order-card.html" data='{"number": "#ABM-2024-0891", "date": "18.08.2024", "status": "Получен", "count": "1 товар", "total": "4 500 ₽"}'></include>
+    <include src="partials/account/order-card.html" data='{"number": "#ABM-2024-0891", "date": "18.08.2024", "status": "Получен", "count": "1 товар", "total": "4 500 ₽"}'></include>
+  </ul>
+</div>

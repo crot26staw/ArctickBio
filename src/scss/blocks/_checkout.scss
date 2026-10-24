@@ -1,0 +1,866 @@
+@use '../base' as *;
+
+// Оформление заказа (checkout.html, partials/checkout/main.html, js/modules/checkout.js).
+// Десктоп 18270:36245: карточка с полями 20 — слева форма (белая) и подвал, справа «Ваш заказ» 450 на светлом фоне.
+// Планшет 18281:45602: правая колонка 328, поля в одну колонку. Мобилка 18270:36258: всё одной белой колонкой,
+// «Ваш заказ» свёрнут в строку «Итого», кнопка оплаты — под промокодом, подвал — в самом низу.
+
+// Размытый фон страницы (оформление заказа, «Заказ оформлен»)
+.page__bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.page--checkout {
+  background-color: var(--color-white);
+}
+
+// Шапка без меню (макет 18205:48157)
+.checkout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: rem(20) rem(120);
+
+  @include media(tablet) {
+    padding: rem(20);
+  }
+
+  @include media(mobile) {
+    padding: rem(10);
+  }
+
+  &__logo {
+    @include media(mobile) {
+      width: rem(53.818);
+      height: rem(32);
+
+      .logo__img {
+        width: rem(48.891);
+        height: rem(34.405);
+      }
+    }
+  }
+
+  &__phone {
+    @include body-s;
+    display: flex;
+    align-items: center;
+    height: rem(40);
+    padding: rem(11) rem(16);
+    color: var(--color-fg-light);
+    white-space: nowrap;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-s);
+    backdrop-filter: blur(15.8px);
+
+    @include media(mobile) {
+      height: rem(32);
+      padding: rem(9.263) rem(13.474);
+    }
+  }
+}
+
+// Обёртка секции: у самой формы класс WooCommerce .checkout, отступы — здесь
+.checkout-wrap {
+  padding: 0 rem(20) rem(20);
+
+  @include media(mobile) {
+    padding: 0;
+  }
+}
+
+.checkout {
+  &__card {
+    display: grid;
+    grid-template-areas:
+      'main aside'
+      'footer aside';
+    grid-template-rows: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) rem(450);
+    overflow: hidden;
+    background-color: var(--color-bg-light);
+    border-radius: var(--radius-l);
+
+    @include media(tablet) {
+      grid-template-columns: minmax(0, 1fr) rem(328);
+    }
+
+    @include media(mobile) {
+      grid-template-areas:
+        'main'
+        'aside'
+        'footer';
+      grid-template-rows: auto;
+      grid-template-columns: minmax(0, 1fr);
+      background-color: var(--color-white);
+      border-radius: 0;
+    }
+  }
+
+  // ---------- Форма ----------
+  &__main {
+    grid-area: main;
+    min-width: 0;
+    padding-bottom: rem(50);
+    background-color: var(--color-white);
+
+    @include media(mobile) {
+      padding-bottom: 0;
+    }
+  }
+
+  &__head {
+    display: flex;
+    gap: rem(4);
+    align-items: center;
+    padding: rem(32) rem(32) 0;
+
+    @include media(mobile) {
+      padding-inline: rem(4);
+    }
+  }
+
+  &__back {
+    display: none;
+    color: var(--color-fg-muted);
+
+    svg {
+      width: rem(24);
+      height: rem(24);
+    }
+
+    @include media(mobile) {
+      display: flex;
+    }
+  }
+
+  &__title {
+    @include h2;
+    color: var(--color-fg);
+  }
+
+  &__section {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  &__subtitle {
+    @include h4;
+    float: left; // legend внутри fieldset — иначе отступы не работают как у блока
+    width: 100%;
+    padding: rem(32) rem(32) 0;
+    color: var(--color-fg);
+
+    @include media(tablet) {
+      padding-inline: rem(20);
+    }
+
+    @include media(mobile) {
+      padding-inline: rem(10);
+    }
+
+    + * {
+      clear: both;
+    }
+  }
+
+  &__fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(20) rem(12);
+    padding: rem(24) rem(32) 0;
+
+    @include media(tablet) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: rem(12);
+      padding-inline: rem(20);
+    }
+
+    @include media(mobile) {
+      padding: rem(16) rem(10) 0;
+    }
+  }
+
+  &__options {
+    display: flex;
+    gap: rem(8);
+    padding: rem(24) rem(32) 0;
+
+    @include media(tablet) {
+      padding-inline: rem(20);
+    }
+
+    @include media(mobile) {
+      padding: rem(16) rem(10) 0;
+    }
+
+    &--delivery > * {
+      @include media(tablet) {
+        flex: 1;
+        width: auto;
+      }
+    }
+  }
+
+  &__delivery {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+    align-items: flex-start;
+    padding: rem(24) rem(32) 0;
+
+    @include media(tablet) {
+      padding-inline: rem(20);
+    }
+
+    @include media(mobile) {
+      align-items: stretch;
+      padding-inline: rem(10);
+    }
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &__error {
+    @include desc-m;
+    margin-top: rem(-18);
+    color: var(--color-error);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &__dates-title {
+    @include body-l;
+    display: flex;
+    gap: rem(8);
+    align-items: center;
+    font-weight: 500;
+    color: #1d1c21;
+
+    img {
+      width: rem(32);
+      height: rem(32);
+    }
+  }
+
+  // Даты доставки: лента до края колонки, листается (drag-slider.js)
+  &__dates {
+    align-self: stretch;
+    margin-inline: rem(-32);
+    overflow: hidden;
+
+    @include media(tablet) {
+      margin-inline: rem(-20);
+    }
+
+    @include media(mobile) {
+      margin-inline: rem(-10);
+    }
+
+    &.is-draggable {
+      @include drag-track;
+    }
+  }
+
+  &__dates-track {
+    display: flex;
+    gap: rem(8);
+    width: max-content;
+    padding-inline: rem(32);
+
+    @include media(tablet) {
+      padding-inline: rem(20);
+    }
+
+    @include media(mobile) {
+      padding-inline: rem(10);
+    }
+  }
+
+  // ---------- Ваш заказ ----------
+  &__aside {
+    display: flex;
+    flex-direction: column;
+    grid-area: aside;
+    min-width: 0;
+    padding: rem(32);
+
+    @include media(tablet) {
+      padding-inline: rem(20);
+    }
+
+    @include media(mobile) {
+      padding: 0 rem(10);
+    }
+  }
+
+  &__order {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+
+    @include media(mobile) {
+      padding-top: rem(32);
+    }
+  }
+
+  &__order-title {
+    @include h3;
+    color: var(--color-fg);
+
+    @include media(mobile) {
+      display: none;
+    }
+  }
+
+  // Десктоп/планшет — «Оформляем 2 товара» со стрелкой; мобилка — строка «Итого» с миниатюрой и суммой
+  &__toggle {
+    @include body-m-strong;
+    display: flex;
+    gap: rem(4);
+    align-items: center;
+    align-self: flex-start;
+    color: var(--color-fg);
+    text-align: left;
+
+    @include media(mobile) {
+      gap: 0;
+      align-self: stretch;
+      height: rem(66);
+    }
+  }
+
+  &__toggle-chevron {
+    flex-shrink: 0;
+    order: -1;
+    width: rem(20);
+    height: rem(20);
+    color: var(--color-accent);
+    transition: transform $transition;
+
+    @include media(mobile) {
+      order: 0;
+      box-sizing: content-box;
+      padding-left: rem(8);
+      color: var(--color-fg);
+    }
+  }
+
+  &__toggle[aria-expanded='false'] &__toggle-chevron {
+    transform: rotate(-90deg);
+
+    @include media(mobile) {
+      transform: none;
+    }
+  }
+
+  &__toggle[aria-expanded='true'] &__toggle-chevron {
+    @include media(mobile) {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__toggle-thumb,
+  &__toggle-mobile,
+  &__toggle-count,
+  &__toggle-price {
+    display: none;
+  }
+
+  @include media(mobile) {
+    &__toggle-thumb {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      width: rem(64);
+      height: rem(64);
+      margin: 1px;
+      overflow: hidden;
+      background-color: #ededed;
+      border: 2px solid var(--color-white);
+      border-radius: rem(16);
+      filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.04)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &__toggle-text {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding-left: rem(14);
+    }
+
+    &__toggle-label {
+      display: none;
+    }
+
+    &__toggle-mobile {
+      display: block;
+    }
+
+    &__toggle-count {
+      display: block;
+      font-weight: 400;
+      font-size: rem(13);
+      line-height: 1;
+      letter-spacing: 0;
+      color: #666;
+    }
+
+    &__toggle-price {
+      display: block;
+    }
+  }
+
+  &__order-list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+    margin-top: rem(16); // 24 от переключателя (gap 8 у блока)
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &__summary {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+    margin-top: rem(32);
+    padding: rem(20) rem(24);
+    background-color: var(--color-white);
+    border-radius: var(--radius-s);
+
+    // Мобилка: без карточки, кнопка оплаты — после промокода
+    @include media(mobile) {
+      display: contents;
+    }
+  }
+
+  &__totals {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+
+    @include media(mobile) {
+      order: 1;
+      padding-top: rem(20);
+    }
+  }
+
+  &__rows {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+  }
+
+  &__row {
+    @include body-m;
+    display: flex;
+    justify-content: space-between;
+    color: #1d1c21;
+    white-space: nowrap;
+  }
+
+  &__discount {
+    color: #f1117e;
+  }
+
+  &__free {
+    color: rgba(51, 179, 67, 0.9);
+  }
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    font-family: $font-text;
+    font-weight: 500;
+    font-size: rem(24);
+    line-height: 1.1;
+    letter-spacing: rem(-0.8);
+    color: #1d1c21;
+    white-space: nowrap;
+  }
+
+  &__pay {
+    width: 100%;
+
+    @include media(mobile) {
+      order: 3;
+      margin-top: rem(16);
+    }
+  }
+
+  &__promo {
+    margin-top: rem(8);
+
+    @include media(mobile) {
+      order: 2;
+      margin-top: rem(16);
+      border-color: var(--color-border-muted);
+    }
+  }
+
+  &__terms {
+    margin-top: rem(16);
+
+    @include media(mobile) {
+      order: 4;
+      margin: 0;
+      padding-block: rem(32);
+    }
+  }
+
+  // ---------- Подвал ----------
+  &__footer {
+    @include body-s;
+    display: flex;
+    grid-area: footer;
+    align-items: center;
+    justify-content: space-between;
+    padding: rem(24) rem(32);
+    white-space: nowrap;
+    background-color: var(--color-white);
+    border-top: 1px solid var(--color-border-muted);
+
+    @include media(tablet) {
+      flex-direction: column;
+      gap: rem(32);
+      align-items: flex-start;
+      padding-inline: rem(20);
+    }
+
+    @include media(mobile) {
+      gap: rem(16);
+      align-items: center;
+      padding-inline: rem(10);
+    }
+  }
+
+  &__links {
+    display: flex;
+    gap: rem(24);
+    color: #1d1c21;
+  }
+
+  &__support {
+    display: flex;
+    flex-direction: column;
+    gap: rem(4);
+    align-items: flex-end;
+    color: var(--color-fg);
+
+    @include media(tablet) {
+      align-items: flex-start;
+    }
+
+    @include media(mobile) {
+      align-items: center;
+    }
+  }
+
+  &__support-phone {
+    color: var(--color-fg-muted);
+  }
+}
+
+// Способ оплаты (макет sbp 18247:72705). Выбранный в макете не задан — рамка accent, как у способа получения
+.checkout-pay {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: rem(8);
+  align-items: center;
+  justify-content: center;
+  min-width: rem(116);
+  height: rem(74);
+  padding: rem(4);
+  border: 2px solid var(--color-border-muted);
+  border-radius: var(--radius-m);
+  cursor: pointer;
+  transition: border-color $transition;
+
+  @include hover {
+    border-color: var(--color-border-default);
+  }
+
+  &:has(:checked) {
+    border-color: var(--color-accent);
+  }
+
+  &:has(:focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  &__input {
+    @include visually-hidden;
+  }
+
+  &__icon {
+    width: rem(32);
+    height: rem(32);
+
+    &--sbp {
+      width: rem(19.4);
+      height: rem(24);
+      margin: rem(4) rem(6.3);
+    }
+  }
+
+  &__label {
+    @include desc-m;
+    color: #001a34;
+    text-align: center;
+    white-space: nowrap;
+  }
+}
+
+// Способ получения (макет 18247:72782, выбранный — 18263:87498)
+.checkout-ship {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  justify-content: center;
+  width: rem(185);
+  height: rem(56);
+  padding: rem(8) rem(12);
+  white-space: nowrap;
+  border: 2px solid var(--color-border-muted);
+  border-radius: var(--radius-s);
+  cursor: pointer;
+  transition: border-color $transition;
+
+  @include hover {
+    border-color: var(--color-border-default);
+  }
+
+  &:has(:checked) {
+    border-color: var(--color-accent);
+  }
+
+  &:has(:focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  &__input {
+    @include visually-hidden;
+  }
+
+  &__title {
+    @include body-m-strong;
+    color: #1d1c21;
+  }
+
+  &__meta {
+    font-family: $font-text;
+    font-size: rem(12);
+    line-height: rem(16);
+    color: rgba(29, 28, 33, 0.64);
+  }
+
+  &__free {
+    color: rgba(51, 179, 67, 0.9);
+  }
+}
+
+// Кнопка выбора пункта выдачи / адреса (макет 18271:39077, с адресом — 18271:40261, выбран ПВЗ — 18271:39375)
+.checkout-target {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: rem(4) rem(8);
+  align-content: center;
+  align-items: center;
+  min-height: rem(44);
+  color: #1d1c21;
+  text-align: left;
+
+  @include media(mobile) {
+    grid-template-columns: auto 1fr;
+  }
+
+  &__icon {
+    display: flex;
+
+    img {
+      width: rem(24);
+      height: rem(24);
+    }
+  }
+
+  &__body {
+    display: contents;
+  }
+
+  &__title {
+    @include body-l;
+    display: flex;
+    grid-column: 2;
+    gap: rem(4);
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    width: rem(20);
+    height: rem(20);
+    margin-left: rem(4);
+    transition: transform $transition;
+  }
+
+  @include hover {
+    .checkout-target__chevron {
+      transform: translateX(rem(3));
+    }
+  }
+
+  &__text {
+    @include body-m;
+    grid-column: 2;
+    white-space: pre-line;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+}
+
+// Товар в «Ваш заказ» (partials/checkout/order-item.html)
+.order-item {
+  display: flex;
+  align-items: center;
+  height: rem(66);
+
+  &__thumb {
+    position: relative;
+    flex-shrink: 0;
+    width: rem(64);
+    height: rem(64);
+    margin: 1px;
+    background-color: #ededed;
+    border: 2px solid var(--color-white);
+    border-radius: rem(16);
+    filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.04)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: rem(14);
+  }
+
+  &__badge {
+    @include body-m-strong;
+    position: absolute;
+    top: rem(-6);
+    left: rem(46);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(20);
+    height: rem(20);
+    padding-inline: rem(4);
+    color: var(--color-white);
+    background-color: #000;
+    border-radius: rem(8);
+  }
+
+  &__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    padding-left: rem(14);
+    white-space: nowrap;
+  }
+
+  &__title {
+    @include body-m-strong;
+    overflow: hidden;
+    color: #000;
+    text-overflow: ellipsis;
+  }
+
+  &__qty {
+    font-family: $font-text;
+    font-size: rem(13);
+    line-height: 1;
+    color: #666;
+  }
+
+  &__price {
+    @include body-m-strong;
+    padding-left: rem(14);
+    color: #000;
+    white-space: nowrap;
+
+    // Планшет: колонка 288 — цена не помещается (в макете обрезана)
+    @include media(tablet) {
+      display: none;
+    }
+
+    @include media(mobile) {
+      display: block;
+    }
+  }
+}
+
+// Дата доставки курьером (partials/checkout/delivery-date.html). Выбранная — рамка 2px border-default (тенью, без сдвига)
+.checkout-date {
+  @include body-m-strong;
+  display: flex;
+  flex-shrink: 0;
+  gap: rem(8);
+  align-items: center;
+  height: rem(56);
+  padding: rem(8) rem(12);
+  color: #1d1c21;
+  white-space: nowrap;
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-s);
+  cursor: pointer;
+  transition:
+    border-color $transition,
+    box-shadow $transition;
+
+  @include hover {
+    border-color: var(--color-border-default);
+  }
+
+  &:has(:checked) {
+    border-color: var(--color-border-default);
+    box-shadow: inset 0 0 0 1px var(--color-border-default);
+  }
+
+  &:has(:focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  &__input {
+    @include visually-hidden;
+  }
+}

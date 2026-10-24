@@ -123,3 +123,35 @@
     display: block;
   }
 }
+
+// Светлое поле (оформление заказа, макет Label 16692:130437): белое, рамка 1px border-muted, текст тёмный
+.field--light {
+  .field__box {
+    background-color: var(--color-white);
+    box-shadow: inset 0 0 0 1px var(--color-border-muted);
+  }
+
+  .field__box:focus-within {
+    box-shadow: inset 0 0 0 2px var(--color-accent);
+  }
+
+  &.is-error .field__box {
+    box-shadow: inset 0 0 0 1px var(--color-error);
+  }
+
+  .field__input {
+    color: var(--color-fg);
+
+    &:autofill {
+      -webkit-text-fill-color: var(--color-fg);
+    }
+
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+  }
+
+  .field__label {
+    color: var(--color-fg-muted);
+  }
+}

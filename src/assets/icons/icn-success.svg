@@ -1,0 +1,28 @@
+<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="check">
+<g clip-path="url(#clip0_0_65)">
+<rect width="44" height="44" rx="22" fill="#00B288"/>
+<g id="icn-check">
+<mask id="mask0_0_65" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="6" y="6" width="32" height="32">
+<rect id="Bounding box" x="6" y="6" width="32" height="32" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_0_65)">
+<path id="check_small" d="M19.3333 27.8667L14 22.5333L15.8667 20.6667L19.3333 24.1333L28.1333 15.3333L30 17.2L19.3333 27.8667Z" fill="#F0F6FD"/>
+</g>
+</g>
+<g id="Ellipse 30" filter="url(#filter0_f_0_65)">
+<circle cx="16" cy="14" r="6" fill="white"/>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_0_65" x="-6" y="-8" width="44" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="8" result="effect1_foregroundBlur_0_65"/>
+</filter>
+<clipPath id="clip0_0_65">
+<rect width="44" height="44" rx="22" fill="white"/>
+</clipPath>
+</defs>
+</svg>

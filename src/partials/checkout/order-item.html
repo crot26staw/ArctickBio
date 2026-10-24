@@ -1,0 +1,12 @@
+<!-- Товар в блоке «Ваш заказ» (макет 18247:73233). В WordPress — цикл по WC()->cart->get_cart() -->
+<li class="order-item">
+  <span class="order-item__thumb">
+    <img class="order-item__img" src="./assets/images/checkout-product.webp" alt="" width="64" height="48">
+    <span class="order-item__badge" aria-hidden="true">{{ qty }}</span>
+  </span>
+  <span class="order-item__text">
+    <span class="order-item__title">{{ title }}</span>
+    <span class="order-item__qty">{{ qty }} шт</span>
+  </span>
+  <span class="order-item__price">{{ price }}</span>
+</li>

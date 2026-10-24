@@ -23,6 +23,8 @@
 @use 'components/quantity';
 @use 'components/ingredient-card';
 @use 'components/field';
+@use 'components/checkbox';
+@use 'components/promo';
 
 // Blocks
 @use 'blocks/header';
@@ -57,3 +59,9 @@
 @use 'blocks/stores';
 @use 'blocks/contacts';
 @use 'blocks/auth';
+@use 'blocks/cart';
+@use 'blocks/checkout';
+@use 'blocks/map-modal';
+@use 'blocks/order-success';
+@use 'blocks/account';
+@use 'blocks/order-status';

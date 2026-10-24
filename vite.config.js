@@ -13,6 +13,13 @@ const pages = {
   product: 'product.html',
   buyers: 'buyers.html',
   contacts: 'contacts.html',
+  checkout: 'checkout.html',
+  'order-received': 'order-received.html',
+  order: 'order.html',
+  account: 'account.html',
+  'account-orders': 'account-orders.html',
+  'account-orders-empty': 'account-orders-empty.html',
+  'account-addresses': 'account-addresses.html',
 };
 
 export default defineConfig({

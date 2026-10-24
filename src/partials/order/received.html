@@ -1,0 +1,25 @@
+<!--
+  Заказ оформлен (макет «Заказ оформлен» в секции 18126:59053: 18252:77498 → 18253:80920; планшет 18271:38594 / 18271:38883,
+  мобилка 18263:88788 / 18263:88849). Два кадра — анимация (js/modules/order-success.js): галочка с пульсирующими кольцами,
+  затем кольца гаснут и появляются заголовок, текст и кнопка. Тайминги в макете не заданы.
+  В WordPress — шаблон woocommerce/checkout/thankyou.php.
+-->
+<section class="order-success" data-header-theme="dark">
+  <div class="order-success__card">
+    <div class="order-success__box woocommerce-order" data-js-order-success>
+      <div class="order-success__icon" aria-hidden="true">
+        <span class="order-success__ring order-success__ring--1" data-js-order-success-ring></span>
+        <span class="order-success__ring order-success__ring--2" data-js-order-success-ring></span>
+        <span class="order-success__ring order-success__ring--3" data-js-order-success-ring></span>
+        <img class="order-success__check" src="./assets/icons/icn-success.svg" alt="" width="44" height="44" data-js-order-success-check>
+      </div>
+      <div class="order-success__content" data-js-order-success-content>
+        <div class="order-success__text">
+          <h1 class="order-success__title woocommerce-thankyou-order-received">Заказ успешно оформлен</h1>
+          <p class="order-success__desc">Заказ уже отображается в вашем личном кабинете</p>
+        </div>
+        <a class="btn btn--accent" href="./account-orders.html" data-js-swipe>Перейти в лк</a>
+      </div>
+    </div>
+  </div>
+</section>

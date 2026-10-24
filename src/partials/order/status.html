@@ -1,0 +1,155 @@
+<!--
+  Статус заказа (макет «Статус заказа» в секции 18126:59053: в работе — 18281:47397, получен — 18282:57850;
+  планшет 18281:57154 / 18282:57907, мобилка 18264:89798 / 18282:57964). WooCommerce — view-order.
+  Сетка карточки — как у оформления заказа (.checkout__card): слева статус, справа «Ваш заказ», подвал.
+  Шкала статусов: data-step у .order-track — номер текущего шага (с 1), подсветка — текущий и следующий (order-track.js).
+  Заказ получен / готов к получению: вместо дат — зелёное сообщение .order-status__message (макет 18282:57850), data-step="4".
+  Мобилка: «Ваш заказ» в макете нет — скрыт; сверху плашки меню кабинета.
+-->
+<section class="checkout-wrap order-status" data-header-theme="dark">
+  <include src="partials/account/nav.html" data='{"mod": "account-nav--mobile", "orders_mod": "is-active", "orders_attrs": "aria-current=\"page\""}'></include>
+
+  <div class="checkout__card" data-header-theme="light">
+    <div class="checkout__main order-status__main">
+      <div class="order-status__head">
+        <a class="order-status__back" href="./account-orders.html">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10.7984 12.0039L15.3984 16.6039L13.9984 18.0039L7.99844 12.0039L13.9984 6.00391L15.3984 7.40391L10.7984 12.0039Z"/></svg>
+          <span>К списку заказов</span>
+        </a>
+        <h1 class="order-status__title">Заказ <span class="order-status__number">#ABM-2024-0847</span></h1>
+      </div>
+
+      <div class="order-status__progress">
+        <div class="order-status__dates">
+          <p class="order-status__date">
+            <span class="order-status__date-value">2 ноя</span>
+            <span class="order-status__date-label">Дата заказа</span>
+          </p>
+          <img class="order-status__arrow" src="./assets/icons/icn-arrow-long.svg" alt="" width="72" height="24">
+          <p class="order-status__date order-status__date--planned">
+            <span class="order-status__date-value">12 ноя</span>
+            <span class="order-status__date-label">Плановая дата доставки</span>
+          </p>
+        </div>
+        <!-- Готов к получению (data-step="4"): вместо дат
+        <p class="order-status__message">Заказ прибыл в пункт выдачи и доступен для&nbsp;получения до&nbsp;10&nbsp;ноября</p> -->
+
+        <ol class="order-track" data-step="1" data-js-order-track>
+          <li class="order-track__step" data-js-order-track-step>
+            <span class="order-track__dot" aria-hidden="true"></span>
+            <span class="order-track__text">
+              <span class="order-track__title">В сборке</span>
+              <span class="order-track__desc">Заказ собирается и упаковывается для отправки</span>
+            </span>
+          </li>
+          <li class="order-track__step" data-js-order-track-step>
+            <span class="order-track__dot" aria-hidden="true"></span>
+            <span class="order-track__text">
+              <span class="order-track__title">Передается в доставку</span>
+              <span class="order-track__desc">Заказ передаётся в службу доставки</span>
+            </span>
+          </li>
+          <li class="order-track__step" data-js-order-track-step>
+            <span class="order-track__dot" aria-hidden="true"></span>
+            <span class="order-track__text">
+              <span class="order-track__title">В пути</span>
+              <span class="order-track__desc">Заказ находится в пути к пункту выдачи или адресу получения</span>
+            </span>
+          </li>
+          <li class="order-track__step" data-js-order-track-step>
+            <span class="order-track__dot" aria-hidden="true"></span>
+            <span class="order-track__text">
+              <span class="order-track__title">Готов к получению</span>
+              <span class="order-track__desc">Заказ прибыл и доступен для получения</span>
+            </span>
+          </li>
+          <li class="order-track__step" data-js-order-track-step>
+            <span class="order-track__dot" aria-hidden="true"></span>
+            <span class="order-track__text">
+              <span class="order-track__title">Получен</span>
+              <span class="order-track__desc">Заказ успешно получен</span>
+            </span>
+          </li>
+        </ol>
+      </div>
+
+      <section class="order-status__section" aria-labelledby="order-recipient-title">
+        <h2 class="order-status__subtitle" id="order-recipient-title">Получатель</h2>
+        <div class="order-status__recipient">
+          <img src="./assets/icons/icn-recipient.svg" alt="" width="28" height="24">
+          <div class="order-status__recipient-text">
+            <p><span class="order-status__muted">Получатель:</span> <strong class="order-status__name">Ренат З.</strong></p>
+            <p class="order-status__muted">+7 (992) 345-40-87 • rzaintdinov@yandex.ru</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="order-status__section order-status__section--delivery" aria-labelledby="order-delivery-title">
+        <h2 class="order-status__subtitle" id="order-delivery-title">Доставка</h2>
+        <div class="order-status__delivery">
+          <div class="order-status__point">
+            <img class="order-status__point-logo" src="./assets/icons/logo-ozon.svg" alt="" width="24" height="24">
+            <div class="order-status__point-text">
+              <p class="order-status__point-title">Пункт Ozon</p>
+              <p>Екатеринбург, Уральская ул., 70</p>
+              <p class="order-status__point-note">Срок хранения заказа — 14 дней</p>
+            </div>
+          </div>
+          <div class="order-status__track">
+            <!-- Неактивна, пока заказ не передан в доставку; подсказка — при наведении и фокусе -->
+            <button class="btn order-status__track-btn" type="button" aria-disabled="true" aria-describedby="order-track-tip">
+              Отследить заказ
+              <img src="./assets/icons/icn-exclamation.svg" alt="" width="16" height="16">
+            </button>
+            <span class="order-status__tooltip" id="order-track-tip" role="tooltip">Отслеживание появится после передачи заказа в доставку</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="checkout__aside order-status__aside" aria-label="Ваш заказ">
+      <div class="checkout__order">
+        <h2 class="checkout__order-title">Ваш заказ</h2>
+        <button class="checkout__toggle" type="button" aria-expanded="true" aria-controls="order-items" data-js-order-toggle>
+          <span class="checkout__toggle-label">2 товара</span>
+          <svg class="checkout__toggle-chevron" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.74935 10.7507L13.5827 6.91732L14.7493 8.08398L9.74935 13.084L4.74935 8.08398L5.91602 6.91732L9.74935 10.7507Z"/></svg>
+        </button>
+        <ul class="checkout__order-list" id="order-items">
+          <include src="partials/checkout/order-item.html" data='{"title": "Коллаген с брусникой", "qty": "1", "price": "1440₽"}'></include>
+          <include src="partials/checkout/order-item.html" data='{"title": "Коллаген с брусникой", "qty": "1", "price": "1440₽"}'></include>
+        </ul>
+      </div>
+
+      <div class="checkout__summary">
+        <div class="checkout__totals">
+          <dl class="checkout__rows">
+            <div class="checkout__row">
+              <dt>2 товара</dt>
+              <dd>1 120 ₽</dd>
+            </div>
+            <div class="checkout__row">
+              <dt>Доставка</dt>
+              <dd class="checkout__free">Бесплатно</dd>
+            </div>
+          </dl>
+          <div class="checkout__total">
+            <p class="order-status__paid">Оплачено <span class="order-status__paid-method">Картой</span></p>
+            <span>1 120 ₽</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <footer class="checkout__footer">
+      <ul class="checkout__links" data-js-roll-group>
+        <li><a href="./buyers.html#help-payment">Оплата</a></li>
+        <li><a href="./buyers.html#help-delivery">Доставка</a></li>
+        <li><a href="./buyers.html#help-returns">Правила возврата</a></li>
+      </ul>
+      <div class="checkout__support">
+        <p>Служба поддержки 24/7</p>
+        <a class="checkout__support-phone" href="tel:88122007550" data-js-roll>8 (812) 200-75-50</a>
+      </div>
+    </footer>
+  </div>
+</section>

@@ -30,6 +30,15 @@
     }
   }
 
+  // Затемнение, пока about наезжает (hero-cover.js)
+  &__shade {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-black);
+    opacity: 0;
+    pointer-events: none;
+  }
+
   &__inner {
     position: relative;
     display: flex;

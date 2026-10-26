@@ -52,11 +52,10 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       opacity $cart-transition,
       transform $cart-transition;
 
+    // Мобилка — на всю ширину экрана, под шапкой (правка: без полей по бокам)
     @include media(mobile) {
       top: rem(60);
-      right: rem(10);
-      bottom: rem(10);
-      left: rem(10);
+      left: 0;
       width: auto;
       transform: translateY(rem(24));
     }
@@ -236,17 +235,11 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     color: #1d1c21;
     white-space: nowrap;
 
+    // Итого — body-m-strong и у подписи, и у суммы (правка дизайнера)
     &--total {
+      @include body-m-strong;
       color: var(--color-fg-soft);
-
-      dt {
-        font-weight: 500;
-      }
     }
-  }
-
-  &__total {
-    @include body-l;
   }
 
   &__discount {
@@ -346,13 +339,13 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
   // Подчёркивание — фоном: text-decoration не доходит до букв roll-эффекта
   &__remove {
-    @include desc-s;
+    @include body-s;
     color: var(--color-fg-muted);
     background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
   }
 
   &__sold {
-    @include desc-s;
+    @include body-s;
     display: none;
     color: #ce7b00;
   }

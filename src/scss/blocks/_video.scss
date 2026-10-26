@@ -167,7 +167,6 @@
     opacity: 0;
     transition: opacity $transition;
 
-    // Размер в rem, не 100%: swipe-button.js оборачивает иконку, и проценты считаются от обёрток (крестик съезжал)
     svg {
       width: rem(44);
       height: rem(44);

@@ -60,7 +60,7 @@
         <div class="checkout__delivery" data-js-checkout-panel="pickup">
           <button class="checkout-target" type="button" aria-haspopup="dialog" aria-controls="pickup" data-js-modal-open="pickup">
             <span class="checkout-target__icon" data-js-checkout-pickup-icon>
-              <img src="./assets/icons/icn-location.svg" alt="" width="24" height="24">
+              <img src="./assets/icons/icn-location.svg" alt="" width="20" height="20">
             </span>
             <span class="checkout-target__body">
               <span class="checkout-target__title"><span data-js-checkout-pickup-title>Пункт выдачи</span>
@@ -77,7 +77,7 @@
         <div class="checkout__delivery" hidden data-js-checkout-panel="courier">
           <button class="checkout-target" type="button" aria-haspopup="dialog" aria-controls="address" data-js-modal-open="address">
             <span class="checkout-target__icon">
-              <img src="./assets/icons/icn-location.svg" alt="" width="24" height="24">
+              <img src="./assets/icons/icn-location.svg" alt="" width="20" height="20">
             </span>
             <span class="checkout-target__body">
               <span class="checkout-target__title">Адрес доставки
@@ -150,11 +150,7 @@
         <button class="btn btn--accent checkout__pay" type="submit" name="woocommerce_checkout_place_order" id="place_order" data-js-swipe>Оплатить 1 120 ₽</button>
       </div>
 
-      <div class="checkout__promo promo checkout_coupon" data-js-checkout-promo>
-        <label class="visually-hidden" for="coupon_code">Промокод</label>
-        <input class="promo__input" id="coupon_code" type="text" name="coupon_code" placeholder="Промокод" autocomplete="off">
-        <button class="promo__btn" type="button" name="apply_coupon" data-js-swipe>Применить</button>
-      </div>
+      <include src="partials/promo.html" data='{"id": "coupon_code", "mod": "checkout__promo checkout_coupon"}'></include>
 
       <label class="checkbox checkout__terms woocommerce-form__label-for-checkbox" data-js-checkout-terms>
         <input class="checkbox__input input-checkbox" type="checkbox" name="terms" id="terms">

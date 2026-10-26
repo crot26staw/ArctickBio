@@ -269,7 +269,7 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
   // Есть разобранные товары, оформить нельзя (макет 18269:34349): без итога и промокода, кнопка неактивна
   &.is-blocked &__totals,
-  &.is-blocked &__promo-form {
+  &.is-blocked &__promo {
     display: none;
   }
 }

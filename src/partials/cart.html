@@ -65,11 +65,7 @@
             </div>
           </dl>
 
-          <form class="cart__promo-form promo promo--outline promo--compact" action="#" method="post" data-js-cart-promo>
-            <label class="visually-hidden" for="cart-coupon">Промокод</label>
-            <input class="promo__input" id="cart-coupon" type="text" name="coupon_code" placeholder="Промокод" autocomplete="off">
-            <button class="promo__btn" type="submit" name="apply_coupon" data-js-swipe>Применить</button>
-          </form>
+          <include src="partials/promo.html" data='{"id": "cart-coupon", "mod": "promo--outline promo--compact cart__promo"}'></include>
 
           <a class="btn btn--accent cart__checkout checkout wc-forward" href="./checkout.html" data-js-cart-checkout data-js-swipe>Перейти к оформлению</a>
         </div>

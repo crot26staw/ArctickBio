@@ -105,9 +105,6 @@ export function initCart() {
     if (event.target.closest('[data-js-cart-close]')) close();
   });
 
-  // Промокод — до WordPress без отправки
-  root.querySelector('[data-js-cart-promo]')?.addEventListener('submit', (event) => event.preventDefault());
-
   document.addEventListener('click', (event) => {
     const openBtn = event.target.closest('[data-js-cart-open]');
     if (!openBtn) return;

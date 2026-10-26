@@ -1,0 +1,16 @@
+<!--
+  Промокод (компонент promocode 18208:49789): пустое поле — серая кнопка; есть значение — крестик очистки и синяя кнопка (is-filled);
+  промокод не найден — текст ошибки под полем (is-error, в WordPress отдаёт сервер). Логика — js/modules/promo.js.
+  data: id — id поля, mod — модификаторы и классы блока (promo--outline, promo--compact, класс места).
+-->
+<div class="promo {{ mod }}" data-js-promo>
+  <div class="promo__box">
+    <label class="visually-hidden" for="{{ id }}">Промокод</label>
+    <input class="promo__input" id="{{ id }}" type="text" name="coupon_code" placeholder="Промокод" autocomplete="off" aria-describedby="{{ id }}-error" data-js-promo-input>
+    <button class="promo__clear" type="button" aria-label="Очистить промокод" data-js-promo-clear>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.174" aria-hidden="true"><path d="M5.636 5.636L18.364 18.364M18.364 5.636L5.636 18.364"/></svg>
+    </button>
+    <button class="promo__btn" type="button" name="apply_coupon" data-js-promo-apply data-js-swipe>Применить</button>
+  </div>
+  <p class="promo__error" id="{{ id }}-error" aria-live="polite" data-js-promo-error>Промокод не найден</p>
+</div>

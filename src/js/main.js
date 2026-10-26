@@ -32,6 +32,7 @@ import { initModals } from './modules/modal.js';
 import { initPickup } from './modules/pickup.js';
 import { initAddress } from './modules/address.js';
 import { initCheckout } from './modules/checkout.js';
+import { initPromos } from './modules/promo.js';
 import { initOrderSuccess } from './modules/order-success.js';
 import { initAccount } from './modules/account.js';
 import { initOrderTracks } from './modules/order-track.js';
@@ -50,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPickup();
   initAddress();
   initCheckout();
+  initPromos();
   initOrderSuccess();
   initAccount();
   initOrderTracks();

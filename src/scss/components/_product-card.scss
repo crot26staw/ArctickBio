@@ -13,6 +13,7 @@
 
   &__hover-img {
     @include cover-img;
+    object-position: 19% 50%; // кадр как в макете (16650:96689): слева срезано 19% лишней ширины — пачка по центру карточки
     opacity: 0;
     transition: opacity $transition;
   }

@@ -294,8 +294,14 @@
   }
 
   // Мобилка: иконки 24, витамины разбросаны вокруг стика (макет 18541:70846–70862).
-  // Карточка уже (260) и раскрывается в сторону экрана: у C, E, K — вправо, у H, PP, A — влево
+  // Карточка — квадрат 180 над иконкой (макет 18609:50962): иконка лежит в её нижнем углу,
+  // у C, E, K карточка раскрывается вправо, у H, PP, A — влево. Открытая карточка — поверх заголовка
   @include media(mobile) {
+    &:hover,
+    &:focus-within {
+      z-index: 4;
+    }
+
     &__icon {
       width: rem(24);
       height: rem(24);
@@ -309,12 +315,13 @@
     }
 
     &__card {
-      width: rem(260);
-      height: auto;
-      padding: rem(16) rem(12) rem(44);
+      width: rem(180);
+      height: rem(180);
+      padding: rem(16);
     }
 
     &__text {
+      @include body-s;
       width: auto;
     }
 
@@ -322,8 +329,8 @@
     &--e,
     &--k {
       .vitamin__card {
-        right: auto;
-        left: -1px;
+        right: rem(24 - 180);
+        left: auto;
       }
     }
 
@@ -333,21 +340,14 @@
       right: auto;
 
       .vitamin__card {
-        right: -1px;
-        left: auto;
+        right: auto;
+        left: rem(24 - 180);
       }
     }
 
     &--c {
       top: calc(50% - #{rem(186)});
       left: rem(86);
-
-      // Вверх не помещается (заголовок) — раскрывается вниз, подпись в верхнем углу
-      .vitamin__card {
-        top: -1px;
-        bottom: auto;
-        padding: rem(44) rem(12) rem(16);
-      }
     }
 
     &--e {

@@ -4,21 +4,21 @@
     <h2 class="research__title" data-js-title-reveal>Продукт исследован ФИЦ Биотехнологии РАН</h2>
   </div>
 
-  <!-- Пункты сменяются по скроллу, секция закреплена (research.js): открыт один, по умолчанию первый -->
+  <!-- Пункты сменяются по скроллу, секция закреплена (research.js, таймлайн со scrub): открыт один, по умолчанию первый -->
   <div class="research__content">
     <ul class="research-list" data-js-research-list>
       <li class="research-list__item is-active" data-js-research-item>
         <div class="research-list__row">
           <span class="research-list__num">01</span>
           <div class="research-list__body">
-            <div class="research-list__collapse">
+            <div class="research-list__collapse" data-js-research-collapse>
               <div class="research-list__inner">
                 <p class="research-list__label">98% коллагеновой основы</p>
               </div>
             </div>
-            <div class="research-list__expand">
+            <div class="research-list__expand" data-js-research-expand>
               <div class="research-list__inner">
-                <div class="research-list__details">
+                <div class="research-list__details" data-js-research-content>
                   <p class="research-list__value">≈ <span class="research-list__number" data-js-number-ticker data-value="98">98</span>%</p>
                   <p class="research-list__title">коллагена в сухом веществе</p>
                   <p class="research-list__text">В сухом веществе преобладает белковая часть — вы получаете продукт с высокой долей коллагенового материала, а не наполнителей</p>
@@ -27,9 +27,9 @@
             </div>
           </div>
         </div>
-        <div class="research-list__expand">
+        <div class="research-list__expand" data-js-research-expand>
           <div class="research-list__inner">
-            <div class="research-list__media">
+            <div class="research-list__media" data-js-research-content>
               <img class="research-list__img" src="./assets/images/research-sample.webp" alt="" width="450" height="600" loading="lazy">
             </div>
           </div>
@@ -40,14 +40,14 @@
         <div class="research-list__row">
           <span class="research-list__num">02</span>
           <div class="research-list__body">
-            <div class="research-list__collapse">
+            <div class="research-list__collapse" data-js-research-collapse>
               <div class="research-list__inner">
                 <p class="research-list__label">&gt; 57% пептидов — 1–5 кДа</p>
               </div>
             </div>
-            <div class="research-list__expand">
+            <div class="research-list__expand" data-js-research-expand>
               <div class="research-list__inner">
-                <div class="research-list__details">
+                <div class="research-list__details" data-js-research-content>
                   <p class="research-list__value">&gt; <span class="research-list__number" data-js-number-ticker data-value="57">57</span>%</p>
                   <p class="research-list__title">пептидов в диапазоне 1–5 кДа</p>
                   <p class="research-list__text">Небольшие пептидные цепочки легче усваиваются организмом <br>по сравнению с цельным белком</p>
@@ -56,9 +56,9 @@
             </div>
           </div>
         </div>
-        <div class="research-list__expand">
+        <div class="research-list__expand" data-js-research-expand>
           <div class="research-list__inner">
-            <div class="research-list__media">
+            <div class="research-list__media" data-js-research-content>
               <img class="research-list__img" src="./assets/images/research-peptides.webp" alt="" width="300" height="400" loading="lazy">
             </div>
           </div>
@@ -69,14 +69,14 @@
         <div class="research-list__row">
           <span class="research-list__num">03</span>
           <div class="research-list__body">
-            <div class="research-list__collapse">
+            <div class="research-list__collapse" data-js-research-collapse>
               <div class="research-list__inner">
                 <p class="research-list__label">18 аминокислот в составе</p>
               </div>
             </div>
-            <div class="research-list__expand">
+            <div class="research-list__expand" data-js-research-expand>
               <div class="research-list__inner">
-                <div class="research-list__details">
+                <div class="research-list__details" data-js-research-content>
                   <p class="research-list__value"><span class="research-list__number" data-js-number-ticker data-value="18">18</span></p>
                   <p class="research-list__title">аминокислот в составе</p>
                   <p class="research-list__text">Аминокислоты — основа коллагена. 18 аминокислот в составе поддерживают кожу, суставы и связки</p>
@@ -85,9 +85,9 @@
             </div>
           </div>
         </div>
-        <div class="research-list__expand">
+        <div class="research-list__expand" data-js-research-expand>
           <div class="research-list__inner">
-            <div class="research-list__media">
+            <div class="research-list__media" data-js-research-content>
               <img class="research-list__img" src="./assets/images/research-amino.webp" alt="" width="300" height="400" loading="lazy">
             </div>
           </div>
@@ -101,9 +101,9 @@
             <p class="research-list__label">Протоколы испытаний продукции</p>
           </div>
         </div>
-        <div class="research-list__expand">
+        <div class="research-list__expand" data-js-research-expand>
           <div class="research-list__inner">
-            <div class="research-list__media">
+            <div class="research-list__media" data-js-research-content>
               <ul class="research-docs">
                 <include src="partials/research-doc.html" data='{"title": "Аминокислот-<br>ный профиль", "size": "8.5 MB", "href": "#"}'></include>
                 <include src="partials/research-doc.html" data='{"title": "Протоколы испытаний продукции", "size": "8.5 MB", "href": "#"}'></include>

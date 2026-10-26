@@ -265,6 +265,22 @@ $research-rise: 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
     mix-blend-mode: multiply;
   }
 
+  // Смена по скроллу (research.js, scrub): высоту, прозрачность и сдвиг ведёт GSAP инлайном,
+  // CSS-переходы и состояния is-active выключены, иначе они догоняют скролл с задержкой
+  &.is-scrubbed &__expand,
+  &.is-scrubbed &__collapse {
+    display: block;
+    overflow: hidden;
+    opacity: 1;
+    transition: none;
+  }
+
+  &.is-scrubbed &__details,
+  &.is-scrubbed &__media {
+    transform: none;
+    transition: none;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     &__expand,
     &__collapse,

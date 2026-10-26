@@ -12,9 +12,11 @@ import { LINE_REVEAL, splitLines } from './title-reveal.js';
  *   ="visible" — только детей, видных в окне по горизонтали (лента шире экрана: drag-slider), остальные не трогаем.
  * [data-reveal-sequence-end="top 40%"] у секции — закончить раньше SEQUENCE.end (всё должно успеть появиться, пока секция в кадре).
  * [data-reveal-sequence-gap="1.5"] — начать раньше: насколько наложиться на предыдущий элемент (по умолчанию SEQUENCE.gap).
+ * [data-reveal-sequence-play] у секции — не по скроллу: та же последовательность проигрывается сама целиком,
+ *   когда секция дошла до SEQUENCE.playStart, один раз (комментарий дизайнера к faq: «долистали, а информация не появилась»).
  * Сейчас — comparison: заголовок → фото → таблица; usage: заголовок → фото → карточки по одной;
- * catalog: заголовок → карточки по одной (заканчивается раньше — data-reveal-sequence-end); reviews: заголовок → кнопка → видимые карточки;
- * faq: заголовок → описание → кнопка → аккордеоны по одному → «Нужна помощь» с соцсетями.
+ * catalog: заголовок → карточки по одной (заканчивается раньше — data-reveal-sequence-end); reviews: заголовок → кнопка → видимые карточки (play);
+ * faq: заголовок → описание → кнопка → аккордеоны по одному → «Нужна помощь» с соцсетями (play — проигрывается при появлении).
  */
 const SEQUENCE = {
   start: 'top 90%',
@@ -25,6 +27,8 @@ const SEQUENCE = {
   lineStagger: 0.15,
   gap: 0.5, // следующий элемент стартует, когда предыдущий прошёл половину
   ease: 'power2.out',
+  playStart: 'top 80%', // data-reveal-sequence-play
+  playSpeed: 2, // шкала в «единицах скролла» — при проигрывании ускоряем (FAQ ≈ 2 с)
 };
 
 function getTargets(item) {
@@ -47,15 +51,19 @@ export function initRevealSequence() {
       const items = group.querySelectorAll('[data-js-reveal-sequence-item]');
       if (!items.length) return;
 
+      const isPlay = group.hasAttribute('data-reveal-sequence-play');
       const tl = gsap.timeline({
         defaults: { ease: SEQUENCE.ease, duration: 1 },
-        scrollTrigger: {
-          trigger: group,
-          start: SEQUENCE.start,
-          end: group.dataset.revealSequenceEnd ?? SEQUENCE.end,
-          scrub: SEQUENCE.scrub,
-        },
+        scrollTrigger: isPlay
+          ? { trigger: group, start: SEQUENCE.playStart, once: true }
+          : {
+              trigger: group,
+              start: SEQUENCE.start,
+              end: group.dataset.revealSequenceEnd ?? SEQUENCE.end,
+              scrub: SEQUENCE.scrub,
+            },
       });
+      if (isPlay) tl.timeScale(SEQUENCE.playSpeed);
 
       items.forEach((item, i) => {
         const position = i === 0 ? 0 : `-=${item.dataset.revealSequenceGap ?? SEQUENCE.gap}`;

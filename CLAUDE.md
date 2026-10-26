@@ -186,8 +186,8 @@ src/
                    section[data-js-reveal-sequence] > [data-js-reveal-sequence-item], по порядку в DOM, снизу + проявление;
                    [data-reveal-sequence-split] — бить на строки (заголовок, такому НЕ ставить data-js-title-reveal). Сейчас — comparison: заголовок → фото → таблица; usage: заголовок → фото → карточки по одной;
                    catalog: заголовок → карточки по одной снизу — [data-reveal-sequence-children], заканчивается раньше — data-reveal-sequence-end="top 40%" у секции (правка дизайнера: к моменту, когда заголовок в середине экрана, все карточки уже видны);
-                   faq: заголовок → описание → кнопка → аккордеоны по одному → «Нужна помощь» с соцсетями, раньше конца аккордеонов — [data-reveal-sequence-gap];
-                   reviews: заголовок → кнопка → карточки, видные на экране — [data-reveal-sequence-children="visible"])
+                   faq: заголовок → описание → кнопка → аккордеоны по одному → «Нужна помощь» с соцсетями, раньше конца аккордеонов — [data-reveal-sequence-gap]; не по скроллу, а проигрывается целиком при появлении — [data-reveal-sequence-play] у секции (комментарий дизайнера);
+                   reviews: заголовок → кнопка → карточки, видные на экране — [data-reveal-sequence-children="visible"], тоже play)
                    swipe-button.js (ховер всех кнопок как animata swipe-button: содержимое уезжает вверх, снизу въезжают копия и фон --swipe-bg;
                    [data-js-swipe] на кнопке, [data-js-swipe-group] — все ссылки внутри (меню), [data-swipe-trigger] — ховер предка,
                    [data-swipe-static] — не двигать (бейдж корзины), на ховере перекрашивается. Стили components/_swipe.scss.

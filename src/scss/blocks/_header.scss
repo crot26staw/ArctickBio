@@ -211,14 +211,46 @@
     }
   }
 
-  // Две линии 18 и 10.8px (макет icn-menu)
+  // Две линии 18 и 10.8px (макет icn-menu); при открытом меню складываются в крестик
   &__burger-lines {
+    position: relative;
     display: block;
     width: rem(18);
     height: calc(#{rem(3.13)} + 2 * #{rem(1.174)});
-    background:
-      linear-gradient(currentColor, currentColor) 0 0 / 100% #{rem(1.174)} no-repeat,
-      linear-gradient(currentColor, currentColor) 0 100% / #{rem(10.798)} #{rem(1.174)} no-repeat;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      height: rem(1.174);
+      background-color: currentColor;
+      transition:
+        transform $transition,
+        width $transition;
+    }
+
+    &::before {
+      top: 0;
+      width: 100%;
+    }
+
+    &::after {
+      bottom: 0;
+      width: rem(10.798);
+    }
+  }
+}
+
+// Крестик вместо бургера при открытом меню: линии сходятся к середине и поворачиваются
+.header.is-menu-open .header__burger-lines {
+  &::before {
+    transform: translateY(#{rem(1.565)}) rotate(45deg);
+  }
+
+  &::after {
+    width: 100%;
+    transform: translateY(#{rem(-1.565)}) rotate(-45deg);
   }
 }
 

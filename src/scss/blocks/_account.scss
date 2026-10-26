@@ -1,7 +1,7 @@
 @use '../base' as *;
 
 // Личный кабинет (account*.html, partials/account/*; макет «Личный кабинет» в секции 18126:59053).
-// Десктоп: карточка под шапкой на всю высоту окна — меню 364 на светлом фоне слева, контент 1036 справа.
+// Десктоп: карточка под шапкой на всю высоту окна — меню 364 на светлом фоне слева (фикс), контент справа — на всю оставшуюся ширину.
 // Планшет: меню 240. Мобилка: меню — две плашки над белой карточкой, «Выйти» — в конце карточки.
 
 // Под фиксированной шапкой (кабинет и статус заказа)
@@ -26,7 +26,7 @@
   &__card {
     display: grid;
     flex: 1;
-    grid-template-columns: minmax(0, 1fr) rem(1036);
+    grid-template-columns: rem(364) minmax(0, 1fr);
     min-height: calc(100svh - #{rem(100)});
     overflow: hidden;
     background-color: var(--color-bg-light);
@@ -368,7 +368,9 @@
 }
 
 // ---------- Заказ в списке (partials/account/order-card.html) ----------
+// Кликабельна вся карточка: ссылка-статус растянута на неё (::after); ховер карточки — статус темнее (без swipe, правка дизайнера)
 .order-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: rem(12);
@@ -417,11 +419,29 @@
     white-space: nowrap;
     background-color: var(--color-neutral);
     border-radius: var(--radius-s);
+    transition: background-color 0.2s ease;
+
+    &::after {
+      position: absolute;
+      inset: 0;
+      content: '';
+      border-radius: var(--radius-s);
+    }
 
     svg {
       width: rem(16);
       height: rem(16);
     }
+  }
+
+  @include hover {
+    .order-card__status {
+      background-color: rgba(1, 39, 62, 0.2);
+    }
+  }
+
+  &:has(.order-card__status:focus-visible) .order-card__status {
+    background-color: rgba(1, 39, 62, 0.2);
   }
 
   &__body {

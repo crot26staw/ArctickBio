@@ -17,6 +17,11 @@
     backdrop-filter: none;
   }
 
+  // Без точек под фото (футер — комментарий дизайнера)
+  &--no-dots &__dots {
+    display: none;
+  }
+
   // Без собственного стекла — внутри слайдера, стекло даёт его рамка (hero)
   &--bare {
     background-color: transparent;

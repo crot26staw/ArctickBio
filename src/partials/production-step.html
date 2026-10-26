@@ -7,16 +7,24 @@
   <button class="production-step__marker" type="button" aria-label="Подробнее о шаге {{ num }}" aria-expanded="false" data-js-step-popup-toggle data-js-swipe>
     <img src="./assets/icons/icn-ingredients-accent.svg" alt="" width="32" height="32">
   </button>
+  <!-- Попап шага. Мобилка: окно поверх страницы — подложка (сам __popup) и карточка с крестиком -->
   <div class="production-step__popup">
-    <div class="production-step__popup-text">
-      <span class="production-step__popup-num">{{ num }}</span>
-      <div>
-        <p class="production-step__popup-title">{{ popup-title }}</p>
-        <p class="production-step__popup-desc">{{ popup-desc }}</p>
+    <div class="production-step__popup-card" data-js-step-popup-card>
+      <div class="production-step__popup-text">
+        <span class="production-step__popup-num">{{ num }}</span>
+        <div>
+          <p class="production-step__popup-title">{{ popup-title }}</p>
+          <p class="production-step__popup-desc">{{ popup-desc }}</p>
+        </div>
       </div>
-    </div>
-    <div class="production-step__popup-img-wrap">
-      <video class="production-step__popup-video" src="{{ popup-video }}" poster="{{ popup-poster }}" width="700" height="394" muted loop playsinline preload="none" aria-hidden="true" data-js-step-popup-video></video>
+      <div class="production-step__popup-img-wrap">
+        <video class="production-step__popup-video" src="{{ popup-video }}" poster="{{ popup-poster }}" width="700" height="394" muted loop playsinline preload="none" aria-hidden="true" data-js-step-popup-video></video>
+      </div>
+      <button class="production-step__popup-close" type="button" aria-label="Закрыть" data-js-step-popup-close data-js-swipe>
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="currentColor" aria-hidden="true">
+          <path d="M23.414 22L30 15.414L28.586 14L22 20.586L15.414 14L14 15.414L20.586 22L14 28.586L15.414 30L22 23.414L28.586 30L30 28.586L23.414 22Z"/>
+        </svg>
+      </button>
     </div>
   </div>
 </li>

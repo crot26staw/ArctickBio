@@ -1,6 +1,9 @@
+import { getLenis } from './smooth-scroll.js';
+
 const OPEN_CLASS = 'is-popup-open';
 const LEFT_CLASS = 'is-popup-left';
 const TABLET = window.matchMedia('(max-width: 1199px)');
+const MOBILE = window.matchMedia('(max-width: 767px)');
 const HOVER = window.matchMedia('(hover: hover)');
 
 /**
@@ -8,6 +11,8 @@ const HOVER = window.matchMedia('(hover: hover)');
  * (на десктопе попап открывается наведением, это CSS). Разметка: [data-js-step-popup] (шаг) > [data-js-step-popup-toggle] (маркер).
  * Открыт один попап; закрывается повторным нажатием, нажатием мимо и Escape.
  * Если вправо от маркера попап не помещается в экран — открывается влево (класс is-popup-left, стили в _production.scss).
+ * На мобилке попап — окно на весь экран: закрывают крестик [data-js-step-popup-close], нажатие мимо карточки [data-js-step-popup-card]
+ * и Escape; на время окна Lenis стоит, фокус — на крестике.
  * Видео попапа [data-js-step-popup-video] играет с начала, пока попап открыт (наведение, фокус или нажатие), иначе на паузе.
  * Грузится заранее (preload auto), когда шаг подходит к экрану.
  */
@@ -26,7 +31,7 @@ export function initStepPopups() {
     const isOpen =
       step.classList.contains(OPEN_CLASS) ||
       (HOVER.matches && toggle?.matches(':hover')) ||
-      toggle?.matches(':focus-visible');
+      (!MOBILE.matches && toggle?.matches(':focus-visible'));
 
     if (isOpen && video.paused) {
       video.currentTime = 0;
@@ -39,10 +44,14 @@ export function initStepPopups() {
   const close = () => {
     if (!current) return;
     const step = current;
+    const toggle = step.querySelector('[data-js-step-popup-toggle]');
+    const hadFocus = step.querySelector('[data-js-step-popup-card]')?.contains(document.activeElement);
     step.classList.remove(OPEN_CLASS);
-    step.querySelector('[data-js-step-popup-toggle]')?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-expanded', 'false');
     current = null;
     syncVideo(step);
+    getLenis()?.start();
+    if (hadFocus) toggle?.focus({ preventScroll: true });
   };
 
   const open = (step, toggle) => {
@@ -54,6 +63,14 @@ export function initStepPopups() {
     toggle.setAttribute('aria-expanded', 'true');
     current = step;
     syncVideo(step);
+
+    if (MOBILE.matches) {
+      getLenis()?.stop();
+      // В первый кадр перехода окно ещё visibility: hidden — фокус не встанет
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => step.querySelector('[data-js-step-popup-close]')?.focus({ preventScroll: true }));
+      });
+    }
   };
 
   steps.forEach((step) => {
@@ -65,6 +82,8 @@ export function initStepPopups() {
       if (current === step) close();
       else open(step, toggle);
     });
+
+    step.querySelector('[data-js-step-popup-close]')?.addEventListener('click', close);
 
     ['pointerenter', 'pointerleave', 'focus', 'blur'].forEach((type) => {
       toggle.addEventListener(type, () => syncVideo(step));
@@ -85,8 +104,12 @@ export function initStepPopups() {
   );
   steps.forEach((step) => preloader.observe(step));
 
+  // Нажатие мимо карточки закрывает (на мобилке подложка окна — внутри шага, поэтому проверка по карточке)
   document.addEventListener('pointerdown', (event) => {
-    if (current && !current.contains(event.target)) close();
+    if (!current) return;
+    const card = current.querySelector('[data-js-step-popup-card]');
+    const toggle = current.querySelector('[data-js-step-popup-toggle]');
+    if (!card?.contains(event.target) && !toggle?.contains(event.target)) close();
   });
 
   document.addEventListener('keydown', (event) => {
@@ -94,4 +117,5 @@ export function initStepPopups() {
   });
 
   TABLET.addEventListener('change', close);
+  MOBILE.addEventListener('change', close);
 }

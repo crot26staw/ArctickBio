@@ -50,6 +50,12 @@ const CARDS = {
   ease: 'power3.out',
 };
 
+// Тень над catalog, пока он наезжает на product-scene (фаза 3) — доли пути наезда
+const COVER_SHADOW = {
+  in: 0.1, // проявляется
+  out: 0.25, // гаснет к концу, когда catalog подходит к верху экрана
+};
+
 // Позиция элемента относительно корня по offset* (не зависит от transform)
 function offsetWithin(el, root) {
   let x = 0;
@@ -342,12 +348,24 @@ function initCover(root, endSection, pinTrigger) {
   const cover = root.closest('[data-js-sachet-journey-cover]');
   if (!cover) return;
 
+  // Тень над наезжающей секцией (.catalog::before): проявляется в начале наезда, гаснет к концу — когда секция у верха экрана
+  const next = cover.nextElementSibling;
+  const shadow = next
+    ? gsap
+        .timeline({ defaults: { ease: 'none' } })
+        .fromTo(next, { '--cover-shadow': 0 }, { '--cover-shadow': 1, duration: COVER_SHADOW.in })
+        .to(next, { '--cover-shadow': 1, duration: 1 - COVER_SHADOW.in - COVER_SHADOW.out })
+        .to(next, { '--cover-shadow': 0, duration: COVER_SHADOW.out })
+    : undefined;
+
   ScrollTrigger.create({
     trigger: cover,
     start: () => pinTrigger.end + offsetWithin(endSection, root).y,
     end: () => pinTrigger.end + offsetWithin(endSection, root).y + endSection.offsetHeight,
     pin: true,
     pinSpacing: false,
+    animation: shadow,
+    scrub: true,
     invalidateOnRefresh: true,
   });
 }

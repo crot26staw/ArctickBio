@@ -9,6 +9,20 @@
   padding-top: rem(120);
   background-color: var(--color-bg-light);
 
+  // Тень над верхним краем, пока catalog наезжает на product-scene (sachet-journey.js, initCover ведёт --cover-shadow 0 → 1 → 0),
+  // иначе светлые секции сливаются. Градиент + opacity, не box-shadow — без перерисовки большой тени каждый кадр
+  &::before {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    left: 0;
+    height: rem(160);
+    pointer-events: none;
+    content: '';
+    background: linear-gradient(to top, rgb(0 16 26 / 14%), rgb(0 16 26 / 5%) 35%, rgb(0 16 26 / 0%));
+    opacity: var(--cover-shadow, 0);
+  }
+
   // Мобилка: макет 18127:29182
   @include media(mobile) {
     gap: rem(32);

@@ -11,7 +11,8 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from './motion.js';
  *   уменьшается до размера саше в пачке и встаёт на место [data-js-sachet-journey-target].
  *
  * Облачная завеса (initVeil, референс — white-desert.com): в конце пина about снизу поднимается завеса,
- *   закрывает about (он прячется), и product-scene выходит из рассеивающихся облаков. Стик летит поверх облаков.
+ *   закрывает about (он прячется), и product-scene выходит из-под облаков: снизу завеса срезана чуть ниже верха секции (VEIL.cut),
+ *   край скалы остаётся под облаками; когда секция почти у верха экрана, остаток завесы растворяется. Стик летит поверх облаков.
  *
  * Фаза 3 — catalog наезжает на закреплённую product-scene (initCover).
  *
@@ -219,8 +220,9 @@ const VEIL = {
   startY: 0.2, // верх завесы на экране в момент конца пина (0 — верх, 1 — низ окна); плотная часть уже под низом окна
   dense: 0.4, // с какой доли высоты картинки облака закрывают карточки — тогда стик поднимается над завесой
   hideAbout: 0.45, // экран полностью закрыт (плотная часть с 0.64 высоты картинки облаков) — прячем about
-  fadeStart: 0.5, // начинаем рассеивать: под завесой — фон страницы и product-scene
-  fadeEnd: 0.8, // завеса рассеялась, стик возвращается за переднюю стенку пачки
+  cut: [0.2, 1], // срез завесы снизу: от и до (доли высоты скалы .product-scene__rock-top от верха product-scene) — край скалы под облаками
+  fadeStart: 0.75, // product-scene подходит к верху экрана — растворяем остаток завесы; стик (уже ниже среза) — за переднюю стенку пачки
+  fadeEnd: 0.95, // завеса рассеялась до того, как product-scene встала у верха экрана
   length: 1, // до конца — product-scene у верха экрана
 };
 
@@ -252,19 +254,30 @@ function isStickAboveVeil(item, cards, about, veil) {
  * Её y — в координатах обёртки: во время пина обёртка стоит, после — уезжает со скроллом,
  * поэтому шкала из двух отрезков с одинаковой скоростью на экране.
  */
-function initVeil(veil, item, about, pinTrigger) {
+function initVeil(veil, item, about, scene, pinTrigger) {
   const cards = about.querySelectorAll('[data-js-sachet-journey-card]');
-  const updateLayer = () => {
-    gsap.set(item, { zIndex: isStickAboveVeil(item, cards, about, veil) ? 5 : '' });
+  const rock = scene.querySelector('[data-js-cloud-veil-edge]') || scene;
+  let stickActive = false;
+  const update = () => {
+    if (stickActive) gsap.set(item, { zIndex: isStickAboveVeil(item, cards, about, veil) ? 5 : '' });
+    // Завеса едет быстрее секции — срез пересчитываем каждый кадр (в координатах завесы)
+    const top = scene.getBoundingClientRect().top - veil.getBoundingClientRect().top;
+    const [from, to] = VEIL.cut.map((k) => `${Math.round(top + rock.offsetHeight * k)}px`);
+    veil.style.setProperty('--veil-cut-start', from);
+    veil.style.setProperty('--veil-cut-end', to);
   };
-  // Слой стика проверяем каждый кадр, пока завеса не рассеялась (VEIL.fadeEnd)
+  // Срез завесы считаем каждый кадр, пока она не рассеялась (VEIL.fadeEnd),
+  // слой стика — пока завеса плотная (до VEIL.fadeStart: дальше стик ниже среза, у пачки — за её передней стенкой)
   const setActive = (active) => {
     if (active) {
-      gsap.ticker.add(updateLayer);
+      gsap.ticker.add(update);
     } else {
-      gsap.ticker.remove(updateLayer);
-      gsap.set(item, { zIndex: '' });
+      gsap.ticker.remove(update);
     }
+  };
+  const setStick = (active) => {
+    stickActive = active;
+    if (!active) gsap.set(item, { zIndex: '' });
   };
 
   const vh = () => window.innerHeight;
@@ -284,12 +297,16 @@ function initVeil(veil, item, about, pinTrigger) {
     // Стик за карточками или над облаками (isStickAboveVeil), пока завеса не рассеялась
     .call(setActive, [false], 0.001)
     .call(setActive, [true], 0.002)
+    .call(setStick, [false], 0.001)
+    .call(setStick, [true], 0.002)
     // Пин: обёртка стоит — завеса поднимается со своей скоростью
     .fromTo(veil, { y: () => vh() }, { y: () => VEIL.startY * vh(), duration: lead, ease: 'none' }, 0)
     // После пина обёртка уезжает со скоростью 1 — завесе остаётся разница
     .to(veil, { y: () => (VEIL.startY - (VEIL.speed - 1) * VEIL.length) * vh(), duration: VEIL.length, ease: 'none' })
     .set(about, { autoAlpha: 0 }, lead + VEIL.hideAbout)
     .to(veil, { opacity: 0, duration: VEIL.fadeEnd - VEIL.fadeStart, ease: 'power1.in' }, lead + VEIL.fadeStart)
+    .call(setStick, [true], lead + VEIL.fadeStart - 0.001)
+    .call(setStick, [false], lead + VEIL.fadeStart)
     .call(setActive, [true], lead + VEIL.fadeEnd - 0.001)
     .call(setActive, [false], lead + VEIL.fadeEnd);
 }
@@ -309,7 +326,7 @@ export function initSachetJourney() {
 
   const veil = root.querySelector('[data-js-cloud-veil]');
   const about = root.querySelector('[data-js-sachet-journey-card]')?.closest('section');
-  if (veil && about && pinTrigger) initVeil(veil, item, about, pinTrigger);
+  if (veil && about && pinTrigger) initVeil(veil, item, about, endSection, pinTrigger);
 
   initFlight(root, item, target, endSection, pinTrigger);
 

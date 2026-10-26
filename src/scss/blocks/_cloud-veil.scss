@@ -13,6 +13,11 @@
   pointer-events: none;
   opacity: 0; // без JS / при reduced motion завесы нет
   will-change: transform, opacity;
+  // Снизу завеса растворяется от --veil-cut-start до --veil-cut-end (JS: по высоте скалы у верха product-scene) —
+  // секция выходит из-под облаков, а её верхний край остаётся под ними. До перехода срез ниже завесы — она сплошная.
+  --veil-cut-start: 1000svh;
+  --veil-cut-end: 1000svh;
+  mask-image: linear-gradient(to bottom, #000 var(--veil-cut-start), transparent var(--veil-cut-end));
 
   &__clouds {
     display: block;

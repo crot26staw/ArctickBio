@@ -5,11 +5,12 @@ const FOLLOW = {
   ease: 'power3.out',
 };
 
-const GAP = 5; // элемент слева сверху от курсора: его правый нижний угол на GAP px левее и выше курсора
+const ACTIVE_CLASS = 'is-cursor-follow'; // у области, пока элемент следует за мышью: в CSS курсор скрыт (cursor: none)
 
 /**
- * Элемент [data-js-cursor-follow] плавно следует за курсором (слева сверху от него, на GAP px) в пределах области
+ * Элемент [data-js-cursor-follow] плавно следует за курсором (центр элемента — под курсором) в пределах области
  * (ближайший [data-js-cursor-follow-area], иначе родитель). Курсор ушёл — элемент возвращается на место.
+ * Пока мышь в области, у неё класс is-cursor-follow — сам курсор скрыт, его роль играет элемент (кнопка «Смотреть»).
  * Позиция в покое задаётся в CSS, центрирование — через `translate: -50% -50%`
  * (не transform: его занимает GSAP). Только для мыши; при prefers-reduced-motion не двигается.
  */
@@ -31,8 +32,8 @@ function setup(el) {
     const halfW = el.offsetWidth / 2;
     const halfH = el.offsetHeight / 2;
 
-    const x = pointer.x - rect.left - GAP - halfW;
-    const y = pointer.y - rect.top - GAP - halfH;
+    const x = pointer.x - rect.left;
+    const y = pointer.y - rect.top;
 
     xTo(clamp(x, halfW, rect.width - halfW) - homeX);
     yTo(clamp(y, halfH, rect.height - halfH) - homeY);
@@ -41,11 +42,13 @@ function setup(el) {
   area.addEventListener('pointermove', (event) => {
     if (event.pointerType !== 'mouse') return;
     pointer = { x: event.clientX, y: event.clientY };
+    area.classList.add(ACTIVE_CLASS);
     follow();
   });
 
   area.addEventListener('pointerleave', () => {
     pointer = null;
+    area.classList.remove(ACTIVE_CLASS);
     xTo(0);
     yTo(0);
   });

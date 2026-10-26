@@ -7,6 +7,16 @@
   color: var(--color-white);
   background-color: var(--color-black);
 
+  // Мышь в блоке (cursor-follow.js): курсор скрыт, под ним — кнопка «Смотреть», клик в любом месте запускает видео.
+  // В открытом плеере курсор нужен для контролов
+  &.is-cursor-follow:not(.is-video-open) {
+    cursor: none;
+
+    * {
+      cursor: none;
+    }
+  }
+
   &__bg {
     position: absolute;
     inset: 0;
@@ -96,12 +106,13 @@
     }
   }
 
+  // Превью-видео (до загрузки — постер)
   &__card-img {
     position: absolute;
-    top: -20%;
-    left: 0;
+    inset: 0;
     width: 100%;
-    height: 120%;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.5s ease;
   }
 
@@ -115,5 +126,64 @@
     align-items: center;
     white-space: nowrap;
     transform: translate(-50%, -50%);
+  }
+
+  // Плеер полного видео: на весь блок поверх всего; раскрывается из карточки — clip-path ведёт GSAP (video.js)
+  &__player {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background-color: var(--color-black);
+
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &__player-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    // Планшет/мобилка: экран выше 16:9 — видео целиком, с полями (карточки нет, раскрывается из кнопки)
+    @include media(tablet) {
+      object-fit: contain;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: rem(90); // под шапкой
+    right: rem(50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(44);
+    height: rem(44);
+    color: var(--color-white);
+    background-color: rgba(14, 14, 14, 0.3);
+    border-radius: var(--radius-s);
+    opacity: 0;
+    transition: opacity $transition;
+
+    // Размер в rem, не 100%: swipe-button.js оборачивает иконку, и проценты считаются от обёрток (крестик съезжал)
+    svg {
+      width: rem(44);
+      height: rem(44);
+    }
+
+    .video.is-video-open & {
+      opacity: 1;
+    }
+
+    @include media(tablet) {
+      right: rem(20);
+    }
+
+    @include media(mobile) {
+      top: rem(70);
+      right: rem(10);
+    }
   }
 }

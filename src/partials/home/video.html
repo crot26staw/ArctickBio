@@ -1,4 +1,4 @@
-<section class="video" data-header-theme="dark" data-js-cursor-follow-area>
+<section class="video" data-header-theme="dark" data-js-cursor-follow-area data-js-video>
   <div class="video__bg" aria-hidden="true">
     <img src="./assets/images/video-bg.webp" alt="" width="2880" height="1622" loading="lazy">
   </div>
@@ -7,20 +7,31 @@
   <!-- Следует за курсором в пределах блока (js/modules/cursor-follow.js) -->
   <button class="video__play" type="button" data-js-video-open data-js-swipe data-js-cursor-follow>
     <img src="./assets/icons/icn-play.svg" alt="" width="12" height="12">
-    Смотреть (2:35)
+    Смотреть (0:42)
   </button>
 
   <div class="video__inner container">
     <h2 class="video__title" data-js-title-reveal>Мы собираем ягоды <br>в экологически чистых местах Кольского полуострова</h2>
 
     <button class="video__card" type="button" data-js-fade-up data-js-video-open data-swipe-trigger>
-      <img class="video__card-img" src="./assets/images/video-card.webp" alt="" width="900" height="900" loading="lazy">
+      <!-- Превью без звука, по кругу; грузится и играет, только когда блок рядом с экраном (js/modules/video.js) -->
+      <video class="video__card-img" src="./assets/video/video-preview.mp4" poster="./assets/images/video-card.webp" width="900" height="900" muted loop playsinline preload="none" aria-hidden="true" data-js-video-preview></video>
       <span class="video__card-label">
-        Смотреть (2:35)
+        Смотреть (0:42)
         <span class="icon-btn icon-btn--24" data-js-swipe>
           <img src="./assets/icons/icn-play-18.svg" alt="" width="18" height="18">
         </span>
       </span>
+    </button>
+  </div>
+
+  <!-- Полное видео со звуком: по «Смотреть» раскрывается из карточки (или кнопки) на весь блок (js/modules/video.js) -->
+  <div class="video__player" data-js-video-player hidden>
+    <video class="video__player-media" src="./assets/video/video-main.mp4" poster="./assets/images/video-card.webp" width="1920" height="1080" playsinline preload="none" data-js-video-main></video>
+    <button class="video__close" type="button" aria-label="Закрыть видео" data-js-video-close data-js-swipe>
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="currentColor" aria-hidden="true">
+        <path d="M23.414 22L30 15.414L28.586 14L22 20.586L15.414 14L14 15.414L20.586 22L14 28.586L15.414 30L22 23.414L28.586 30L30 28.586L23.414 22Z"/>
+      </svg>
     </button>
   </div>
 </section>

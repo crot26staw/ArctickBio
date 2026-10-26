@@ -17,6 +17,7 @@ import { initCardsRise } from './modules/cards-rise.js';
 import { initSwipeButtons } from './modules/swipe-button.js';
 import { initRollText } from './modules/roll-text.js';
 import { initCursorFollow } from './modules/cursor-follow.js';
+import { initVideos } from './modules/video.js';
 import { initRevealSequence } from './modules/reveal-sequence.js';
 import { initQuantities } from './modules/quantity.js';
 import { initProductFormats } from './modules/product-format.js';
@@ -67,5 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initStepPopups();
   initCardsRise();
   initCursorFollow();
+  initVideos();
   initRevealSequence();
 });

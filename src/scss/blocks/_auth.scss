@@ -161,11 +161,8 @@ $auth-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     width: 100%;
   }
 
-  &__consent {
-    @include desc-m;
-    max-width: rem(301);
-    color: var(--color-fg-light-soft);
-    text-align: center;
+  &__checkbox {
+    align-self: stretch;
   }
 
   &__switch {

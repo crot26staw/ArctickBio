@@ -5,7 +5,8 @@
  * Проверка: у поля [data-js-field-input] атрибут data-validate:
  *   email    — пустое (текст ошибки в data-message) / не похоже на email;
  *   required — пустое, текст ошибки в data-message;
- *   repeat   — пустое / не совпадает с полем из data-repeat (id).
+ *   repeat   — пустое / не совпадает с полем из data-repeat (id);
+ *   checked  — чекбокс не отмечен (у чекбокса нет подсказки — только is-error, рамка цвета ошибки).
  * Ошибка — класс is-error у [data-js-field] и текст в [data-js-field-hint]. Сервер может отдать поле
  * уже с is-error и текстом подсказки («Неверный логин или пароль») — ошибка снимется при вводе.
  */
@@ -18,6 +19,7 @@ const MESSAGES = {
   required: 'Заполните поле',
   repeatEmpty: 'Повторите пароль',
   repeatMismatch: 'Пароли не совпадают',
+  checked: 'Подтвердите согласие',
 };
 
 function getError(input) {
@@ -34,6 +36,8 @@ function getError(input) {
       const original = document.getElementById(input.dataset.repeat);
       return original && original.value !== input.value ? MESSAGES.repeatMismatch : '';
     }
+    case 'checked':
+      return input.checked ? '' : input.dataset.message || MESSAGES.checked;
     default:
       return '';
   }

@@ -1,7 +1,7 @@
 @use '../base' as *;
 
 // Чекбокс (макет Checkbox 18519:135281): квадрат 16 с рамкой 2px в поле 20, подпись body-s.
-// Ошибка (.is-error, js/modules/checkout.js) — рамка цвета ошибки
+// Ошибка (.is-error, js/modules/checkout.js и field.js — data-validate="checked") — рамка цвета ошибки
 .checkbox {
   display: flex;
   gap: rem(8);
@@ -57,6 +57,15 @@
   &__input:focus-visible + &__box::before {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
+  }
+
+  // На тёмном фоне (регистрация в попапе входа, 18269:35833)
+  &--inverse &__box::before {
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+
+  &--inverse &__label {
+    color: var(--color-fg-light-soft);
   }
 
   &.is-error &__box::before {

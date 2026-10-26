@@ -30,6 +30,11 @@
     }
   }
 
+  // Видео поверх фото: фото видно, пока видео не загрузилось
+  &__video {
+    @include cover-img;
+  }
+
   // Затемнение, пока about наезжает (hero-cover.js)
   &__shade {
     position: absolute;

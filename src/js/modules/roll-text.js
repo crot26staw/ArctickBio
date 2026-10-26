@@ -3,6 +3,8 @@ import { prefersReducedMotion } from './motion.js';
 /**
  * Ховер текстовых ссылок «roll text» (референс: animata.design/docs/text/roll-text, stagger: character):
  * у каждой буквы две копии друг над другом, при наведении/фокусе стопка по очереди уезжает вверх на одну строку.
+ * Запуск мышью — только если курсор задержался на ссылке ROLL.hoverDelay (комментарий дизайнера: при быстром проходе
+ * курсором по меню «проигрываются» все ссылки подряд); с клавиатуры — сразу.
  * Анимация доигрывает до конца, даже если курсор ушёл; повторный запуск — только после окончания.
  * В конце копии совпадают, поэтому стопка просто сбрасывается на место (без «открытого» состояния).
  *
@@ -14,6 +16,7 @@ const ROLL = {
   duration: 450, // мс, на одну букву
   stagger: 20, // мс между буквами
   easing: 'cubic-bezier(0.77, 0, 0.175, 1)',
+  hoverDelay: 120, // мс, курсор ушёл раньше — не запускаем
 };
 
 function createUnit(char) {
@@ -85,7 +88,11 @@ function setup(link) {
     });
   };
 
-  link.addEventListener('mouseenter', play);
+  let hoverTimer;
+  link.addEventListener('mouseenter', () => {
+    hoverTimer = setTimeout(play, ROLL.hoverDelay);
+  });
+  link.addEventListener('mouseleave', () => clearTimeout(hoverTimer));
   link.addEventListener('focusin', play);
 }
 

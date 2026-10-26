@@ -2,15 +2,21 @@
   <div class="company-intro__content">
     <div class="company-intro__header">
       <h2 class="company-intro__title" data-js-title-reveal>Сделано людьми Севера</h2>
-      <p class="company-intro__lead" data-js-title-reveal>На Кольском полуострове есть всё для создания коллагена. Чистое сырьё и люди, которые понимают, что такое качество</p>
+      <p class="company-intro__lead" data-js-title-reveal>На Кольском полуострове есть всё для создания коллагена. Чистое сырьё и люди, которые понимают, <span class="company-intro__nowrap">что такое</span> качество</p>
     </div>
     <div class="company-intro__bottom">
-      <img class="company-intro__img-small" data-js-fade-up src="./assets/images/company-about-small.webp" alt="Оборудование цеха производства коллагена" width="500" height="640" loading="lazy">
+      <div class="company-intro__img-small image-reveal" data-js-image-reveal>
+        <span class="image-reveal__bg" aria-hidden="true"></span>
+        <img class="company-intro__img image-reveal__media" src="./assets/images/company-about-small.webp" alt="Оборудование цеха производства коллагена" width="500" height="640" loading="lazy">
+      </div>
       <p class="company-intro__text" data-js-title-reveal>Мы решили контролировать полный цикл, потому что только так можно гарантировать, что продукт не потеряет свою природную силу. Мы не просто производим коллаген —мы показываем, как он рождается.</p>
     </div>
   </div>
-  <picture class="company-intro__picture" data-js-fade-up>
-    <source media="(max-width: 1199px)" srcset="./assets/images/company-about-tablet.webp" width="1456" height="1200">
-    <img class="company-intro__img" src="./assets/images/company-about.webp" alt="Сотрудники в цеху производства" width="1290" height="1320" loading="lazy">
-  </picture>
+  <div class="company-intro__picture image-reveal" data-js-image-reveal>
+    <span class="image-reveal__bg" aria-hidden="true"></span>
+    <picture class="image-reveal__media">
+      <source media="(max-width: 1199px)" srcset="./assets/images/company-about-tablet.webp" width="1456" height="1200">
+      <img class="company-intro__img" src="./assets/images/company-about.webp" alt="Сотрудники в цеху производства" width="1290" height="1320" loading="lazy">
+    </picture>
+  </div>
 </section>

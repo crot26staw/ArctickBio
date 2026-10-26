@@ -61,11 +61,12 @@ body {
   }
 }
 
-// Анимируемые заголовки и элементы скрыты, пока title-reveal.js / fade-up.js их не подготовят (без мигания)
+// Анимируемые заголовки и элементы скрыты, пока title-reveal.js / fade-up.js / image-reveal.js их не подготовят (без мигания)
 @media (prefers-reduced-motion: no-preference) {
   .js [data-js-title-reveal]:not(.is-split),
   .js [data-js-fade-up]:not(.is-fade-ready),
-  .js [data-js-fade-up-group]:not(.is-fade-ready) {
+  .js [data-js-fade-up-group]:not(.is-fade-ready),
+  .js [data-js-image-reveal]:not(.is-reveal-ready) {
     visibility: hidden;
   }
 }

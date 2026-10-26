@@ -1,0 +1,22 @@
+@use '../base' as *;
+
+// Фото с синей плашкой под ним — появление image-reveal.js (референс floema.com/en/sustainability).
+// Размеры задаёт блок-хозяин (mix: .company-intro__picture.image-reveal)
+.image-reveal {
+  position: relative;
+  overflow: hidden;
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-accent);
+  }
+
+  // img или picture (у picture img внутри — 100% / cover от блока-хозяина)
+  &__media {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}

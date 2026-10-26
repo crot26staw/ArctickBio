@@ -59,6 +59,11 @@
     }
   }
 
+  // Неразрывный кусок текста: &nbsp; не подходит — SplitText (title-reveal) заменяет его обычным пробелом
+  &__nowrap {
+    white-space: nowrap;
+  }
+
   &__bottom {
     display: flex;
     gap: rem(100);
@@ -73,7 +78,6 @@
     flex-shrink: 0;
     width: rem(250);
     height: rem(320);
-    object-fit: cover;
   }
 
   &__text {

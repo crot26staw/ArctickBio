@@ -7,6 +7,7 @@ import { initDragSliders } from './modules/drag-slider.js';
 import { initFakeGlass } from './modules/fake-glass.js';
 import { initTitleReveal } from './modules/title-reveal.js';
 import { initFadeUp } from './modules/fade-up.js';
+import { initImageReveal } from './modules/image-reveal.js';
 import { initSachetJourney } from './modules/sachet-journey.js';
 import { initProductSliders } from './modules/product-slider.js';
 import { initNewsSliders } from './modules/news-slider.js';
@@ -60,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFakeGlass();
   initTitleReveal();
   initFadeUp();
+  initImageReveal();
   initSachetJourney();
   initProductSliders();
   initNewsSliders();

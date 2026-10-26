@@ -1,6 +1,7 @@
 @use '../base' as *;
 
-// «Реальные сотрудники производства» (макет 18517:126627). Лента листается зажатием/свайпом (drag-slider.js)
+// «Реальные сотрудники производства» (макет 18517:126627). Лента листается зажатием/свайпом (drag-slider.js),
+// на десктопе секция закрепляется и лента по скроллу уезжает влево к полю (scroll-shift.js)
 .team {
   display: flex;
   flex-direction: column;
@@ -27,14 +28,20 @@
     overflow: hidden;
   }
 
-  // Слева в макете отступ 398 — лента начинается правее заголовка
+  // Лента от левого поля; в макете слева отступ 398 — лента начинается правее заголовка:
+  // этот сдвиг — translate, по скроллу он уходит в 0 (scroll-shift.js, только десктоп)
   &__list {
     display: flex;
     gap: rem(16);
     width: max-content;
-    padding-right: $container-padding;
-    padding-left: rem(398);
+    padding-inline: $container-padding;
     @include drag-track;
+
+    @media (min-width: 1200px) and (prefers-reduced-motion: no-preference) {
+      .js & {
+        translate: rem(398 - 50) 0;
+      }
+    }
 
     @include media(tablet) {
       padding-inline: $container-padding-tablet;

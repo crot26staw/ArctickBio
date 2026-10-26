@@ -181,6 +181,8 @@ src/
                    checkout.js (форма оформления: способ получения, свёртка товаров, проверка, демо-переход на order-received.html)
                    order-success.js (анимация «Заказ оформлен»), order-track.js (шкала статусов: is-current и «капсула» за текущим и следующим шагом)
                    account.js (ЛК: вкладки заказов, кнопки форм аккаунта, адреса — добавить/изменить/удалить, свёртка «Ваш заказ»)
+                   scroll-shift.js (секция [data-js-scroll-shift] закрепляется (pin), лента [data-js-scroll-shift-track] по скроллу уезжает из начального сдвига (CSS translate у ленты) в 0,
+                   путь = сдвигу; translate, не transform — transform занят drag-slider.js. Только ≥1200. Сейчас — сотрудники «О компании»: лента правее заголовка (398) → к левому полю)
                    fade-up.js (появление элементов из прозрачности снизу, см. «Анимации»)
                    image-reveal.js (появление фото: сверху вниз раскрывается синяя плашка .image-reveal__bg, следом фото .image-reveal__media — clip-path inset, один раз;
                    комментарий дизайнера, референс floema.com/en/sustainability. [data-js-image-reveal].image-reveal, стили components/_image-reveal.scss. Сейчас — оба фото intro «О компании»)

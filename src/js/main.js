@@ -13,6 +13,7 @@ import { initProductSliders } from './modules/product-slider.js';
 import { initNewsSliders } from './modules/news-slider.js';
 import { initResearch } from './modules/research.js';
 import { initRibbons } from './modules/ribbon.js';
+import { initScrollShift } from './modules/scroll-shift.js';
 import { initStepPopups } from './modules/step-popup.js';
 import { initCardsRise } from './modules/cards-rise.js';
 import { initSwipeButtons } from './modules/swipe-button.js';
@@ -67,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNewsSliders();
   initResearch();
   initRibbons();
+  initScrollShift();
   initStepPopups();
   initCardsRise();
   initCursorFollow();

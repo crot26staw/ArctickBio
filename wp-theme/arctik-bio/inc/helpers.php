@@ -60,3 +60,83 @@ function arctik_option( string $name ): mixed {
 
 	return carbon_get_theme_option( $name );
 }
+
+/**
+ * Ссылка tel: из телефона в любом виде: «+7 921 153 3553» → tel:+79211533553.
+ */
+function arctik_phone_href( string $phone ): string {
+	$digits = preg_replace( '/\D+/', '', $phone );
+
+	if ( 11 === strlen( $digits ) && '8' === $digits[0] ) {
+		$digits = '7' . substr( $digits, 1 );
+	}
+
+	return 'tel:+' . $digits;
+}
+
+/**
+ * Соцсети из настроек сайта: [ [ 'network' => 'vk', 'url' => '…', 'label' => 'ВКонтакте' ], … ].
+ */
+function arctik_socials(): array {
+	$labels = [
+		'vk'       => 'ВКонтакте',
+		'whatsapp' => 'WhatsApp',
+		'inst'     => 'Instagram',
+		'telegram' => 'Telegram',
+	];
+
+	$socials = [];
+	foreach ( (array) arctik_option( 'arctik_socials' ) as $item ) {
+		$network = $item['network'] ?? '';
+
+		if ( isset( $labels[ $network ] ) && ! empty( $item['url'] ) ) {
+			$socials[] = [
+				'network' => $network,
+				'url'     => $item['url'],
+				'label'   => $labels[ $network ],
+			];
+		}
+	}
+
+	return $socials;
+}
+
+/**
+ * Опубликованные товары WooCommerce в порядке сортировки из админки (подвал: колонка каталога и лента).
+ *
+ * @return WC_Product[]
+ */
+function arctik_products(): array {
+	if ( ! function_exists( 'wc_get_products' ) ) {
+		return [];
+	}
+
+	return wc_get_products( [
+		'status'  => 'publish',
+		'limit'   => -1,
+		'orderby' => [ 'menu_order' => 'ASC', 'title' => 'ASC' ],
+	] );
+}
+
+/**
+ * Меню из области темы с нашими классами (разметка wp_nav_menu: ul.menu > li.menu-item > a).
+ * $attrs — атрибуты <ul> (data-js-swipe-group и т.п.).
+ */
+function arctik_menu( string $location, string $class, string $attrs = '' ): void {
+	wp_nav_menu( [
+		'theme_location' => $location,
+		'container'      => false,
+		'menu_class'     => $class,
+		'menu_id'        => '',
+		'items_wrap'     => '<ul class="%2$s"' . ( $attrs ? ' ' . $attrs : '' ) . '>%3$s</ul>',
+		'depth'          => 1,
+		'fallback_cb'    => false,
+	] );
+}
+
+/**
+ * Название меню в области темы (заголовки колонок подвала).
+ */
+function arctik_menu_name( string $location ): string {
+	return (string) wp_get_nav_menu_name( $location );
+}

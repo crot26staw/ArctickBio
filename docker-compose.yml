@@ -55,6 +55,7 @@ services:
       - ./wp-theme/arctik-bio:/var/www/html/wp-content/themes/arctik-bio
       - ./docker/php.ini:/usr/local/etc/php/conf.d/arctik.ini:ro
       - ./scripts/out:/out
+      - ./scripts/seed:/seed:ro
 
   # Ловушка писем: WP Mail SMTP локально шлёт на mailpit:1025, письма — http://localhost:${MAIL_PORT}
   mailpit:

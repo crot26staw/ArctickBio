@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 ?>
-<main class="main">
+<main class="main" data-header-theme="light">
 	<div class="container">
 		<?php while ( have_posts() ) : the_post(); ?>
 			<h1 data-js-title-reveal><?php the_title(); ?></h1>

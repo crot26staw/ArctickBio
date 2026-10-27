@@ -15,3 +15,16 @@ add_action( 'after_setup_theme', function () {
 add_action( 'wp_head', function () {
 	wp_print_inline_script_tag( "document.documentElement.classList.add('js');" );
 }, 0 );
+
+add_action( 'after_setup_theme', function () {
+	register_nav_menus( [
+		'header'        => 'Шапка',
+		'mobile'        => 'Мобильное меню',
+		'footer_about'  => 'Подвал: «О нас»',
+		'footer_buyers' => 'Подвал: «Покупателям»',
+		'footer_docs'   => 'Подвал: «Документы»',
+	] );
+} );
+
+// Админ-бар на сайте скрыт: перекрывает фиксированную шапку и сбивает закреплённые сцены (решение пользователя).
+add_filter( 'show_admin_bar', '__return_false' );

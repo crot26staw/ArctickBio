@@ -56,7 +56,7 @@ add_action( 'init', function () {
 		return;
 	}
 
-	foreach ( [ 'the_title', 'the_content', 'the_excerpt', 'woocommerce_short_description' ] as $hook ) {
+	foreach ( [ 'the_title', 'the_content', 'the_excerpt', 'woocommerce_short_description', 'nav_menu_item_title' ] as $hook ) {
 		add_filter( $hook, 'arctik_typograph', 20 );
 	}
 } );

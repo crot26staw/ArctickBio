@@ -1,6 +1,7 @@
 <section class="video" data-header-theme="dark" data-js-cursor-follow-area data-js-video>
+  <!-- Фон — превью без звука, по кругу; грузится и играет, только когда блок рядом с экраном (js/modules/video.js) -->
   <div class="video__bg" aria-hidden="true">
-    <img src="./assets/images/video-bg.webp" alt="" width="2880" height="1622" loading="lazy">
+    <video src="./assets/video/video-preview.mp4" poster="./assets/images/video-bg.webp" width="1920" height="1080" muted loop playsinline preload="none" data-js-video-preview></video>
   </div>
   <img class="video__light" src="./assets/images/video-light.webp" alt="" width="1920" height="1088" loading="lazy" aria-hidden="true">
 
@@ -13,9 +14,8 @@
   <div class="video__inner container">
     <h2 class="video__title" data-js-title-reveal>Мы&nbsp;собираем ягоды <br>в&nbsp;экологически чистых местах Кольского полуострова</h2>
 
-    <button class="video__card" type="button" data-js-fade-up data-js-video-open data-swipe-trigger>
-      <!-- Превью без звука, по кругу; грузится и играет, только когда блок рядом с экраном (js/modules/video.js) -->
-      <video class="video__card-img" src="./assets/video/video-preview.mp4" poster="./assets/images/video-card.webp" width="900" height="900" muted loop playsinline preload="none" aria-hidden="true" data-js-video-preview></video>
+    <button class="video__card" type="button" data-js-fade-up data-js-video-open data-js-video-card data-swipe-trigger>
+      <img class="video__card-img" src="./assets/images/video-card.webp" alt="" width="900" height="900" loading="lazy">
       <span class="video__card-label">
         Смотреть (0:42)
         <span class="icon-btn icon-btn--24" data-js-swipe>
@@ -25,7 +25,7 @@
     </button>
   </div>
 
-  <!-- Полное видео со звуком: по «Смотреть» раскрывается из карточки (или кнопки) на весь блок (js/modules/video.js) -->
+  <!-- Полное видео со звуком: по «Смотреть» раскрывается из карточки-картинки (или кнопки) на весь блок (js/modules/video.js) -->
   <div class="video__player" data-js-video-player hidden>
     <video class="video__player-media" src="./assets/video/video-main.mp4" poster="./assets/images/video-card.webp" width="1920" height="1080" playsinline preload="none" data-js-video-main></video>
     <button class="video__close" type="button" aria-label="Закрыть видео" data-js-video-close>

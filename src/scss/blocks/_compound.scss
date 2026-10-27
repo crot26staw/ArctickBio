@@ -1,14 +1,32 @@
 @use '../base' as *;
 
-// На весь экран; композиция из макета (высота 800) — по центру по вертикали, камни прижаты к низу
+// Сколько экранов скролла экран сцены стоит на месте, пока идёт анимация (js/modules/compound-scene.js)
+$compound-pin: 2.5;
+
+// Дорожка: экран сцены (__sticky) прилипает к верху на $compound-pin экранов анимации и ещё на один —
+// пока на него наезжает video (overlap-stack--track). Шкала анимации — от 'top top' до 'bottom 200%'
 .compound {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100svh;
-  overflow: hidden;
+  height: calc(#{$compound-pin + 2} * 100svh);
   background-color: var(--color-bg-light);
+
+  // Без анимации — только экран наезда video
+  @media (prefers-reduced-motion: reduce) {
+    height: 200svh;
+  }
+
+  // На весь экран; композиция из макета (высота 800) — по центру по вертикали, камни прижаты к низу
+  &__sticky {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100svh;
+    overflow: hidden;
+    // Фон — здесь, а не только у секции: sticky создаёт свой контекст наложения, и mix-blend-mode стика смешивается только с ним
+    background-color: var(--color-bg-light);
+  }
 
   &__rocks {
     position: absolute;
@@ -128,12 +146,116 @@
   }
 }
 
+// Цифры «Состава» (макет 18126:48398, мобилка — 18541:70827): позиции — от центра сцены (центра стика).
+// Появление и уход — compound-scene.js (сдвиг через transform)
+.compound-stat {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: rem(16);
+  width: rem(207);
+  color: var(--color-fg);
+
+  &--percent {
+    top: max(0px, calc(50% - #{rem(174)})); // не выше сцены — на невысоком экране не заходит на заголовок
+    left: calc(50% - #{rem(407)});
+  }
+
+  &--mass {
+    top: max(0px, calc(50% - #{rem(176)}));
+    left: calc(50% + #{rem(191)});
+    white-space: nowrap;
+  }
+
+  // Планшет: макета нет — по сторонам стика
+  @include media(tablet) {
+    &--percent {
+      left: calc(50% - #{rem(330)});
+    }
+
+    &--mass {
+      left: calc(50% + #{rem(110)});
+    }
+  }
+
+  // Мобилка: позиции из макета 18541:70827 (бывшая отдельная секция compound-stats)
+  @include media(mobile) {
+    gap: rem(13);
+    width: auto;
+
+    &--percent {
+      top: max(0px, calc(50% - #{rem(164)}));
+      left: rem(16);
+      gap: rem(16);
+      width: rem(126);
+    }
+
+    // Подписи переносятся (как в макете), число — в одну строку
+    &--mass {
+      top: calc(50% - #{rem(34)});
+      left: rem(253);
+      width: rem(112);
+      white-space: normal;
+
+      .compound-stat__value {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    @include media(mobile) {
+      .compound-stat--percent & {
+        gap: rem(8);
+      }
+    }
+  }
+
+  &__value {
+    @include display-l;
+  }
+
+  &__unit {
+    font-family: $font-text;
+    font-size: rem(24);
+    line-height: 1.1;
+    letter-spacing: rem(-0.8);
+
+    @include media(mobile) {
+      font-size: rem(18);
+    }
+  }
+
+  &__label {
+    @include body-l;
+    color: var(--color-fg-soft);
+    opacity: 0.7;
+
+    @include media(mobile) {
+      @include body-m;
+    }
+  }
+
+  &__notes {
+    @include body-m;
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+    color: var(--color-fg-soft);
+    opacity: 0.7;
+  }
+}
+
 .vitamin {
   position: absolute;
   display: flex;
   gap: rem(12);
   align-items: center;
-  transform: translateY(-50%);
+  translate: 0 -50%; // не transform: им двигает compound-scene.js
 
   &__name {
     white-space: pre;

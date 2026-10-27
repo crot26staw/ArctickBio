@@ -241,8 +241,11 @@ const VEIL = {
   hideAbout: 0.45, // экран полностью закрыт (плотная часть с 0.64 высоты картинки облаков) — прячем about
   cut: [0.2, 1], // срез завесы снизу: от и до (доли высоты скалы .product-scene__rock-top от верха product-scene) — край скалы под облаками
   stickBehind: 0.75, // стик (уже ниже среза) — за переднюю стенку пачки
-  // Остаток завесы пропадает сразу (без растворения), ровно когда верх product-scene встал у верха экрана (конец length):
-  // до этого она закрывает ровный верхний край скалы (замечание дизайнера — срез не должен быть виден)
+  // Остаток завесы начинает гаснуть ровно, когда верх product-scene встал у верха экрана (конец length), и гаснет плавно,
+  // по времени (fadeOut, сек): до этого она закрывает ровный верхний край скалы (замечание дизайнера — срез не должен быть виден),
+  // а дальше край уже у верха экрана (десктоп — product-scene закреплена, мобилка — уходит вверх)
+  fadeOut: 0.8,
+  fadeIn: 0.4, // скролл назад — завеса возвращается
   length: 1, // до конца — product-scene у верха экрана
 };
 
@@ -329,13 +332,13 @@ function initVeil(veil, item, about, scene, pinTrigger) {
     .call(setActive, [true], lead + VEIL.length - 0.001)
     .call(setActive, [false], lead + VEIL.length);
 
-  // Пропадание — отдельным триггером без scrub: у шкалы выше плавное отставание (scrub 0.6), а завеса должна пропасть
-  // точно в момент, когда верх product-scene у верха экрана
+  // Угасание — отдельным триггером без scrub: у шкалы выше плавное отставание (scrub 0.6), а гаснуть завеса должна
+  // точно с момента, когда верх product-scene у верха экрана; само угасание — по времени
   ScrollTrigger.create({
     start: () => pinTrigger.end + VEIL.length * vh(),
     invalidateOnRefresh: true,
-    onEnter: () => gsap.set(veil, { visibility: 'hidden' }),
-    onLeaveBack: () => gsap.set(veil, { visibility: '' }),
+    onEnter: () => gsap.to(veil, { autoAlpha: 0, duration: VEIL.fadeOut, ease: 'power1.out', overwrite: 'auto' }),
+    onLeaveBack: () => gsap.to(veil, { autoAlpha: 1, duration: VEIL.fadeIn, ease: 'power1.out', overwrite: 'auto' }),
   });
 }
 

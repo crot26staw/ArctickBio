@@ -22,6 +22,7 @@ import { initCursorFollow } from './modules/cursor-follow.js';
 import { initVideos } from './modules/video.js';
 import { initScrollVideos } from './modules/scroll-video.js';
 import { initCompoundRocks } from './modules/compound-rocks.js';
+import { initCompoundScenes } from './modules/compound-scene.js';
 import { initRevealSequence } from './modules/reveal-sequence.js';
 import { initQuantities } from './modules/quantity.js';
 import { initProductFormats } from './modules/product-format.js';
@@ -79,5 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initVideos();
   initScrollVideos();
   initCompoundRocks();
+  initCompoundScenes();
   initRevealSequence();
 });

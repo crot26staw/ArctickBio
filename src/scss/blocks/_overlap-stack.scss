@@ -13,4 +13,16 @@
     position: relative;
     z-index: 1;
   }
+
+  // Первая секция — высокая дорожка со своим прилипающим экраном (compound): сама не прилипает,
+  // последняя заезжает на последний экран дорожки
+  &--track {
+    > :first-child {
+      position: relative;
+    }
+
+    > :last-child {
+      margin-top: -100svh;
+    }
+  }
 }

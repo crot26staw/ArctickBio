@@ -3,9 +3,9 @@ import { getLenis } from './smooth-scroll.js';
 
 /**
  * Блок video: превью и полное видео.
- * Превью [data-js-video-preview] — без звука, по кругу; грузится и играет, только пока блок рядом с экраном
+ * Превью [data-js-video-preview] — фон блока: без звука, по кругу; грузится и играет, только пока блок рядом с экраном
  * (при prefers-reduced-motion не играет — остаётся постер).
- * «Смотреть» [data-js-video-open] или клик мышью в блоке — плеер [data-js-video-player] раскрывается из карточки превью
+ * «Смотреть» [data-js-video-open] или клик мышью в блоке — плеер [data-js-video-player] раскрывается из карточки [data-js-video-card] (картинка)
  * на весь блок (clip-path; на планшете/мобилке карточки нет — из нажатой кнопки), и полное видео [data-js-video-main] играет со звуком.
  * Закрывают крестик [data-js-video-close] и Escape — плеер сжимается обратно. Пока открыт, Lenis остановлен.
  */
@@ -45,8 +45,8 @@ function initVideo(section) {
 
   initPreview(section, preview);
 
-  // Плеер раскрывается из карточки превью; на планшете/мобилке её нет (display: none) — из нажатой кнопки
-  const card = preview?.closest('[data-js-video-open]');
+  // Плеер раскрывается из карточки; на планшете/мобилке её нет (display: none) — из нажатой кнопки
+  const card = section.querySelector('[data-js-video-card]');
   let source = null; // откуда раскрылся плеер (туда же и сжимается)
   const reduced = prefersReducedMotion();
 

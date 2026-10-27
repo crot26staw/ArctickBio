@@ -118,3 +118,70 @@ function arctik_product_formats( WC_Product $product ): array {
 
 	return $formats;
 }
+
+/**
+ * Пункты аккордеона на странице товара: «О продукте» (описание товара), доставка, документы, преимущества.
+ * Пустые не выводятся. html — готовое содержимое .accordion__panel.
+ *
+ * @return array<int, array{id: string, title: string, html: string}>
+ */
+function arctik_product_details( WC_Product $product ): array {
+	$details = [];
+
+	$description = trim( $product->get_description() );
+	if ( $description ) {
+		$details[] = [
+			'id'    => 'about',
+			'title' => 'О продукте',
+			'html'  => '<div class="accordion__answer">' . apply_filters( 'the_content', $description ) . '</div>',
+		];
+	}
+
+	$delivery = trim( (string) arctik_product_content( $product, 'delivery' ) );
+	if ( $delivery ) {
+		$details[] = [
+			'id'    => 'delivery',
+			'title' => 'Доставка',
+			'html'  => '<p class="accordion__answer">' . arctik_lines( $delivery ) . '</p>',
+		];
+	}
+
+	// Документ без файла — строка без ссылки.
+	$documents = array_filter( (array) arctik_product_content( $product, 'documents' ), fn( $item ) => ! empty( $item['title'] ) );
+	if ( $documents ) {
+		$items = array_map( function ( array $item ): string {
+			$url = arctik_file_url( $item['file'] ?? 0 );
+
+			return '<li>' . ( $url
+				? '<a href="' . esc_url( $url ) . '" download>' . arctik_text( $item['title'] ) . '</a>'
+				: arctik_text( $item['title'] ) ) . '</li>';
+		}, $documents );
+
+		$details[] = [
+			'id'    => 'docs',
+			'title' => 'Документы',
+			'html'  => '<ul class="accordion__answer accordion__links" data-js-roll-group>' . implode( '', $items ) . '</ul>',
+		];
+	}
+
+	$benefits = array_filter( (array) arctik_product_content( $product, 'benefits' ), fn( $item ) => ! empty( $item['text'] ) );
+	if ( $benefits ) {
+		$details[] = [
+			'id'    => 'benefits',
+			'title' => 'Преимущества',
+			'html'  => '<ul class="accordion__answer">' . implode( '', array_map( fn( $item ) => '<li>' . arctik_text( $item['text'] ) . '</li>', $benefits ) ) . '</ul>',
+		];
+	}
+
+	return $details;
+}
+
+/**
+ * Цена в карточках (каталог, мини-карточки): одна цена — того, что добавляет «+» (arctik_product_cart_id()),
+ * вместо диапазона WC у вариативного товара.
+ */
+function arctik_product_card_price( WC_Product $product ): string {
+	$item = $product->is_type( 'variable' ) ? wc_get_product( arctik_product_cart_id( $product ) ) : $product;
+
+	return $item ? $item->get_price_html() : '';
+}

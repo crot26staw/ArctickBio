@@ -40,7 +40,7 @@ $arctik_link = $arctik_product->get_permalink();
 			<button class="mini-card__add icon-btn icon-btn--24 icon-btn--light add_to_cart_button" type="button" aria-label="Добавить в корзину" data-product_id="<?php echo esc_attr( arctik_product_cart_id( $arctik_product ) ); ?>" data-js-swipe>
 				<img src="<?php echo esc_url( arctik_asset( 'icons/icn-add.svg' ) ); ?>" alt="" width="18" height="18">
 			</button>
-			<span class="mini-card__price price"><?php echo wp_kses_post( $arctik_product->get_price_html() ); ?></span>
+			<span class="mini-card__price price"><?php echo wp_kses_post( arctik_product_card_price( $arctik_product ) ); ?></span>
 		</div>
 	</div>
 </article>

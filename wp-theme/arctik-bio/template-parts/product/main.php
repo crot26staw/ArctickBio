@@ -7,6 +7,7 @@
  *
  * Фото — «Галерея товара» (первое — большое), пусто — «Изображение товара». Форматы — вариации (arctik_product_formats()),
  * у простого товара (набор на 3 месяца) выбора формата нет. Нет в наличии ни одного — кнопка неактивна, «Нет в наличии».
+ * Ниже формы — аккордеоны (arctik_product_details()), ингредиенты (у товара или общие) и «Другие вкусы» (arctik_products()).
  *
  * $args: product — WC_Product.
  */
@@ -36,6 +37,13 @@ if ( $arctik_product->is_type( 'variable' ) ) {
 $arctik_price    = arctik_price_text( $arctik_selected ? wc_get_price_to_display( $arctik_selected ) : $arctik_product->get_price() );
 $arctik_max      = $arctik_selected ? arctik_product_max_qty( $arctik_selected ) : 99;
 $arctik_delivery = (string) arctik_option( 'arctik_products_delivery_note' );
+
+$arctik_details = arctik_product_details( $arctik_product );
+
+$arctik_ingredients = array_filter( (array) arctik_product_content( $arctik_product, 'ingredients' ), fn( $item ) => ! empty( $item['title'] ) );
+
+// «Другие вкусы»: все товары-вкусы, кроме этого.
+$arctik_related = array_filter( arctik_products(), fn( $item ) => $item->get_id() !== $arctik_product->get_id() );
 ?>
 <section class="product-main product" data-header-theme="dark">
 	<div class="product-main__bg" aria-hidden="true">
@@ -106,6 +114,58 @@ $arctik_delivery = (string) arctik_option( 'arctik_products_delivery_note' );
 				<?php endif; ?>
 			</div>
 		</form>
+
+		<?php if ( $arctik_details ) : ?>
+			<?php // Описание товара: аккордеоны (accordion.js), открыт один пункт — первый. ?>
+			<div class="product-main__details" data-js-accordion-group>
+				<?php foreach ( $arctik_details as $arctik_index => $arctik_detail ) : ?>
+					<?php $arctik_open = 0 === $arctik_index; ?>
+					<div class="accordion accordion--compact<?php echo $arctik_open ? ' is-open' : ''; ?>" data-js-accordion>
+						<button class="accordion__header" type="button" aria-expanded="<?php echo $arctik_open ? 'true' : 'false'; ?>" aria-controls="product-<?php echo esc_attr( $arctik_detail['id'] ); ?>" data-js-accordion-toggle>
+							<span class="accordion__question"><?php echo arctik_text( $arctik_detail['title'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+							<span class="accordion__icon icon-btn icon-btn--24" aria-hidden="true">
+								<img src="<?php echo esc_url( arctik_asset( 'icons/icn-plus.svg' ) ); ?>" alt="" width="18" height="18">
+								<img src="<?php echo esc_url( arctik_asset( 'icons/icn-minus.svg' ) ); ?>" alt="" width="18" height="18">
+							</span>
+						</button>
+						<div class="accordion__panel" id="product-<?php echo esc_attr( $arctik_detail['id'] ); ?>" data-js-accordion-panel>
+							<?php echo $arctik_detail['html']; // phpcs:ignore WordPress.Security.EscapeOutput -- собрано выше с экранированием ?>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
+
+		<?php // Ряды шире панели листаются зажатием/свайпом (drag-slider.js). ?>
+		<?php if ( $arctik_ingredients ) : ?>
+			<div class="product-main__block">
+				<h2 class="product-main__subtitle">Ингредиенты</h2>
+				<div class="product-main__viewport" data-js-drag-slider data-drag-slider-align="start">
+					<ul class="product-main__track product-main__track--ingredients" data-js-drag-slider-track>
+						<?php
+						foreach ( $arctik_ingredients as $arctik_item ) {
+							get_template_part( 'template-parts/ingredient-card', null, [ 'item' => $arctik_item ] );
+						}
+						?>
+					</ul>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<?php if ( $arctik_related ) : ?>
+			<div class="product-main__block product-main__block--related">
+				<h2 class="product-main__subtitle">Другие вкусы Arctic Berries</h2>
+				<div class="product-main__viewport" data-js-drag-slider data-drag-slider-align="start">
+					<div class="product-main__track" data-js-drag-slider-track>
+						<?php
+						foreach ( $arctik_related as $arctik_item ) {
+							get_template_part( 'template-parts/mini-card', null, [ 'product' => $arctik_item, 'mod' => 'mini-card--light' ] );
+						}
+						?>
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
 	</div>
 
 	<?php

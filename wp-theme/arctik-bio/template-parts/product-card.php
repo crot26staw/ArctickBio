@@ -25,7 +25,7 @@ $arctik_cart_id = arctik_product_cart_id( $arctik_product );
 	<div class="product-card__info">
 		<div class="product-card__heading">
 			<h3 class="product-card__title woocommerce-loop-product__title"><?php echo arctik_text( $arctik_title ); // phpcs:ignore WordPress.Security.EscapeOutput ?></h3>
-			<span class="product-card__price price"><?php echo wp_kses_post( $arctik_product->get_price_html() ); ?></span>
+			<span class="product-card__price price"><?php echo wp_kses_post( arctik_product_card_price( $arctik_product ) ); ?></span>
 		</div>
 		<div class="product-card__actions">
 			<a class="product-card__more btn btn--neutral btn--small" href="<?php echo esc_url( $arctik_link ); ?>" data-js-swipe>Подробнее</a>

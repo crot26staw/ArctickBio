@@ -7,72 +7,75 @@
   <div class="compound__stage">
     <h2 class="compound__title section-title" data-js-title-reveal>Показываем состав полностью</h2>
 
-    <div class="compound__sachet" aria-hidden="true">
-      <img src="./assets/images/sachet-open.webp" alt="" width="1046" height="1503" loading="lazy">
-    </div>
+    <!-- Сцена под заголовком: стик и витамины позиционируются от её центра, при нехватке высоты она сжимается вместе со стиком -->
+    <div class="compound__scene">
+      <div class="compound__sachet" aria-hidden="true">
+        <img src="./assets/images/sachet-open.webp" alt="" width="1046" height="1503" loading="lazy">
+      </div>
 
-    <!-- Карточка с описанием всплывает при наведении/фокусе; подпись витамина лежит в её нижнем углу -->
-    <ul class="compound__vitamins" data-js-fade-up-group>
-      <li class="vitamin vitamin--c vitamin--left" tabindex="0">
-        <span class="vitamin__name">Витамин С</span>
-        <span class="vitamin__icon">
-          <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
-          <img class="vitamin__berry" src="./assets/images/vitamin-c.webp" alt="" width="40" height="40" loading="lazy">
-        </span>
-        <div class="vitamin__card">
-          <p class="vitamin__text">Поступает из&nbsp;цельных северных ягод. Выступает кофактором синтеза собственного коллагена организмом</p>
-        </div>
-      </li>
-      <li class="vitamin vitamin--e vitamin--left" tabindex="0">
-        <span class="vitamin__name">Витамин E</span>
-        <span class="vitamin__icon">
-          <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
-          <img class="vitamin__berry" src="./assets/images/vitamin-e.webp" alt="" width="40" height="40" loading="lazy">
-        </span>
-        <div class="vitamin__card">
-          <p class="vitamin__text">Защищает клетки от&nbsp;окислительного стресса. Помогает сохранять целостность клеточных мембран</p>
-        </div>
-      </li>
-      <li class="vitamin vitamin--k vitamin--left" tabindex="0">
-        <span class="vitamin__name">Витамин  K</span>
-        <span class="vitamin__icon">
-          <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
-          <img class="vitamin__berry" src="./assets/images/vitamin-k.webp" alt="" width="40" height="40" loading="lazy">
-        </span>
-        <div class="vitamin__card">
-          <p class="vitamin__text">Участвует в&nbsp;процессе нормального свертывания крови. Способствует поддержанию здоровья костной ткани</p>
-        </div>
-      </li>
-      <li class="vitamin vitamin--h vitamin--right" tabindex="0">
-        <span class="vitamin__icon">
-          <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
-          <img class="vitamin__berry" src="./assets/images/vitamin-h.webp" alt="" width="40" height="40" loading="lazy">
-        </span>
-        <span class="vitamin__name">Витамин  H</span>
-        <div class="vitamin__card">
-          <p class="vitamin__text">Участвует в&nbsp;обмене белков и&nbsp;жиров. Способствует поддержанию нормального состояния кожи и&nbsp;волос</p>
-        </div>
-      </li>
-      <li class="vitamin vitamin--pp vitamin--right" tabindex="0">
-        <span class="vitamin__icon">
-          <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
-          <img class="vitamin__berry" src="./assets/images/vitamin-pp.webp" alt="" width="40" height="40" loading="lazy">
-        </span>
-        <span class="vitamin__name">Витамин  PP</span>
-        <div class="vitamin__card">
-          <p class="vitamin__text">Участвует в&nbsp;энергетическом обмене клеток. Помогает поддерживать нормальное состояние кожи и&nbsp;нервной системы</p>
-        </div>
-      </li>
-      <li class="vitamin vitamin--a vitamin--right" tabindex="0">
-        <span class="vitamin__icon">
-          <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
-          <img class="vitamin__berry" src="./assets/images/vitamin-a.webp" alt="" width="40" height="40" loading="lazy">
-        </span>
-        <span class="vitamin__name">Витамин  A</span>
-        <div class="vitamin__card">
-          <p class="vitamin__text">Способствует обновлению клеток кожи. Поддерживает нормальное состояние слизистых оболочек и&nbsp;зрения</p>
-        </div>
-      </li>
-    </ul>
+      <!-- Карточка с описанием всплывает при наведении/фокусе; подпись витамина лежит в её нижнем углу -->
+      <ul class="compound__vitamins" data-js-fade-up-group>
+        <li class="vitamin vitamin--c vitamin--left" tabindex="0">
+          <span class="vitamin__name">Витамин С</span>
+          <span class="vitamin__icon">
+            <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
+            <img class="vitamin__berry" src="./assets/images/vitamin-c.webp" alt="" width="40" height="40" loading="lazy">
+          </span>
+          <div class="vitamin__card">
+            <p class="vitamin__text">Поступает из&nbsp;цельных северных ягод. Выступает кофактором синтеза собственного коллагена организмом</p>
+          </div>
+        </li>
+        <li class="vitamin vitamin--e vitamin--left" tabindex="0">
+          <span class="vitamin__name">Витамин E</span>
+          <span class="vitamin__icon">
+            <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
+            <img class="vitamin__berry" src="./assets/images/vitamin-e.webp" alt="" width="40" height="40" loading="lazy">
+          </span>
+          <div class="vitamin__card">
+            <p class="vitamin__text">Защищает клетки от&nbsp;окислительного стресса. Помогает сохранять целостность клеточных мембран</p>
+          </div>
+        </li>
+        <li class="vitamin vitamin--k vitamin--left" tabindex="0">
+          <span class="vitamin__name">Витамин  K</span>
+          <span class="vitamin__icon">
+            <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
+            <img class="vitamin__berry" src="./assets/images/vitamin-k.webp" alt="" width="40" height="40" loading="lazy">
+          </span>
+          <div class="vitamin__card">
+            <p class="vitamin__text">Участвует в&nbsp;процессе нормального свертывания крови. Способствует поддержанию здоровья костной ткани</p>
+          </div>
+        </li>
+        <li class="vitamin vitamin--h vitamin--right" tabindex="0">
+          <span class="vitamin__icon">
+            <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
+            <img class="vitamin__berry" src="./assets/images/vitamin-h.webp" alt="" width="40" height="40" loading="lazy">
+          </span>
+          <span class="vitamin__name">Витамин  H</span>
+          <div class="vitamin__card">
+            <p class="vitamin__text">Участвует в&nbsp;обмене белков и&nbsp;жиров. Способствует поддержанию нормального состояния кожи и&nbsp;волос</p>
+          </div>
+        </li>
+        <li class="vitamin vitamin--pp vitamin--right" tabindex="0">
+          <span class="vitamin__icon">
+            <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
+            <img class="vitamin__berry" src="./assets/images/vitamin-pp.webp" alt="" width="40" height="40" loading="lazy">
+          </span>
+          <span class="vitamin__name">Витамин  PP</span>
+          <div class="vitamin__card">
+            <p class="vitamin__text">Участвует в&nbsp;энергетическом обмене клеток. Помогает поддерживать нормальное состояние кожи и&nbsp;нервной системы</p>
+          </div>
+        </li>
+        <li class="vitamin vitamin--a vitamin--right" tabindex="0">
+          <span class="vitamin__icon">
+            <img src="./assets/icons/icn-ingredients.svg" alt="" width="32" height="32">
+            <img class="vitamin__berry" src="./assets/images/vitamin-a.webp" alt="" width="40" height="40" loading="lazy">
+          </span>
+          <span class="vitamin__name">Витамин  A</span>
+          <div class="vitamin__card">
+            <p class="vitamin__text">Способствует обновлению клеток кожи. Поддерживает нормальное состояние слизистых оболочек и&nbsp;зрения</p>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </section>

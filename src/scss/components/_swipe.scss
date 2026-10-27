@@ -16,17 +16,21 @@ $swipe-transition: 0.3s ease-in-out;
   isolation: isolate;
   overflow: hidden;
 
-  // Фон ховера. В покое — на 1px ниже края: при дробной высоте (резиновый rem) на части экранов
-  // сглаживание оставляло его верхний край тонкой синей линией под кнопкой (замечание дизайнера, мобильное меню)
+  // Фон ховера. В покое — на 1px ниже края и скрыт (visibility): при дробной высоте (резиновый rem) сглаживание,
+  // а в Safari ещё и обрезка overflow со скруглением оставляли его верхний край тонкой синей линией внизу кнопки
+  // (замечание дизайнера — на всех кнопках). Прячется после того, как уехал вниз (задержка = длительность перехода)
   &::before {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
+    visibility: hidden;
     background-color: var(--swipe-bg, var(--color-accent));
     border-radius: inherit;
     transform: translateY(calc(100% + 1px));
-    transition: transform $swipe-transition;
+    transition:
+      transform $swipe-transition,
+      visibility 0s linear 0.3s;
   }
 
   &__inner {
@@ -67,7 +71,9 @@ $swipe-transition: 0.3s ease-in-out;
 
   @mixin swipe-active {
     &::before {
+      visibility: visible;
       transform: none;
+      transition: transform $swipe-transition;
     }
 
     .swipe__label {

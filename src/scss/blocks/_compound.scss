@@ -27,23 +27,30 @@
     }
   }
 
-  // Сцена фиксированной ширины 1440, все элементы позиционируются от неё
+  // Колонка шириной 1440 на весь экран: заголовок, под ним сцена со стиком и витаминами.
+  // Стик и витамины — от центра сцены (не от экрана), поэтому на заголовок не заходят ни на какой высоте экрана
+  // (замечание дизайнера; в макете 800 стик заходил на заголовок). Десктоп: заголовок и сцена — по центру экрана
   &__stage {
     position: relative;
-    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
     max-width: $container-width;
-    height: rem(800);
+    height: 100%;
     margin-inline: auto;
-    padding-top: rem(120);
+    padding-top: rem(100);
+    padding-bottom: rem(60);
 
-    // Планшет: сцена на весь экран, стик и витамины — от её центра (макет 18541:70765)
+    // Планшет/мобилка: заголовок сверху, сцена — вся высота под ним
     @include media(tablet) {
-      height: 100%;
+      justify-content: flex-start;
+      padding-bottom: rem(40);
     }
 
     @include media(mobile) {
       padding-top: rem(75);
+      padding-bottom: rem(20);
     }
   }
 
@@ -51,6 +58,7 @@
   &__title {
     position: relative;
     z-index: 3;
+    flex-shrink: 0;
     width: rem(460);
     margin-inline: auto;
 
@@ -59,30 +67,38 @@
     }
   }
 
+  // Высота — стик с полями; на невысоком экране сцена сжимается, стик уменьшается вместе с ней
+  &__scene {
+    position: relative;
+    flex: 0 1 rem(560);
+    min-height: 0;
+    margin-top: rem(16); // зазор от строк заголовка (буквы выходят за высоту строки)
+
+    @include media(tablet) {
+      flex: 1 1 0;
+    }
+  }
+
   &__sachet {
     position: absolute;
-    top: rem(176.95);
+    top: 50%;
     left: calc(50% - #{rem(8.45)});
     display: flex;
     align-items: center;
     justify-content: center;
-    width: rem(304.698);
-    height: rem(512.508);
-    transform: translateX(-50%);
+    aspect-ratio: 304.698 / 512.508;
+    height: min(#{rem(512.508)}, 100%);
+    transform: translate(-50%, -50%);
     pointer-events: none;
 
     @include media(tablet) {
-      top: 50%;
       left: calc(50% + #{rem(0.77)});
-      transform: translate(-50%, -50%);
     }
 
     // Мобилка: та же картинка, рамка 188×317 (макет 18541:70855)
     @include media(mobile) {
-      top: calc(50% - #{rem(0.41)});
       left: calc(50% - #{rem(0.29)});
-      width: rem(188.465);
-      height: rem(317.188);
+      height: min(#{rem(317.188)}, 100%);
     }
 
     // У картинки прозрачные поля по бокам, поэтому она шире рамки
@@ -95,10 +111,16 @@
   }
 
   &__vitamins {
-    // позиции из макета
-    --top-1: calc(50% - #{rem(122)});
-    --top-2: calc(50% - #{rem(36)});
-    --top-3: calc(50% + #{rem(58)});
+    // Позиции из макета — от центра стика
+    --top-1: calc(50% - #{rem(155)});
+    --top-2: calc(50% - #{rem(69)});
+    --top-3: calc(50% + #{rem(25)});
+
+    @include media(tablet) {
+      --top-1: calc(50% - #{rem(122)});
+      --top-2: calc(50% - #{rem(36)});
+      --top-3: calc(50% + #{rem(58)});
+    }
   }
 }
 

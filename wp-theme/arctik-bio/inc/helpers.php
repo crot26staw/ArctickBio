@@ -145,9 +145,15 @@ function arctik_menu_name( string $location ): string {
 
 /**
  * Текст из многострочного поля: переносы строк → <br> (заголовки «как в макете»), экранирование + типограф.
+ * $br_class — класс у <br>, если перенос нужен не на всех ширинах (about__text-br — только на мобилке).
  */
-function arctik_lines( ?string $text ): string {
-	return arctik_typograph( nl2br( esc_html( trim( (string) $text ) ), false ) );
+function arctik_lines( ?string $text, string $br_class = '' ): string {
+	$html = nl2br( esc_html( trim( (string) $text ) ), false );
+	if ( $br_class ) {
+		$html = str_replace( '<br>', '<br class="' . esc_attr( $br_class ) . '">', $html );
+	}
+
+	return arctik_typograph( $html );
 }
 
 /**
@@ -163,6 +169,9 @@ function arctik_icon_options(): array {
 		'ligaments'  => 'Связки',
 		'connective' => 'Соединительная ткань',
 		'hair-nails' => 'Волосы и ногти',
+		'fruit'      => 'Ягода',
+		'absorption' => 'Впитывание',
+		'fish'       => 'Рыба',
 	];
 }
 

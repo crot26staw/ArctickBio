@@ -16,7 +16,9 @@ foreach ( [
 	'woocommerce',
 	'product',
 	'cart',
+	'auth',
 	'ajax/cart',
+	'ajax/auth',
 ] as $arctik_file ) {
 	require_once get_theme_file_path( "inc/{$arctik_file}.php" );
 }

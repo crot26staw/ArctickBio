@@ -1,6 +1,7 @@
 <?php
 /**
- * Попап входа (src/partials/auth-modal.html). Пока демо-логика auth.js; реальные вход/регистрация/сброс — этап «В».
+ * Попап входа (src/partials/auth-modal.html). Формы отправляет auth.js в обработчики inc/ajax/auth.php;
+ * серверная ошибка поля (устаревшая ссылка сброса) — arctik_auth_field() из inc/auth.php.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -135,14 +136,14 @@ defined( 'ABSPATH' ) || exit;
 			</div>
 			<form class="auth__form auth__form--compact" action="#" method="post" novalidate data-js-auth-form="forgot">
 				<?php
-				get_template_part( 'template-parts/form-field', null, [
+				get_template_part( 'template-parts/form-field', null, arctik_auth_field( [
 					'id'           => 'auth-forgot-email',
 					'type'         => 'email',
 					'name'         => 'user_login',
 					'label'        => 'Email',
 					'autocomplete' => 'email',
 					'attrs'        => 'data-validate="email"',
-				] );
+				] ) );
 				?>
 				<button class="btn btn--accent auth__btn" type="submit" data-js-swipe>Отправить</button>
 			</form>

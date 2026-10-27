@@ -2,7 +2,7 @@
 /**
  * Поле пароля с кнопкой показа (src/partials/form-field-password.html).
  *
- * $args: id, name, label, autocomplete, mod, attrs — готовые атрибуты, выводятся как есть.
+ * $args: id, name, label, autocomplete, mod, hint — текст ошибки от сервера (с mod is-error), attrs — готовые атрибуты, выводятся как есть.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -24,5 +24,5 @@ $arctik_id = $args['id'] ?? '';
 			</svg>
 		</button>
 	</div>
-	<p class="field__hint" id="<?php echo esc_attr( $arctik_id ); ?>-hint" data-js-field-hint></p>
+	<p class="field__hint" id="<?php echo esc_attr( $arctik_id ); ?>-hint" data-js-field-hint><?php echo esc_html( $args['hint'] ?? '' ); ?></p>
 </div>

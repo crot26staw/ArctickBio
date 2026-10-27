@@ -179,7 +179,7 @@ src/
                    field.js (поля форм: показ пароля [data-js-password-toggle]; проверка data-validate="email|required|repeat" — validateForm / resetForm / setFieldError;
                    ошибка — is-error у [data-js-field] и текст в [data-js-field-hint]; после первой отправки пересчёт при вводе)
                    auth.js (попап входа [data-js-auth]: открывают [data-js-auth-open="<экран>"] и адрес #auth-<экран>, [data-js-auth-go] переключает экраны,
-                   «Назад» — по карте BACK, закрывают [data-js-auth-close] и Escape; Lenis stop, фокус внутри панели. onSubmit — демо-переходы до WordPress)
+                   «Назад» — по карте BACK, закрывают [data-js-auth-close] и Escape; Lenis stop, фокус внутри панели. onSubmit — демо-переходы в статике; в WordPress (window.arctik.auth) — запросы в inc/ajax/auth.php, после входа перезагрузка)
                    cart.js (корзина-попап [data-js-cart]: открывает кнопка корзины в шапке [data-js-cart-open] (повторно — закрывает), демо-пересчёт, «Удалить», пустая корзина, is-blocked;
                    в WordPress — запросы через cart-api.js: количество, удаление, «+» у карточек .add_to_cart_button[data-product_id], ответ — фрагменты WC, после них cart:updated;
                    после добавления товара («+» у карточек, форма [data-js-cart-form], нижняя панель мобилки) попап открывается — в статике сразу)

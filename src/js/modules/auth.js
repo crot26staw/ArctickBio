@@ -12,13 +12,65 @@ const BACK = {
   reset: 'login',
 };
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled])';
+// Форма попапа → обработчик wc-ajax (inc/ajax/auth.php)
+const ENDPOINTS = {
+  login: 'arctik_login',
+  register: 'arctik_register',
+  forgot: 'arctik_forgot',
+  sent: 'arctik_forgot',
+  reset: 'arctik_reset',
+};
+
+const api = () => window.arctik?.auth;
+
+/** Отправка формы в WordPress. Возвращает данные успешного ответа или null (ошибки уже показаны у полей). */
+async function authRequest(form) {
+  const { endpoint, nonce } = api();
+  const body = new FormData(form);
+  body.append('security', nonce);
+
+  form.setAttribute('aria-busy', 'true');
+  const json = await fetch(endpoint.replace('%%endpoint%%', ENDPOINTS[form.dataset.jsAuthForm]), {
+    method: 'POST',
+    body,
+    credentials: 'same-origin',
+  })
+    .then((response) => response.json())
+    .catch(() => ({ success: false }));
+  form.removeAttribute('aria-busy');
+
+  if (json.success) return json.data || {};
+
+  const errors = json.data?.errors || {};
+  const inputs = [...form.querySelectorAll('[data-js-field-input]')];
+  // Поле без имени в ответе (или нет ответа) — ошибка у первого поля формы
+  const fallback = inputs.find((input) => input.type !== 'checkbox');
+  if (!Object.keys(errors).length) errors[fallback.name] = 'Не\u00a0удалось отправить, попробуйте ещё раз';
+
+  let first = null;
+  Object.entries(errors).forEach(([name, message]) => {
+    const input = inputs.find((el) => el.name === name) || fallback;
+    setFieldError(input, message);
+    first ??= input;
+  });
+  first?.focus();
+  return null;
+}
+
+// После входа — та же страница без #auth-…
+const reloadPage = () => {
+  if (location.hash.startsWith(HASH_PREFIX)) history.replaceState(null, '', location.pathname + location.search);
+  location.reload();
+};
 
 /**
  * Попап входа (partials/auth-modal.html, макет 18126:59052): экраны login / register / forgot / sent / reset.
  * Открывают [data-js-auth-open="<экран>"] и адрес #auth-<экран> (ссылка из письма — #auth-reset),
  * переключают [data-js-auth-go="<экран>"], закрывают [data-js-auth-close] (крестик, клик мимо панели) и Escape.
  * Пока открыт: Lenis stop, фокус внутри панели, по закрытии фокус возвращается на кнопку.
- * Проверка полей — field.js; без ошибок форма уходит в onSubmit (до WordPress — демо-переходы).
+ * Проверка полей — field.js; без ошибок форма уходит в onSubmit. В WordPress (window.arctik.auth — inc/auth.php)
+ * формы отправляются в wc-ajax обработчики inc/ajax/auth.php, ошибки { errors: { имя поля: текст } } показываются у полей;
+ * после входа и регистрации страница перезагружается (шапка с буквой имени — из PHP). В статике — демо-переходы.
  */
 export function initAuth() {
   const root = document.querySelector('[data-js-auth]');
@@ -86,6 +138,26 @@ export function initAuth() {
     initSwipeButtons();
   };
 
+  const showSent = (email) => {
+    const sent = views.get('sent');
+    sent.querySelector('[data-js-auth-sent-email]').textContent = email;
+    sent.querySelector('[data-js-field-input]').value = email;
+    show('sent');
+  };
+
+  const onSubmitApi = {
+    login: reloadPage,
+    register: reloadPage,
+    forgot: (form) => showSent(form.elements.user_login.value.trim()),
+    sent: () => {},
+    reset: (form, data) => {
+      resetForm(form);
+      show('login');
+      const login = views.get('login').querySelector('[name="username"]');
+      if (data.login) login.value = data.login;
+    },
+  };
+
   const onSubmit = {
     login: (form) => {
       showUser(form.elements.username.value.trim()[0]);
@@ -97,13 +169,7 @@ export function initAuth() {
       close();
       resetForm(form);
     },
-    forgot: (form) => {
-      const email = form.elements.user_login.value.trim();
-      const sent = views.get('sent');
-      sent.querySelector('[data-js-auth-sent-email]').textContent = email;
-      sent.querySelector('[data-js-field-input]').value = email;
-      show('sent');
-    },
+    forgot: (form) => showSent(form.elements.user_login.value.trim()),
     sent: () => {},
     reset: (form) => {
       resetForm(form);
@@ -111,11 +177,20 @@ export function initAuth() {
     },
   };
 
-  root.addEventListener('submit', (event) => {
+  root.addEventListener('submit', async (event) => {
     const form = event.target.closest('[data-js-auth-form]');
     if (!form) return;
     event.preventDefault();
-    if (validateForm(form)) onSubmit[form.dataset.jsAuthForm]?.(form);
+    if (form.hasAttribute('aria-busy') || !validateForm(form)) return;
+
+    const name = form.dataset.jsAuthForm;
+    if (!api()) {
+      onSubmit[name]?.(form);
+      return;
+    }
+
+    const data = await authRequest(form);
+    if (data) onSubmitApi[name]?.(form, data);
   });
 
   document.addEventListener('click', (event) => {

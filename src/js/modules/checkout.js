@@ -2,7 +2,7 @@ import { validateForm } from './field.js';
 
 const MOBILE_QUERY = '(max-width: 767px)';
 const ERROR_CLASS = 'is-error';
-const STORAGE_NOTE = 'Срок хранения заказа — 14 дней';
+const STORAGE_NOTE = 'Срок хранения заказа\u00a0— 14\u00a0дней';
 
 /**
  * Оформление заказа (partials/checkout/main.html).

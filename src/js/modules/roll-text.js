@@ -43,7 +43,8 @@ function createUnit(char) {
 function setup(link) {
   if (link.classList.contains('roll')) return;
 
-  const text = link.textContent.trim().replace(/\s+/g, ' ');
+  // Неразрывные пробелы (после предлогов) не трогаем — слово с предлогом остаётся одной группой
+  const text = link.textContent.trim().replace(/[^\S\u00a0]+/g, ' ');
   if (!text) return;
 
   const label = document.createElement('span');

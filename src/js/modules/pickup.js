@@ -39,7 +39,7 @@ export function initPickup() {
     const isShown = (service) => !services.size || services.has(service);
 
     points.forEach((point) => {
-      const address = point.querySelector('[data-js-pickup-point-address]').textContent.toLowerCase();
+      const address = point.querySelector('[data-js-pickup-point-address]').textContent.replace(/\u00a0/g, ' ').toLowerCase();
       point.hidden = !isShown(point.dataset.service) || (query && !address.includes(query));
     });
     markers.forEach((marker) => {
@@ -146,7 +146,7 @@ export function initPickup() {
           service: point.dataset.service,
           serviceName: serviceNames[point.dataset.service],
           logo: chips.find((chip) => chip.dataset.jsPickupChip === point.dataset.service)?.querySelector('img')?.getAttribute('src'),
-          address: point.querySelector('[data-js-pickup-point-address]').textContent.trim(),
+          address: point.querySelector('[data-js-pickup-point-address]').textContent.replace(/\u00a0/g, ' ').trim(),
         },
       }),
     );

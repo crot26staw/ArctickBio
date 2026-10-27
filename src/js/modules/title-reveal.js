@@ -27,8 +27,16 @@ export function splitLines(el, options = {}) {
     if (getComputedStyle(br).display === 'none') br.remove();
   });
 
+  // SplitText сжимает пробелы по /\s+/ и превращает &nbsp; в обычный пробел — предлог отрывается от слова.
+  // Сжимаем сами, кроме неразрывных, а его сжатие отключаем (reduceWhiteSpace: false)
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    walker.currentNode.textContent = walker.currentNode.textContent.replace(/[^\S ]+/g, ' ');
+  }
+
   return SplitText.create(el, {
     type: 'lines',
+    reduceWhiteSpace: false,
     mask: 'lines',
     linesClass: 'title-line',
     aria: 'auto',

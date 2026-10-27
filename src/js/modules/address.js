@@ -68,7 +68,7 @@ export function initAddress() {
   };
 
   const pick = (item) => {
-    input.value = item.textContent;
+    input.value = item.textContent.replace(/\u00a0/g, ' ');
     setFieldError(input, '');
     hide();
   };

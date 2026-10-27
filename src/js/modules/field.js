@@ -15,10 +15,10 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const MESSAGES = {
   emailEmpty: 'Введите email',
-  emailFormat: 'Введите email в формате name@example.com',
+  emailFormat: 'Введите email в\u00a0формате name@example.com',
   required: 'Заполните поле',
   repeatEmpty: 'Повторите пароль',
-  repeatMismatch: 'Пароли не совпадают',
+  repeatMismatch: 'Пароли не\u00a0совпадают',
   checked: 'Подтвердите согласие',
 };
 

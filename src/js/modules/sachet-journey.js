@@ -47,6 +47,7 @@ const CARDS = {
   stackFrom: 90, // старт — ниже позиции «колонкой» (без наложения)
   stackDuration: 0.36,
   stackStep: 0.26,
+  stackFade: 0.12, // мобилка: содержимое предыдущей карточки гаснет под следующей
   ease: 'power3.out',
 };
 
@@ -157,21 +158,33 @@ function initCards(root, pinTrigger) {
     tl.to({}, { duration: 0 }, APPEAR.length);
   });
 
-  // Планшет/мобилка: карточки стопкой (CSS), первая на месте, остальные въезжают снизу из позиции «колонкой»
-  mm.add('(max-width: 1199px)', () => {
+  // Планшет/мобилка: карточки стопкой (CSS). Планшет: первая на месте, остальные въезжают снизу из позиции «колонкой».
+  // Мобилка: все карточки, и первая тоже, выезжают из-под низа экрана и ложатся на предыдущую целиком —
+  // содержимое предыдущей гаснет, чтобы не просвечивало сквозь стекло
+  const initStack = (isMobile) => {
     const tl = createTimeline();
-    // Сдвиг от позиции в стопке до позиции «колонкой» (одна под другой) + CARDS.stackFrom
-    const fromY = (card, i) => cards[0].offsetTop + i * cards[0].offsetHeight - card.offsetTop + CARDS.stackFrom;
+    // Планшет: сдвиг от позиции в стопке до позиции «колонкой» (одна под другой) + CARDS.stackFrom;
+    // мобилка: карточки в одном месте — сдвиг на высоту карточки + CARDS.stackFrom (ниже края секции)
+    const fromY = (card, i) =>
+      isMobile
+        ? card.offsetHeight + CARDS.stackFrom
+        : cards[0].offsetTop + i * cards[0].offsetHeight - card.offsetTop + CARDS.stackFrom;
 
-    cards.slice(1).forEach((card, n) => {
-      const i = n + 1;
+    (isMobile ? cards : cards.slice(1)).forEach((card, n) => {
+      const i = cards.indexOf(card);
       const start = CARDS.start + n * CARDS.stackStep;
 
       tl.fromTo(card, { y: () => fromY(card, i) }, { y: 0, duration: CARDS.stackDuration, ease: CARDS.ease }, start);
       revealContent(tl, card, start + 0.08);
+      if (isMobile && i > 0) {
+        tl.to([...cards[i - 1].children], { opacity: 0, duration: CARDS.stackFade, ease: 'none' }, start + 0.06);
+      }
     });
     tl.to({}, { duration: 0 }, APPEAR.length);
-  });
+  };
+
+  mm.add('(min-width: 768px) and (max-width: 1199px)', () => initStack(false));
+  mm.add('(max-width: 767px)', () => initStack(true));
 }
 
 function initFlight(root, item, target, endSection, pinTrigger) {
@@ -227,8 +240,9 @@ const VEIL = {
   dense: 0.4, // с какой доли высоты картинки облака закрывают карточки — тогда стик поднимается над завесой
   hideAbout: 0.45, // экран полностью закрыт (плотная часть с 0.64 высоты картинки облаков) — прячем about
   cut: [0.2, 1], // срез завесы снизу: от и до (доли высоты скалы .product-scene__rock-top от верха product-scene) — край скалы под облаками
-  fadeStart: 0.75, // product-scene подходит к верху экрана — растворяем остаток завесы; стик (уже ниже среза) — за переднюю стенку пачки
-  fadeEnd: 0.95, // завеса рассеялась до того, как product-scene встала у верха экрана
+  stickBehind: 0.75, // стик (уже ниже среза) — за переднюю стенку пачки
+  // Остаток завесы пропадает сразу (без растворения), ровно когда верх product-scene встал у верха экрана (конец length):
+  // до этого она закрывает ровный верхний край скалы (замечание дизайнера — срез не должен быть виден)
   length: 1, // до конца — product-scene у верха экрана
 };
 
@@ -272,8 +286,8 @@ function initVeil(veil, item, about, scene, pinTrigger) {
     veil.style.setProperty('--veil-cut-start', from);
     veil.style.setProperty('--veil-cut-end', to);
   };
-  // Срез завесы считаем каждый кадр, пока она не рассеялась (VEIL.fadeEnd),
-  // слой стика — пока завеса плотная (до VEIL.fadeStart: дальше стик ниже среза, у пачки — за её передней стенкой)
+  // Срез завесы считаем каждый кадр, пока она не пропала (конец VEIL.length),
+  // слой стика — пока завеса плотная (до VEIL.stickBehind: дальше стик ниже среза, у пачки — за её передней стенкой)
   const setActive = (active) => {
     if (active) {
       gsap.ticker.add(update);
@@ -310,11 +324,19 @@ function initVeil(veil, item, about, scene, pinTrigger) {
     // После пина обёртка уезжает со скоростью 1 — завесе остаётся разница
     .to(veil, { y: () => (VEIL.startY - (VEIL.speed - 1) * VEIL.length) * vh(), duration: VEIL.length, ease: 'none' })
     .set(about, { autoAlpha: 0 }, lead + VEIL.hideAbout)
-    .to(veil, { opacity: 0, duration: VEIL.fadeEnd - VEIL.fadeStart, ease: 'power1.in' }, lead + VEIL.fadeStart)
-    .call(setStick, [true], lead + VEIL.fadeStart - 0.001)
-    .call(setStick, [false], lead + VEIL.fadeStart)
-    .call(setActive, [true], lead + VEIL.fadeEnd - 0.001)
-    .call(setActive, [false], lead + VEIL.fadeEnd);
+    .call(setStick, [true], lead + VEIL.stickBehind - 0.001)
+    .call(setStick, [false], lead + VEIL.stickBehind)
+    .call(setActive, [true], lead + VEIL.length - 0.001)
+    .call(setActive, [false], lead + VEIL.length);
+
+  // Пропадание — отдельным триггером без scrub: у шкалы выше плавное отставание (scrub 0.6), а завеса должна пропасть
+  // точно в момент, когда верх product-scene у верха экрана
+  ScrollTrigger.create({
+    start: () => pinTrigger.end + VEIL.length * vh(),
+    invalidateOnRefresh: true,
+    onEnter: () => gsap.set(veil, { visibility: 'hidden' }),
+    onLeaveBack: () => gsap.set(veil, { visibility: '' }),
+  });
 }
 
 export function initSachetJourney() {

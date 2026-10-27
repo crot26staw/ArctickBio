@@ -84,8 +84,8 @@ function initAddresses(root) {
     editing = card;
     resetForm(form);
     if (card) {
-      form.elements.shipping_full_name.value = card.querySelector('[data-js-address-card-name]').textContent;
-      form.elements.shipping_address_1.value = card.querySelector('[data-js-address-card-address]').textContent;
+      form.elements.shipping_full_name.value = card.querySelector('[data-js-address-card-name]').textContent.replace(/\u00a0/g, ' ');
+      form.elements.shipping_address_1.value = card.querySelector('[data-js-address-card-address]').textContent.replace(/\u00a0/g, ' ');
     }
     setSubmitText(card ? 'Сохранить адрес' : 'Добавить адрес');
     list.hidden = true;

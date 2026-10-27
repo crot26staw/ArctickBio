@@ -242,15 +242,16 @@
   }
 }
 
-// Крестик вместо бургера при открытом меню: линии сходятся к середине и поворачиваются
+// Крестик вместо бургера при открытом меню: линии сходятся точно к середине (сдвиг — половина расстояния
+// между их центрами: (3.13 + 1.174) / 2) и поворачиваются. Со сдвигом меньше линии пересекались не по центру — крестик был кривой
 .header.is-menu-open .header__burger-lines {
   &::before {
-    transform: translateY(#{rem(1.565)}) rotate(45deg);
+    transform: translateY(#{rem(2.152)}) rotate(45deg);
   }
 
   &::after {
     width: 100%;
-    transform: translateY(#{rem(-1.565)}) rotate(-45deg);
+    transform: translateY(#{rem(-2.152)}) rotate(-45deg);
   }
 }
 

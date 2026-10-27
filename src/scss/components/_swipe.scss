@@ -16,7 +16,8 @@ $swipe-transition: 0.3s ease-in-out;
   isolation: isolate;
   overflow: hidden;
 
-  // Фон ховера
+  // Фон ховера. В покое — на 1px ниже края: при дробной высоте (резиновый rem) на части экранов
+  // сглаживание оставляло его верхний край тонкой синей линией под кнопкой (замечание дизайнера, мобильное меню)
   &::before {
     content: '';
     position: absolute;
@@ -24,7 +25,7 @@ $swipe-transition: 0.3s ease-in-out;
     z-index: -1;
     background-color: var(--swipe-bg, var(--color-accent));
     border-radius: inherit;
-    transform: translateY(100%);
+    transform: translateY(calc(100% + 1px));
     transition: transform $swipe-transition;
   }
 

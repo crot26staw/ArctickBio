@@ -1,0 +1,17 @@
+<?php
+/**
+ * Возможности темы.
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+add_action( 'after_setup_theme', function () {
+	add_theme_support( 'title-tag' );
+	add_theme_support( 'post-thumbnails' );
+	add_theme_support( 'html5', [ 'search-form', 'gallery', 'caption', 'style', 'script' ] );
+} );
+
+// Класс js на <html> — до разбивки заголовков они скрыты (как в статике, см. CLAUDE.md → «Заголовки и описания»).
+add_action( 'wp_head', function () {
+	wp_print_inline_script_tag( "document.documentElement.classList.add('js');" );
+}, 0 );

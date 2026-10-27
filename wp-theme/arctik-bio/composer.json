@@ -1,0 +1,15 @@
+{
+  "name": "arctik-bio/theme",
+  "description": "Тема АрктикБио",
+  "type": "wordpress-theme",
+  "require": {
+    "php": ">=8.2",
+    "htmlburger/carbon-fields": "^3.6"
+  },
+  "config": {
+    "platform": {
+      "php": "8.2"
+    },
+    "optimize-autoloader": true
+  }
+}

@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:wp": "vite --mode wp",
+    "build:wp": "vite build --mode wp"
   },
   "browserslist": [
     "last 2 versions",

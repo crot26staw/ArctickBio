@@ -1,5 +1,6 @@
 <!-- Первый экран карточки товара: галерея фото + панель покупки, макет 16581:44492.
-     Разметка панели под WooCommerce: .product_title, .price, form.cart (вариант, .quantity, .single_add_to_cart_button) -->
+     Разметка панели под WooCommerce: .product_title, .price, form.cart (add-to-cart — ID товара, формат — радио variation_id с ID вариации, .quantity, .single_add_to_cart_button).
+     В WordPress форму отправляет cart.js (AJAX, data-js-cart-form) -->
 <section class="product-main product" data-header-theme="dark">
   <div class="product-main__bg" aria-hidden="true">
     <img src="./assets/images/product-bg.webp" alt="" width="936" height="1024" fetchpriority="high">
@@ -22,24 +23,25 @@
   <div class="product-main__panel summary entry-summary" data-header-theme="light">
     <div class="product-main__heading">
       <h1 class="product-main__title product_title" data-js-title-reveal data-title-reveal-start="top bottom">Премиальный морской коллаген c дикой черникой</h1>
-      <p class="product-main__price price" data-js-product-price>1440₽</p>
+      <p class="product-main__price price" data-js-product-price>1&nbsp;440&nbsp;₽</p>
     </div>
 
-    <form class="product-main__form cart" action="#" method="post" data-js-sticky-buy-form>
+    <form class="product-main__form cart" action="#" method="post" data-js-sticky-buy-form data-js-cart-form>
+      <input type="hidden" name="add-to-cart" value="1">
       <fieldset class="product-main__formats">
         <legend class="product-main__subtitle">Выберите формат</legend>
         <div class="product-main__formats-list">
-          <include src="partials/product-format.html" data='{"name": "attribute_format", "value": "15", "title": "15&nbsp;саше", "subtitle": "Попробовать · 15&nbsp;дней", "price": "1440₽", "old_price": "1440₽"}'></include>
-          <include src="partials/product-format.html" data='{"name": "attribute_format", "value": "30", "title": "30&nbsp;саше", "subtitle": "Попробовать · 15&nbsp;дней", "price": "1440₽", "old_price": "1440₽", "checked": "checked"}'></include>
+          <include src="partials/product-format.html" data='{"name": "variation_id", "value": "15", "title": "15&nbsp;саше", "subtitle": "Попробовать · 15&nbsp;дней", "price": "1&nbsp;440&nbsp;₽", "old_price": "1&nbsp;440&nbsp;₽"}'></include>
+          <include src="partials/product-format.html" data='{"name": "variation_id", "value": "30", "title": "30&nbsp;саше", "subtitle": "Попробовать · 15&nbsp;дней", "price": "1&nbsp;440&nbsp;₽", "old_price": "1&nbsp;440&nbsp;₽", "checked": "checked"}'></include>
         </div>
       </fieldset>
 
       <div class="product-main__buy">
         <div class="product-main__actions" data-js-sticky-buy-source>
           <include src="partials/quantity.html" data='{"name": "quantity"}'></include>
-          <button class="product-main__cart btn btn--accent single_add_to_cart_button button" type="submit" name="add-to-cart" value="1" data-js-swipe>
+          <button class="product-main__cart btn btn--accent single_add_to_cart_button button" type="submit" data-js-swipe>
             <span>В&nbsp;корзину</span>
-            <span data-js-product-price>1440₽</span>
+            <span data-js-product-price>1&nbsp;440&nbsp;₽</span>
           </button>
         </div>
         <p class="product-main__delivery">
@@ -139,10 +141,10 @@
       <h2 class="product-main__subtitle">Другие вкусы Arctic Berries</h2>
       <div class="product-main__viewport" data-js-drag-slider data-drag-slider-align="start">
         <div class="product-main__track" data-js-drag-slider-track>
-          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с&nbsp;дикой брусникой", "price": "1440₽", "link": "#", "id": "2", "mod": "mini-card--light"}'></include>
-          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с&nbsp;дикой голубикой", "price": "1440₽", "link": "#", "id": "3", "mod": "mini-card--light"}'></include>
-          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с&nbsp;дикой клюквой", "price": "1440₽", "link": "#", "id": "4", "mod": "mini-card--light"}'></include>
-          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с&nbsp;дикой морошкой", "price": "1440₽", "link": "#", "id": "5", "mod": "mini-card--light"}'></include>
+          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с&nbsp;дикой брусникой", "price": "1&nbsp;440&nbsp;₽", "link": "#", "id": "2", "mod": "mini-card--light"}'></include>
+          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с&nbsp;дикой голубикой", "price": "1&nbsp;440&nbsp;₽", "link": "#", "id": "3", "mod": "mini-card--light"}'></include>
+          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с&nbsp;дикой клюквой", "price": "1&nbsp;440&nbsp;₽", "link": "#", "id": "4", "mod": "mini-card--light"}'></include>
+          <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с&nbsp;дикой морошкой", "price": "1&nbsp;440&nbsp;₽", "link": "#", "id": "5", "mod": "mini-card--light"}'></include>
         </div>
       </div>
     </div>
@@ -154,7 +156,7 @@
     <include src="partials/quantity.html"></include>
     <button class="product-main__cart btn btn--accent" type="button" data-js-sticky-buy-submit data-js-swipe>
       <span>В&nbsp;корзину</span>
-      <span data-js-product-price>1440₽</span>
+      <span data-js-product-price>1&nbsp;440&nbsp;₽</span>
     </button>
   </div>
 </section>

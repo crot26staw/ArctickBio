@@ -25,7 +25,8 @@ const formatPrice = (value) => `${String(value).replace(/\B(?=(\d{3})+(?!\d))/g,
  * Остались только разобранные — оформить нельзя: is-blocked (макет 18269:34349), кнопка неактивна.
  *
  * В WordPress (cart-api.js) суммы и счётчики считает сервер: количество (с задержкой QTY_DELAY), «Удалить» и «+» у карточек
- * товаров (.add_to_cart_button[data-product_id]) — запросы, ответ — фрагменты WC. Списки и итоги после ответа заменяются,
+ * товаров (.add_to_cart_button[data-product_id]), форма покупки на странице товара ([data-js-cart-form]) — запросы,
+ * ответ — фрагменты WC. Списки и итоги после ответа заменяются,
  * поэтому элементы ищутся при каждом обновлении. После добавления попап не открывается — меняется счётчик в шапке.
  */
 export function initCart() {
@@ -119,6 +120,18 @@ export function initCart() {
     if (json.error && json.product_url) window.location.href = json.product_url;
   };
 
+  // Форма покупки на странице товара: выбранная вариация (радио формата, variation_id) или сам товар (add-to-cart).
+  // Ошибку (не хватило остатка) WC пишет в уведомления — на странице товара их нет, кнопка просто снова активна
+  const submitProductForm = async (form) => {
+    if (form.getAttribute('aria-busy') === 'true') return;
+    const productId = form.querySelector('[data-js-product-format]:checked')?.value
+      || form.elements['add-to-cart']?.value;
+    if (!productId) return;
+    form.setAttribute('aria-busy', 'true');
+    await cartRequest('add_to_cart', { product_id: productId, quantity: form.elements.quantity?.value || 1 });
+    form.removeAttribute('aria-busy');
+  };
+
   const open = (trigger = null) => {
     opener = trigger;
     root.inert = false;
@@ -170,6 +183,14 @@ export function initCart() {
       addToCart(button);
     });
   }
+
+  // В статике форма никуда не отправляется (action="#")
+  document.addEventListener('submit', (event) => {
+    const form = event.target.closest('[data-js-cart-form]');
+    if (!form) return;
+    event.preventDefault();
+    if (api) submitProductForm(form);
+  });
 
   document.addEventListener('click', (event) => {
     const openBtn = event.target.closest('[data-js-cart-open]');

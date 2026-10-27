@@ -61,7 +61,8 @@ foreach ( $flavors as $slug => [ $name, $berry ] ) {
 	$attribute = new WC_Product_Attribute();
 	$attribute->set_id( wc_attribute_taxonomy_id_by_name( 'format' ) );
 	$attribute->set_name( 'pa_format' );
-	$attribute->set_options( array_keys( $formats ) );
+	// Глобальному атрибуту — ID терминов: строку WC считает названием и создаёт новый термин (дубли «15-sashe»).
+	$attribute->set_options( array_map( fn( $format ) => get_term_by( 'slug', $format, 'pa_format' )->term_id, array_keys( $formats ) ) );
 	$attribute->set_visible( true );
 	$attribute->set_variation( true );
 

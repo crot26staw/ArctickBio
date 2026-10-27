@@ -19,3 +19,8 @@ add_action( 'wp_enqueue_scripts', function () {
 
 // Каталог — все товары на одной странице (без пагинации, как в макете).
 add_filter( 'loop_shop_per_page', fn() => 100 );
+
+// Галерея и форма покупки на странице товара — свои (drag-slider.js, cart.js), jQuery-скрипт WC не нужен.
+add_action( 'wp_enqueue_scripts', function () {
+	wp_dequeue_script( 'wc-single-product' );
+}, 100 );

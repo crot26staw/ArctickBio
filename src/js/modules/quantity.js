@@ -7,14 +7,15 @@ function initQuantity(root) {
   const minus = root.querySelector('[data-js-quantity-minus]');
   const plus = root.querySelector('[data-js-quantity-plus]');
 
-  const min = Number(input.min) || 1;
-  const max = Number(input.max) || Infinity;
+  // min/max читаются каждый раз: max меняется при выборе формата (product-format.js)
+  const min = () => Number(input.min) || 1;
+  const max = () => Number(input.max) || Infinity;
 
-  const clamp = (value) => Math.min(max, Math.max(min, Math.round(value) || min));
+  const clamp = (value) => Math.min(max(), Math.max(min(), Math.round(value) || min()));
 
   const update = () => {
-    minus.disabled = Number(input.value) <= min;
-    plus.disabled = Number(input.value) >= max;
+    minus.disabled = Number(input.value) <= min();
+    plus.disabled = Number(input.value) >= max();
   };
 
   const set = (value) => {

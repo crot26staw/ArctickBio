@@ -171,7 +171,7 @@ src/
                    «Смотреть» [data-js-video-open] — плеер [data-js-video-player] раскрывается из карточки-картинки [data-js-video-card] (нет её — из нажатой кнопки) на весь блок (clip-path, GSAP),
                    полное видео [data-js-video-main] со звуком и контролами; закрывают [data-js-video-close], Escape, конец видео; Lenis stop)
                    quantity.js (счётчик количества [data-js-quantity]: −/+ в пределах min/max, событие change)
-                   product-format.js (выбор формата [data-js-product-format]: data-price → все [data-js-product-price] в .product, включая копию swipe)
+                   product-format.js (выбор формата [data-js-product-format]: data-price → все [data-js-product-price] в .product, включая копию swipe; data-max (WordPress, остаток) → max счётчиков секции)
                    sticky-buy.js (мобилка, карточка товара: нижняя панель [data-js-sticky-buy] видна (is-visible), когда [data-js-sticky-buy-source] вне экрана (IntersectionObserver);
                    количество синхронизировано с формой, кнопка — requestSubmit формы [data-js-sticky-buy-form]; у поля в панели нет name — не отправляется)
                    anchor-nav.js (меню разделов [data-js-anchor-nav] со ссылками href="#id": is-active + aria-current у раздела, чей верх прошёл 40% экрана;

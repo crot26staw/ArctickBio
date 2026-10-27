@@ -220,6 +220,13 @@
     min-width: 1px;
     font-family: $font-text;
     border-radius: var(--radius-m);
+
+    // Нет в наличии ни одного формата (WordPress) — как неактивные кнопки корзины и ЛК
+    &:disabled {
+      color: rgba(1, 39, 62, 0.5);
+      background-color: rgba(34, 34, 34, 0.1);
+      pointer-events: none;
+    }
   }
 
   &__delivery {

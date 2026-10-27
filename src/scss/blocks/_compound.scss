@@ -17,6 +17,7 @@
     width: 100%;
     aspect-ratio: 1440 / 443;
     pointer-events: none;
+    translate: 0 var(--rocks-shift, 0px); // опускаются, чтобы не заходить на стик (js/modules/compound-rocks.js)
 
     @include media(mobile) {
       aspect-ratio: 375 / 115;
@@ -90,6 +91,9 @@
     height: min(#{rem(512.508)}, 100%);
     transform: translate(-50%, -50%);
     pointer-events: none;
+    // У видео светлый непрозрачный фон (#f3f9fe), чуть светлее фона блока: darken берёт более тёмный цвет —
+    // фон видео сливается с фоном блока, прямоугольника не видно
+    mix-blend-mode: darken;
 
     @include media(tablet) {
       left: calc(50% + #{rem(0.77)});
@@ -101,8 +105,8 @@
       height: min(#{rem(317.188)}, 100%);
     }
 
-    // У картинки прозрачные поля по бокам, поэтому она шире рамки
-    img {
+    // Кадр видео уже рамки — по высоте рамки, по центру
+    video {
       flex: none;
       width: auto;
       max-width: none;

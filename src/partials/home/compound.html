@@ -1,5 +1,5 @@
 <section class="compound" data-header-theme="light">
-  <div class="compound__rocks" aria-hidden="true">
+  <div class="compound__rocks" aria-hidden="true" data-js-compound-rocks>
     <img src="./assets/images/rock-bottom-back.webp" alt="" width="2172" height="724" loading="lazy">
     <img src="./assets/images/rock-bottom.webp" alt="" width="2169" height="725" loading="lazy">
   </div>
@@ -9,8 +9,9 @@
 
     <!-- Сцена под заголовком: стик и витамины позиционируются от её центра, при нехватке высоты она сжимается вместе со стиком -->
     <div class="compound__scene">
-      <div class="compound__sachet" aria-hidden="true">
-        <img src="./assets/images/sachet-open.webp" alt="" width="1046" height="1503" loading="lazy">
+      <div class="compound__sachet" aria-hidden="true" data-js-compound-sachet>
+        <!-- Саше раскрывается по скроллу (js/modules/scroll-video.js); у видео светлый фон — растворяется в фоне блока (mix-blend-mode в _compound.scss) -->
+        <video src="./assets/video/stick.mp4" poster="./assets/images/stick-video-poster.webp" width="600" height="1186" muted playsinline preload="auto" disablepictureinpicture data-js-scroll-video></video>
       </div>
 
       <!-- Карточка с описанием всплывает при наведении/фокусе; подпись витамина лежит в её нижнем углу -->

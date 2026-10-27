@@ -187,6 +187,12 @@ src/
                    account.js (ЛК: вкладки заказов, кнопки форм аккаунта, адреса — добавить/изменить/удалить, свёртка «Ваш заказ»)
                    scroll-shift.js (секция [data-js-scroll-shift] закрепляется (pin), лента [data-js-scroll-shift-track] по скроллу уезжает из начального сдвига (CSS translate у ленты) в 0,
                    путь = сдвигу; translate, не transform — transform занят drag-slider.js. Только ≥1200. Сейчас — сотрудники «О компании»: лента правее заголовка (398) → к левому полю)
+                   scroll-video.js (видео, которое проматывает скролл: [data-js-scroll-video], путь — top 30% → top top секции (раскрытие начинается, когда верх секции на ~14% экрана) (data-scroll-video-start/end), scrub 0.4;
+                   новый seek только после seeked. Видео — с ключевым каждым кадром (ffmpeg -g 1), иначе перемотка дёргается.
+                   Сейчас — стик в «Составе» (assets/video/stick.mp4 из video-stick с рабочего стола, 600×1186, 1.4 MB); фон видео светлый непрозрачный —
+                   у рамки .compound__sachet mix-blend-mode: darken, фон сливается с фоном блока, низ стика уходит за мох)
+                   compound-rocks.js (камни «Состава» [data-js-compound-rocks] опускаются (--rocks-shift, translate), чтобы впадина под стиком [data-js-compound-sachet] была на 40 ниже его низа;
+                   не мешают — остаются на месте. Пересчёт по ResizeObserver секции. Просьба пользователя: камни не пересекаются со стиком)
                    fade-up.js (появление элементов из прозрачности снизу, см. «Анимации»)
                    image-reveal.js (появление фото: сверху вниз раскрывается синяя плашка .image-reveal__bg, следом фото .image-reveal__media — clip-path inset, один раз;
                    комментарий дизайнера, референс floema.com/en/sustainability. [data-js-image-reveal].image-reveal, стили components/_image-reveal.scss. Сейчас — оба фото intro «О компании»)

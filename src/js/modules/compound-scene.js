@@ -5,7 +5,8 @@ import { createVideoScrubber } from './scroll-video.js';
  * Сцена «Состава» (комментарии дизайнера к макетам 18392:67399 → 18126:48398 → 18126:48397):
  * экран сцены стоит на месте (CSS sticky в высокой секции [data-js-compound], длина — $compound-pin в _compound.scss),
  * всё идёт по скроллу одной шкалой: видео стика [data-js-compound-video] медленно проигрывается; пока стик цельный —
- * из его центра выезжают цифры [data-js-compound-stat] и проявляются; когда стик раскрывается, цифры гаснут
+ * из его центра выезжают цифры [data-js-compound-stat] и проявляются (только по горизонтали, на своей высоте — замечание дизайнера:
+ * выезд к центру стика по вертикали давал диагональ); когда стик раскрывается, цифры гаснут
  * и тем же способом появляются бейджи витаминов [data-js-compound-vitamin]. В конце пауза, затем наезжает video.
  * Шкала — от 'top top' (экран прилип) до 'bottom 200%' (начинается наезд video), доли — в SCENE.
  * Сдвиг — transform (x/y); центровка витаминов в CSS — свойством translate, поэтому не конфликтует.
@@ -44,9 +45,9 @@ function initCompoundScene(section) {
     const own = axis === 'x' ? el.offsetLeft + el.offsetWidth / 2 : el.offsetTop + el.offsetHeight / 2;
     return (center - own) * SCENE.from;
   };
-  const fromCenter = (items) => ({
+  const fromCenter = (items, { vertical = true } = {}) => ({
     x: (i) => toCenter(items[i], 'x'),
-    y: (i) => toCenter(items[i], 'y'),
+    y: (i) => (vertical ? toCenter(items[i], 'y') : 0),
     scale: SCENE.scale,
     autoAlpha: 0,
   });
@@ -74,7 +75,7 @@ function initCompoundScene(section) {
     { value: 1, duration: span(SCENE.video), onUpdate: () => setVideo(progress.value) },
     SCENE.video[0],
   )
-    .fromTo(stats, fromCenter(stats), { ...shown, duration: span(SCENE.statsIn) }, SCENE.statsIn[0])
+    .fromTo(stats, fromCenter(stats, { vertical: false }), { ...shown, duration: span(SCENE.statsIn) }, SCENE.statsIn[0])
     .to(stats, { autoAlpha: 0, scale: 0.95, duration: span(SCENE.statsOut) }, SCENE.statsOut[0])
     .fromTo(
       vitamins,

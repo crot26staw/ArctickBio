@@ -193,7 +193,7 @@ src/
                    у рамки .compound__sachet mix-blend-mode: darken (смешивается с фоном .compound__sticky — у него свой фон, sticky = свой контекст наложения))
                    compound-scene.js (сцена «Состава»: секция [data-js-compound] — дорожка ($compound-pin + 2 экрана), экран .compound__sticky прилипает;
                    одна шкала 'top top' → 'bottom 200%', доли в SCENE: видео [data-js-compound-video] (assets/video/stick.mp4, 600×1186),
-                   цифры [data-js-compound-stat] выезжают из центра стика (x/y, scale, autoAlpha) и гаснут, когда стик раскрывается (52% видео),
+                   цифры [data-js-compound-stat] разъезжаются от центра стика только по горизонтали, на своей высоте (x, scale, autoAlpha; замечание дизайнера — без диагонали) и гаснут, когда стик раскрывается (52% видео),
                    затем так же — бейджи [data-js-compound-vitamin] (центровка витамина — CSS translate, не transform). Reduced motion — итог сразу, дорожка 200svh)
                    compound-rocks.js (камни «Состава» [data-js-compound-rocks] опускаются (--rocks-shift, translate), чтобы впадина под стиком [data-js-compound-sachet] была на 40 ниже его низа;
                    не мешают — остаются на месте. Пересчёт по ResizeObserver секции. Просьба пользователя: камни не пересекаются со стиком)

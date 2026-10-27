@@ -17,6 +17,9 @@ foreach ( [
 	'product',
 	'cart',
 	'auth',
+	'shipping',
+	'payment',
+	'checkout',
 	'ajax/cart',
 	'ajax/auth',
 ] as $arctik_file ) {

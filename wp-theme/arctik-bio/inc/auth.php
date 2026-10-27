@@ -75,6 +75,25 @@ add_filter( 'retrieve_password_message', function ( string $message, string $key
 	return preg_replace( '#\S*wp-login\.php\?\S+#', $url, $message );
 }, 10, 3 );
 
+// Ссылки WC на установку/сброс пароля (письмо «Аккаунт создан» после оформления заказа, сброс из «Моего аккаунта»)
+// ведут на страницу «Забыли пароль» WC — переводим их в наш поток: проверка ключа ниже, экран #auth-reset.
+add_action( 'template_redirect', function () {
+	if ( ! is_wc_endpoint_url( 'lost-password' ) || empty( $_GET['key'] ) ) {
+		return;
+	}
+
+	$login = isset( $_GET['login'] ) ? sanitize_user( rawurldecode( wp_unslash( $_GET['login'] ) ) ) : '';
+	if ( ! $login && ! empty( $_GET['id'] ) ) {
+		$login = (string) ( get_userdata( absint( $_GET['id'] ) )->user_login ?? '' );
+	}
+
+	wp_safe_redirect( add_query_arg( [
+		'reset-login' => rawurlencode( $login ),
+		'reset-key'   => sanitize_text_field( wp_unslash( $_GET['key'] ) ),
+	], home_url( '/' ) ) );
+	exit;
+}, 5 );
+
 // Переход по ссылке из письма.
 add_action( 'template_redirect', function () {
 	if ( ! isset( $_GET['reset-key'], $_GET['reset-login'] ) ) {

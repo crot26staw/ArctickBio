@@ -71,6 +71,7 @@ $arctik_empty = WC()->cart->is_empty();
 					] );
 					?>
 
+					<p class="mini-cart__error" hidden data-js-cart-error>Удалите из&nbsp;корзины товары, которых нет в&nbsp;наличии</p>
 					<a class="btn btn--accent mini-cart__checkout checkout wc-forward" href="<?php echo esc_url( wc_get_checkout_url() ); ?>" data-js-cart-checkout data-js-swipe>Перейти к&nbsp;оформлению</a>
 				</div>
 			</div>

@@ -251,6 +251,16 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     color: rgba(51, 179, 67, 0.9);
   }
 
+  // «Оформить» при разобранных товарах (решение пользователя, макета нет)
+  &__error {
+    @include desc-m;
+    color: var(--color-error);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
   &__checkout {
     width: 100%;
 
@@ -366,5 +376,11 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
   &--sold &__sold {
     display: block;
+  }
+
+  // «Удалить» слева, «Разобрали» справа (просьба пользователя)
+  &--sold &__controls {
+    flex: 1;
+    justify-content: space-between;
   }
 }

@@ -23,6 +23,7 @@ add_action( 'after_setup_theme', function () {
 		'footer_about'  => 'Подвал: «О нас»',
 		'footer_buyers' => 'Подвал: «Покупателям»',
 		'footer_docs'   => 'Подвал: «Документы»',
+		'checkout'      => 'Оформление заказа: ссылки внизу',
 	] );
 } );
 

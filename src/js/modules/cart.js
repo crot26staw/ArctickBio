@@ -23,6 +23,9 @@ const formatPrice = (value) => `${String(value).replace(/\B(?=(\d{3})+(?!\d))/g,
  * в заголовке и бейдже шапки; «Удалить» убирает товар сразу (заметка в макете — при количестве 1 минус неактивен,
  * удалить можно только кнопкой). Нет товаров — экран «Корзина пуста».
  * Остались только разобранные — оформить нельзя: is-blocked (макет 18269:34349), кнопка неактивна.
+ * Есть разобранные и товары в наличии — «Перейти к оформлению» не переходит, а показывает ошибку [data-js-cart-error]
+ * (решение пользователя). В WordPress перед переходом наличие проверяется заново (get_refreshed_fragments): товар
+ * закончился, пока покупатель решал, — карточка становится «Разобрали», переход не происходит, ошибка.
  *
  * В WordPress (cart-api.js) суммы и счётчики считает сервер: количество (с задержкой QTY_DELAY), «Удалить» и «+» у карточек
  * товаров (.add_to_cart_button[data-product_id]), форма покупки на странице товара ([data-js-cart-form]) — запросы,
@@ -39,11 +42,32 @@ export function initCart() {
   const empty = root.querySelector('[data-js-cart-empty]');
   const content = root.querySelector('[data-js-cart-content]');
   const checkout = root.querySelector('[data-js-cart-checkout]');
+  const checkoutError = root.querySelector('[data-js-cart-error]');
   const header = document.querySelector('[data-js-header]');
   const qtyTimers = new Map();
   let opener = null;
 
   const isOpen = () => root.classList.contains(OPEN_CLASS);
+
+  const hasSold = () => Boolean(root.querySelector(`[data-js-cart-item].${SOLD_CLASS}`));
+
+  // Перед оформлением — свежее наличие с сервера (фрагменты заменят список и итоги, update() пересчитает is-blocked)
+  let checking = false;
+  const goToCheckout = async (link) => {
+    if (checking) return;
+    if (api) {
+      checking = true;
+      link.setAttribute('aria-busy', 'true');
+      await cartRequest('get_refreshed_fragments');
+      link.removeAttribute('aria-busy');
+      checking = false;
+    }
+    if (hasSold()) {
+      checkoutError.hidden = false;
+      return;
+    }
+    window.location.assign(link.href);
+  };
 
   // Демо-пересчёт статики: суммы строк, итог, число товаров
   const recount = (available, hasItems) => {
@@ -76,6 +100,7 @@ export function initCart() {
     content.hidden = items.length === 0;
 
     const blocked = items.length > 0 && available.length === 0;
+    if (available.length === items.length) checkoutError.hidden = true;
     root.classList.toggle(BLOCKED_CLASS, blocked);
     checkout.classList.toggle('is-disabled', blocked);
     checkout.setAttribute('aria-disabled', String(blocked));
@@ -184,6 +209,13 @@ export function initCart() {
     if (remove) {
       event.preventDefault();
       removeItem(remove);
+      return;
+    }
+
+    const checkoutLink = event.target.closest('[data-js-cart-checkout]');
+    if (checkoutLink) {
+      event.preventDefault();
+      goToCheckout(checkoutLink);
       return;
     }
 

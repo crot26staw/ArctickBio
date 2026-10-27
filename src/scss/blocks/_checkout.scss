@@ -242,6 +242,16 @@
     &[hidden] {
       display: none;
     }
+
+    // Под кнопкой оплаты (макета нет); на мобилке кнопка — после промокода, ошибка — за ней
+    &--pay {
+      margin-top: 0;
+
+      @include media(mobile) {
+        order: 3;
+        margin-top: rem(8);
+      }
+    }
   }
 
   &__dates-title {

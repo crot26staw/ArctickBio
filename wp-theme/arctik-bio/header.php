@@ -62,7 +62,7 @@ $arctik_phone = (string) arctik_option( 'arctik_phone' );
 				<svg class="header__icon header__cart-close" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.174" aria-hidden="true">
 					<path d="M1.6 1.6L14.4 14.4M14.4 1.6L1.6 14.4"/>
 				</svg>
-				<span class="header__cart-count" data-js-cart-count data-swipe-static><?php echo esc_html( function_exists( 'WC' ) && WC()->cart ? WC()->cart->get_cart_contents_count() : 0 ); ?></span>
+				<?php echo arctik_cart_part( 'count' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			</button>
 			<button class="header__icon-btn header__burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu" data-js-mobile-menu-toggle data-js-swipe>
 				<span class="header__burger-lines" aria-hidden="true"></span>

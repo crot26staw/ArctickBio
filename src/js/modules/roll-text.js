@@ -97,7 +97,8 @@ function setup(link) {
   link.addEventListener('focusin', play);
 }
 
-export function initRollText() {
+// scope — область поиска (новая разметка после AJAX); уже подключённые ссылки пропускаются
+export function initRollText(scope = document) {
   if (prefersReducedMotion()) return;
-  document.querySelectorAll('[data-js-roll], [data-js-roll-group] a').forEach(setup);
+  scope.querySelectorAll('[data-js-roll], [data-js-roll-group] a').forEach(setup);
 }

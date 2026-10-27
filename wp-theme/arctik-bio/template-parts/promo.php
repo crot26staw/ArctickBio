@@ -1,6 +1,6 @@
 <?php
 /**
- * Поле промокода (src/partials/promo.html). $args: id, mod.
+ * Поле промокода (src/partials/promo.html). $args: id, mod, value — применённый промокод.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,12 +10,12 @@ $arctik_id = $args['id'] ?? '';
 <?php /*
 	Промокод (компонент promocode 18208:49789): пустое поле — серая кнопка; есть значение — крестик очистки и синяя кнопка (is-filled);
 	промокод не найден — текст ошибки под полем (is-error, в WordPress отдаёт сервер). Логика — js/modules/promo.js.
-	data: id — id поля, mod — модификаторы и классы блока (promo--outline, promo--compact, класс места).
+	data: id — id поля, mod — модификаторы и классы блока (promo--outline, promo--compact, класс места), value — применённый промокод.
 */ ?>
 <div class="promo <?php echo esc_attr( $args['mod'] ?? '' ); ?>" data-js-promo>
 	<div class="promo__box">
 		<label class="visually-hidden" for="<?php echo esc_attr( $arctik_id ); ?>">Промокод</label>
-		<input class="promo__input" id="<?php echo esc_attr( $arctik_id ); ?>" type="text" name="coupon_code" placeholder="Промокод" autocomplete="off" aria-describedby="<?php echo esc_attr( $arctik_id ); ?>-error" data-js-promo-input>
+		<input class="promo__input" id="<?php echo esc_attr( $arctik_id ); ?>" type="text" name="coupon_code" placeholder="Промокод" value="<?php echo esc_attr( $args['value'] ?? '' ); ?>" autocomplete="off" aria-describedby="<?php echo esc_attr( $arctik_id ); ?>-error" data-js-promo-input>
 		<button class="promo__clear" type="button" aria-label="Очистить промокод" data-js-promo-clear>
 			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.174" aria-hidden="true"><path d="M5.636 5.636L18.364 18.364M18.364 5.636L5.636 18.364"/></svg>
 		</button>

@@ -87,3 +87,13 @@ add_action( 'wp_head', function () {
 		printf( '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n", esc_url( $font ) );
 	}
 }, 1 );
+
+// Данные для JS (window.arctik): модули темы добавляют свои ключи фильтром arctik_js_data (cart — inc/cart.php).
+// В статике объекта нет — модули работают в демо-режиме.
+add_action( 'wp_head', function () {
+	$data = apply_filters( 'arctik_js_data', [] );
+
+	if ( $data ) {
+		printf( "<script>window.arctik = %s;</script>\n", wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) );
+	}
+}, 2 );

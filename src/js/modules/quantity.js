@@ -32,6 +32,7 @@ function initQuantity(root) {
   update();
 }
 
-export function initQuantities() {
-  document.querySelectorAll('[data-js-quantity]').forEach(initQuantity);
+// scope — область поиска (товары корзины после обновления фрагментами, cart.js)
+export function initQuantities(scope = document) {
+  scope.querySelectorAll('[data-js-quantity]').forEach(initQuantity);
 }

@@ -358,8 +358,8 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     white-space: nowrap;
   }
 
+  // У разобранного — «Разобрали» и «Удалить» (просьба пользователя: в макете кнопки нет)
   &--sold &__quantity,
-  &--sold &__remove,
   &--sold &__price {
     display: none;
   }

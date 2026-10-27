@@ -1,4 +1,7 @@
 import { getLenis } from './smooth-scroll.js';
+import { cartRequest, hasCartApi } from './cart-api.js';
+import { initQuantities } from './quantity.js';
+import { initRollText } from './roll-text.js';
 
 const OPEN_CLASS = 'is-open';
 const LOCK_CLASS = 'is-scroll-locked';
@@ -6,39 +9,43 @@ const HEADER_CLASS = 'is-cart-open';
 const BLOCKED_CLASS = 'is-blocked';
 const SOLD_CLASS = 'cart-item--sold';
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled])';
+const QTY_DELAY = 400;
 
-const formatPrice = (value) => `${value}₽`;
+// «1 440 ₽» — как цены WooCommerce (неразрывные пробелы в разрядах и перед ₽)
+const formatPrice = (value) => `${String(value).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0')}\u00a0₽`;
 
 /**
  * Корзина-попап (partials/cart.html). Открывает кнопка корзины в шапке [data-js-cart-open] — повторное нажатие
  * закрывает (на мобилке в ней крестик), закрывают [data-js-cart-close] (крестик, клик мимо панели) и Escape.
  * Пока открыта: Lenis stop, фокус внутри панели, у шапки is-cart-open.
  *
- * Пересчёт до WordPress — демо (там фрагмент мини-корзины обновляет WooCommerce): счётчик −/+ (quantity.js, событие change)
- * меняет сумму строки, итог и число товаров в заголовке и бейдже шапки; «Удалить» убирает товар сразу (заметка в макете —
- * при количестве 1 минус неактивен, удалить можно только кнопкой). Нет товаров — экран «Корзина пуста».
+ * В статике пересчёт — демо: счётчик −/+ (quantity.js, событие change) меняет сумму строки, итог и число товаров
+ * в заголовке и бейдже шапки; «Удалить» убирает товар сразу (заметка в макете — при количестве 1 минус неактивен,
+ * удалить можно только кнопкой). Нет товаров — экран «Корзина пуста».
  * Остались только разобранные — оформить нельзя: is-blocked (макет 18269:34349), кнопка неактивна.
+ *
+ * В WordPress (cart-api.js) суммы и счётчики считает сервер: количество (с задержкой QTY_DELAY), «Удалить» и «+» у карточек
+ * товаров (.add_to_cart_button[data-product_id]) — запросы, ответ — фрагменты WC. Списки и итоги после ответа заменяются,
+ * поэтому элементы ищутся при каждом обновлении. После добавления попап не открывается — меняется счётчик в шапке.
  */
 export function initCart() {
   const root = document.querySelector('[data-js-cart]');
   if (!root) return;
 
+  const api = hasCartApi();
   const dialog = root.querySelector('[data-js-cart-dialog]');
-  const list = root.querySelector('[data-js-cart-list]');
   const empty = root.querySelector('[data-js-cart-empty]');
   const content = root.querySelector('[data-js-cart-content]');
-  const titleCount = root.querySelector('[data-js-cart-title-count]');
-  const total = root.querySelector('[data-js-cart-total]');
-  const discount = Number(root.querySelector('[data-js-cart-discount]')?.dataset.value) || 0;
   const checkout = root.querySelector('[data-js-cart-checkout]');
   const header = document.querySelector('[data-js-header]');
+  const qtyTimers = new Map();
   let opener = null;
 
   const isOpen = () => root.classList.contains(OPEN_CLASS);
 
-  const update = () => {
-    const items = [...list.querySelectorAll('[data-js-cart-item]')];
-    const available = items.filter((item) => !item.classList.contains(SOLD_CLASS));
+  // Демо-пересчёт статики: суммы строк, итог, число товаров
+  const recount = (available, hasItems) => {
+    const discount = Number(root.querySelector('[data-js-cart-discount]')?.dataset.value) || 0;
     let count = 0;
     let sum = 0;
 
@@ -50,19 +57,66 @@ export function initCart() {
       sum += line;
     });
 
+    root.querySelector('[data-js-cart-title-count]').textContent = hasItems ? ` (${count})` : '';
+    root.querySelector('[data-js-cart-total]').textContent = formatPrice(Math.max(sum - discount, 0));
+    document.querySelectorAll('[data-js-cart-count]').forEach((badge) => {
+      badge.textContent = count;
+    });
+  };
+
+  const update = () => {
+    const items = [...root.querySelectorAll('[data-js-cart-item]')];
+    const available = items.filter((item) => !item.classList.contains(SOLD_CLASS));
+
+    if (!api) recount(available, items.length > 0);
+
     empty.hidden = items.length > 0;
     content.hidden = items.length === 0;
-    titleCount.textContent = items.length ? ` (${count})` : '';
-    total.textContent = formatPrice(Math.max(sum - discount, 0));
 
     const blocked = items.length > 0 && available.length === 0;
     root.classList.toggle(BLOCKED_CLASS, blocked);
     checkout.classList.toggle('is-disabled', blocked);
     checkout.setAttribute('aria-disabled', String(blocked));
+  };
 
-    document.querySelectorAll('[data-js-cart-count]').forEach((badge) => {
-      badge.textContent = count;
-    });
+  // Новые товары из фрагментов: счётчики и ховер «Удалить»
+  const refresh = () => {
+    const list = root.querySelector('[data-js-cart-list]');
+    if (list) {
+      initQuantities(list);
+      initRollText(list);
+    }
+    update();
+  };
+
+  const setQuantity = (input) => {
+    const item = input.closest('[data-js-cart-item]');
+    const key = item.dataset.cart_item_key;
+    clearTimeout(qtyTimers.get(key));
+    qtyTimers.set(key, setTimeout(() => {
+      qtyTimers.delete(key);
+      cartRequest('arctik_cart_qty', { cart_item_key: key, quantity: input.value });
+    }, QTY_DELAY));
+  };
+
+  const removeItem = (link) => {
+    const item = link.closest('[data-js-cart-item]');
+    const key = item.dataset.cart_item_key;
+    item.remove();
+    update();
+    if (api) {
+      clearTimeout(qtyTimers.get(key));
+      cartRequest('remove_from_cart', { cart_item_key: key });
+    }
+  };
+
+  // «+» у карточек товаров (каталог, мини-карточки); не вышло (нет в наличии) — на страницу товара, как в WC
+  const addToCart = async (button) => {
+    if (button.getAttribute('aria-busy') === 'true') return;
+    button.setAttribute('aria-busy', 'true');
+    const json = await cartRequest('add_to_cart', { product_id: button.dataset.product_id, quantity: 1 });
+    button.removeAttribute('aria-busy');
+    if (json.error && json.product_url) window.location.href = json.product_url;
   };
 
   const open = (trigger = null) => {
@@ -89,21 +143,33 @@ export function initCart() {
     opener = null;
   };
 
-  list.addEventListener('change', (event) => {
-    if (event.target.closest('[data-js-quantity-input]')) update();
+  root.addEventListener('change', (event) => {
+    const input = event.target.closest('[data-js-cart-list] [data-js-quantity-input]');
+    if (!input) return;
+    if (api) setQuantity(input);
+    else update();
   });
 
   root.addEventListener('click', (event) => {
     const remove = event.target.closest('[data-js-cart-remove]');
     if (remove) {
       event.preventDefault();
-      remove.closest('[data-js-cart-item]').remove();
-      update();
+      removeItem(remove);
       return;
     }
 
     if (event.target.closest('[data-js-cart-close]')) close();
   });
+
+  if (api) {
+    document.addEventListener('cart:updated', refresh);
+    document.addEventListener('click', (event) => {
+      const button = event.target.closest('.add_to_cart_button[data-product_id]');
+      if (!button) return;
+      event.preventDefault();
+      addToCart(button);
+    });
+  }
 
   document.addEventListener('click', (event) => {
     const openBtn = event.target.closest('[data-js-cart-open]');

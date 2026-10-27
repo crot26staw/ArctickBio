@@ -28,7 +28,14 @@ get_header();
 		</div>
 	</div>
 	<?php get_template_part( 'template-parts/home/catalog' ); ?>
-	<?php // Г2: compound + video (overlap-stack--track), research, production; Г3: comparison, usage, benefits, catalog, faq, reviews. ?>
+	<?php // video наезжает сверху на последний экран дорожки compound (scss/blocks/_overlap-stack.scss). ?>
+	<div class="overlap-stack overlap-stack--track">
+		<?php get_template_part( 'template-parts/home/compound' ); ?>
+		<?php get_template_part( 'template-parts/home/video' ); ?>
+	</div>
+	<?php get_template_part( 'template-parts/home/research' ); ?>
+	<?php get_template_part( 'template-parts/home/production' ); ?>
+	<?php // Г3: comparison, usage, benefits, catalog, faq, reviews. ?>
 </main>
 <?php
 get_footer();

@@ -38,8 +38,11 @@ echo '→ WooCommerce'
 wp option update woocommerce_default_country 'RU'
 wp option update woocommerce_currency 'RUB'
 wp option update woocommerce_price_num_decimals 0
-wp option update woocommerce_price_thousand_sep ' '
-wp option update woocommerce_currency_pos 'right'
+# Цена «1 440 ₽»: неразрывный пробел в разрядах и перед ₽ (решение пользователя)
+wp option update woocommerce_price_thousand_sep $'\xc2\xa0'
+wp option update woocommerce_currency_pos 'right_space'
+# Картинки товаров без обрезки (пачки не квадратные)
+wp option update woocommerce_thumbnail_cropping 'uncropped'
 wp option update woocommerce_coming_soon 'no'
 wp option update woocommerce_onboarding_profile '{"skipped":true}' --format=json
 wp wc tool run install_pages --user="$WP_ADMIN_USER" >/dev/null

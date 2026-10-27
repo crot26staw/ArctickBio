@@ -13,6 +13,7 @@ foreach ( [
 	'helpers',
 	'carbon-fields',
 	'woocommerce',
+	'product',
 ] as $arctik_file ) {
 	require_once get_theme_file_path( "inc/{$arctik_file}.php" );
 }

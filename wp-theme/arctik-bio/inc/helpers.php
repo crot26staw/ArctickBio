@@ -102,7 +102,8 @@ function arctik_socials(): array {
 }
 
 /**
- * Опубликованные товары WooCommerce в порядке сортировки из админки (подвал: колонка каталога и лента).
+ * Товары-вкусы: опубликованные и видимые в каталоге, в порядке сортировки из админки
+ * (подвал, «Попробуйте также», «Другие вкусы»). Набор на 3 месяца скрыт из каталога — сюда не попадает.
  *
  * @return WC_Product[]
  */
@@ -112,9 +113,10 @@ function arctik_products(): array {
 	}
 
 	return wc_get_products( [
-		'status'  => 'publish',
-		'limit'   => -1,
-		'orderby' => [ 'menu_order' => 'ASC', 'title' => 'ASC' ],
+		'status'     => 'publish',
+		'visibility' => 'catalog',
+		'limit'      => -1,
+		'orderby'    => [ 'menu_order' => 'ASC', 'title' => 'ASC' ],
 	] );
 }
 

@@ -3,8 +3,7 @@
  * Мини-карточка товара (src/partials/mini-card.html): подвал, корзина «Попробуйте также», hero.
  *
  * $args: product — WC_Product, mod — модификаторы (mini-card--solid mini-card--no-dots…).
- * Заголовок / подзаголовок карточки («Морской коллаген» / «с дикой брусникой») — поля товара, этап «Т»;
- * пока заголовок — название товара.
+ * Заголовок / подзаголовок («Морской коллаген» / «с дикой брусникой») и пачка — поля товара (вкладки «Названия», «Картинки»).
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -15,13 +14,14 @@ if ( ! $arctik_product instanceof WC_Product ) {
 	return;
 }
 
-$arctik_link     = $arctik_product->get_permalink();
-$arctik_subtitle = $args['subtitle'] ?? '';
+$arctik_link = $arctik_product->get_permalink();
+
+[ $arctik_title, $arctik_subtitle ] = arctik_product_mini_titles( $arctik_product );
 ?>
 <article class="mini-card <?php echo esc_attr( $args['mod'] ?? '' ); ?>">
 	<a class="mini-card__media" href="<?php echo esc_url( $arctik_link ); ?>" tabindex="-1" aria-hidden="true">
 		<span class="mini-card__img-wrap">
-			<?php echo arctik_image( (int) $arctik_product->get_image_id(), 'woocommerce_thumbnail', [ 'class' => 'mini-card__img', 'alt' => '' ] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo arctik_image( arctik_product_image_id( $arctik_product, 'mini' ), 'woocommerce_thumbnail', [ 'class' => 'mini-card__img', 'alt' => '' ] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 		</span>
 		<span class="mini-card__dots">
 			<span class="mini-card__dot is-active"></span>
@@ -31,7 +31,7 @@ $arctik_subtitle = $args['subtitle'] ?? '';
 	</a>
 	<div class="mini-card__body">
 		<div class="mini-card__text">
-			<a class="mini-card__title" href="<?php echo esc_url( $arctik_link ); ?>"><?php echo arctik_text( $arctik_product->get_name() ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a>
+			<a class="mini-card__title" href="<?php echo esc_url( $arctik_link ); ?>"><?php echo arctik_text( $arctik_title ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a>
 			<?php if ( $arctik_subtitle ) : ?>
 				<p class="mini-card__subtitle"><?php echo arctik_text( $arctik_subtitle ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 			<?php endif; ?>

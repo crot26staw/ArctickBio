@@ -28,6 +28,7 @@ export function initCheckout() {
   const termsInput = terms.querySelector('input');
   const pickupValue = form.querySelector('[data-js-checkout-pickup-value]');
   const pickupAddress = form.querySelector('[data-js-checkout-pickup-address]');
+  const pickupService = form.querySelector('[data-js-checkout-pickup-service]');
   const pickupError = form.querySelector('[data-js-checkout-error="pickup"]');
   const pickupIcon = form.querySelector('[data-js-checkout-pickup-icon] img');
   const pickupTitle = form.querySelector('[data-js-checkout-pickup-title]');
@@ -71,6 +72,7 @@ export function initCheckout() {
   document.addEventListener('pickup:choose', ({ detail }) => {
     pickupValue.value = detail.id;
     pickupAddress.value = `${detail.serviceName}, ${detail.address}`;
+    pickupService.value = detail.service;
     pickupTitle.textContent = `Пункт ${detail.serviceName}`;
     pickupText.textContent = `${detail.address}\n${STORAGE_NOTE}`;
     pickupText.hidden = false;

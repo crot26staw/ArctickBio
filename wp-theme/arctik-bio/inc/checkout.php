@@ -12,7 +12,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Страница оформления (без «Заказ получен» и оплаты заказа — у них пока стандартный вид, этап З).
+ * Страница оформления (без «Заказ получен» — inc/order.php — и оплаты заказа, у неё стандартный вид WC).
  */
 function arctik_is_checkout_form(): bool {
 	return function_exists( 'is_checkout' ) && is_checkout() && ! is_wc_endpoint_url( 'order-received' ) && ! is_wc_endpoint_url( 'order-pay' );
@@ -105,7 +105,7 @@ add_action( 'woocommerce_after_checkout_validation', function ( array $data, WP_
 	// phpcs:enable
 }, 10, 2 );
 
-// Пункт выдачи, адрес и дата — в заказ: адрес доставки заказа + свои поля (видны в админке под адресом доставки).
+// Пункт выдачи, адрес и дата — в заказ: адрес доставки заказа + свои поля (в админке под адресом доставки — inc/order.php).
 add_action( 'woocommerce_checkout_create_order', function ( WC_Order $order, array $data ) {
 	// phpcs:disable WordPress.Security.NonceVerification.Missing
 	$slot = arctik_checkout_slot( $data );
@@ -114,6 +114,7 @@ add_action( 'woocommerce_checkout_create_order', function ( WC_Order $order, arr
 		$address = sanitize_text_field( wp_unslash( $_POST['pickup_point_address'] ?? '' ) );
 		$order->update_meta_data( '_arctik_pickup_point', sanitize_text_field( wp_unslash( $_POST['pickup_point'] ?? '' ) ) );
 		$order->update_meta_data( '_arctik_pickup_address', $address );
+		$order->update_meta_data( '_arctik_pickup_service', sanitize_key( wp_unslash( $_POST['pickup_point_service'] ?? '' ) ) );
 		$order->set_shipping_address_1( $address );
 	}
 
@@ -127,17 +128,6 @@ add_action( 'woocommerce_checkout_create_order', function ( WC_Order $order, arr
 	$order->set_shipping_last_name( $order->get_billing_last_name() );
 	$order->set_shipping_phone( $order->get_billing_phone() );
 }, 10, 2 );
-
-add_action( 'woocommerce_admin_order_data_after_shipping_address', function ( WC_Order $order ) {
-	$rows = [
-		'Пункт выдачи'   => trim( $order->get_meta( '_arctik_pickup_address' ) . ' (' . $order->get_meta( '_arctik_pickup_point' ) . ')', ' ()' ),
-		'Дата доставки' => $order->get_meta( '_arctik_delivery_date' ) ? wp_date( 'j F Y', strtotime( $order->get_meta( '_arctik_delivery_date' ) ) ) : '',
-	];
-
-	foreach ( array_filter( $rows ) as $label => $value ) {
-		printf( '<p><strong>%s:</strong> %s</p>', esc_html( $label ), esc_html( $value ) );
-	}
-} );
 
 // ---------- Аккаунт ----------
 

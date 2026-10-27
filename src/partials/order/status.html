@@ -33,6 +33,8 @@
         </div>
         <!-- Готов к получению (data-step="4"): вместо дат
         <p class="order-status__message">Заказ прибыл в пункт выдачи и доступен для&nbsp;получения до&nbsp;10&nbsp;ноября</p> -->
+        <!-- Отменён / возвращён (макета нет): вместо дат и шкалы — серое сообщение, не оплачен — красное (order-status__message--error)
+        <p class="order-status__message order-status__message--muted">Заказ отменён</p> -->
 
         <ol class="order-track" data-step="1" data-js-order-track>
           <li class="order-track__step" data-js-order-track-step>
@@ -102,6 +104,8 @@
               <img src="./assets/icons/icn-exclamation.svg" alt="" width="16" height="16">
             </button>
             <span class="order-status__tooltip" id="order-track-tip" role="tooltip">Отслеживание появится после передачи заказа в&nbsp;доставку</span>
+            <!-- Есть ссылка отслеживания (макета нет):
+            <a class="btn order-status__track-btn order-status__track-btn--active" href="#" target="_blank" rel="noopener" data-js-swipe>Отследить заказ</a> -->
           </div>
         </div>
       </section>

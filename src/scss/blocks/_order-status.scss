@@ -145,6 +145,16 @@
     @include body-l;
     max-width: rem(330);
     color: #00a172;
+
+    // Отменён, возвращён (макета нет)
+    &--muted {
+      color: var(--color-fg-muted);
+    }
+
+    // Не оплачен (макета нет)
+    &--error {
+      color: var(--color-error);
+    }
   }
 
   &__section {
@@ -272,6 +282,13 @@
     img {
       width: rem(16);
       height: rem(16);
+    }
+
+    // Есть ссылка отслеживания (макета нет) — обычная синяя кнопка
+    &--active {
+      color: var(--color-fg-light);
+      background-color: var(--color-accent);
+      cursor: pointer;
     }
   }
 

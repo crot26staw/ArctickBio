@@ -13,7 +13,6 @@ defined( 'ABSPATH' ) || exit;
 $arctik_error    = (string) ( $error ?? arctik_checkout_sold_message() );
 $arctik_cart     = WC()->cart;
 $arctik_count    = arctik_checkout_count_text( $arctik_cart->get_cart_contents_count() );
-$arctik_phone    = (string) arctik_option( 'arctik_phone' );
 $arctik_terms_id = wc_terms_and_conditions_page_id();
 
 // Способы оплаты: выбран сохранённый в сессии или первый (в статике — СБП).
@@ -130,6 +129,7 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 					</button>
 					<input type="hidden" name="pickup_point" value="" data-js-checkout-pickup-value>
 					<input type="hidden" name="pickup_point_address" value="" data-js-checkout-pickup-address>
+					<input type="hidden" name="pickup_point_service" value="" data-js-checkout-pickup-service>
 					<p class="checkout__error" hidden data-js-checkout-error="pickup">Выберите пункт выдачи</p>
 				</div>
 
@@ -192,7 +192,11 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 				<ul class="checkout__order-list woocommerce-checkout-review-order-table" id="checkout-order-list" data-js-checkout-list>
 					<?php
 					foreach ( $arctik_cart->get_cart() as $arctik_item ) {
-						get_template_part( 'template-parts/checkout/order-item', null, [ 'item' => $arctik_item ] );
+						get_template_part( 'template-parts/checkout/order-item', null, [
+							'product' => $arctik_item['data'],
+							'qty'     => (int) $arctik_item['quantity'],
+							'price'   => $arctik_cart->get_product_subtotal( $arctik_item['data'], $arctik_item['quantity'] ),
+						] );
 					}
 					?>
 				</ul>
@@ -218,15 +222,7 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 			<?php endif; ?>
 		</aside>
 
-		<footer class="checkout__footer">
-			<?php arctik_menu( 'checkout', 'checkout__links', 'data-js-roll-group' ); ?>
-			<?php if ( $arctik_phone ) : ?>
-				<div class="checkout__support">
-					<p>Служба поддержки 24/7</p>
-					<a class="checkout__support-phone" href="<?php echo esc_attr( arctik_phone_href( $arctik_phone ) ); ?>" data-js-roll><?php echo esc_html( $arctik_phone ); ?></a>
-				</div>
-			<?php endif; ?>
-		</footer>
+		<?php get_template_part( 'template-parts/checkout/footer' ); ?>
 
 		<?php wp_nonce_field( 'woocommerce-process_checkout', 'woocommerce-process-checkout-nonce' ); ?>
 	</form>

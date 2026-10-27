@@ -181,7 +181,8 @@ src/
                    auth.js (попап входа [data-js-auth]: открывают [data-js-auth-open="<экран>"] и адрес #auth-<экран>, [data-js-auth-go] переключает экраны,
                    «Назад» — по карте BACK, закрывают [data-js-auth-close] и Escape; Lenis stop, фокус внутри панели. onSubmit — демо-переходы до WordPress)
                    cart.js (корзина-попап [data-js-cart]: открывает кнопка корзины в шапке [data-js-cart-open] (повторно — закрывает), демо-пересчёт, «Удалить», пустая корзина, is-blocked;
-                   в WordPress — запросы через cart-api.js: количество, удаление, «+» у карточек .add_to_cart_button[data-product_id], ответ — фрагменты WC, после них cart:updated)
+                   в WordPress — запросы через cart-api.js: количество, удаление, «+» у карточек .add_to_cart_button[data-product_id], ответ — фрагменты WC, после них cart:updated;
+                   после добавления товара («+» у карточек, форма [data-js-cart-form], нижняя панель мобилки) попап открывается — в статике сразу)
                    cart-api.js (только WordPress, window.arctik.cart: POST на ?wc-ajax=…, фрагменты { селектор: разметка } заменяют элементы целиком → событие cart:updated; в статике объекта нет — модули в демо-режиме)
                    promo.js (промокод [data-js-promo]: is-filled — крестик очистки и синяя кнопка; «Применить»/Enter — демо: всегда «Промокод не найден» (is-error); в WordPress — купоны WC через cart-api.js, применённый код остаётся в поле, крестик снимает)
                    modal.js (попапы с картой на оформлении: [data-js-modal="имя"], [data-js-modal-open], [data-js-modal-close]; openModal / closeModal)

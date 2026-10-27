@@ -27,7 +27,8 @@ const formatPrice = (value) => `${String(value).replace(/\B(?=(\d{3})+(?!\d))/g,
  * В WordPress (cart-api.js) суммы и счётчики считает сервер: количество (с задержкой QTY_DELAY), «Удалить» и «+» у карточек
  * товаров (.add_to_cart_button[data-product_id]), форма покупки на странице товара ([data-js-cart-form]) — запросы,
  * ответ — фрагменты WC. Списки и итоги после ответа заменяются,
- * поэтому элементы ищутся при каждом обновлении. После добавления попап не открывается — меняется счётчик в шапке.
+ * поэтому элементы ищутся при каждом обновлении. После добавления открывается попап с обновлённой корзиной
+ * (в статике — сразу, с демо-товарами).
  */
 export function initCart() {
   const root = document.querySelector('[data-js-cart]');
@@ -111,25 +112,40 @@ export function initCart() {
     }
   };
 
-  // «+» у карточек товаров (каталог, мини-карточки); не вышло (нет в наличии) — на страницу товара, как в WC
+  // Товар добавлен — открыть попап (уже открыт — «Попробуйте также» — остаётся открытым)
+  const showAdded = (trigger) => {
+    if (!isOpen()) open(trigger);
+  };
+
+  // «+» у карточек товаров (каталог, мини-карточки, «Попробуйте также»); не вышло (нет в наличии) — на страницу товара, как в WC
   const addToCart = async (button) => {
+    if (!api) {
+      showAdded(button);
+      return;
+    }
     if (button.getAttribute('aria-busy') === 'true') return;
     button.setAttribute('aria-busy', 'true');
     const json = await cartRequest('add_to_cart', { product_id: button.dataset.product_id, quantity: 1 });
     button.removeAttribute('aria-busy');
     if (json.error && json.product_url) window.location.href = json.product_url;
+    else if (json.fragments) showAdded(button);
   };
 
   // Форма покупки на странице товара: выбранная вариация (радио формата, variation_id) или сам товар (add-to-cart).
   // Ошибку (не хватило остатка) WC пишет в уведомления — на странице товара их нет, кнопка просто снова активна
-  const submitProductForm = async (form) => {
+  const submitProductForm = async (form, trigger) => {
+    if (!api) {
+      showAdded(trigger);
+      return;
+    }
     if (form.getAttribute('aria-busy') === 'true') return;
     const productId = form.querySelector('[data-js-product-format]:checked')?.value
       || form.elements['add-to-cart']?.value;
     if (!productId) return;
     form.setAttribute('aria-busy', 'true');
-    await cartRequest('add_to_cart', { product_id: productId, quantity: form.elements.quantity?.value || 1 });
+    const json = await cartRequest('add_to_cart', { product_id: productId, quantity: form.elements.quantity?.value || 1 });
     form.removeAttribute('aria-busy');
+    if (json.fragments && !json.error) showAdded(trigger);
   };
 
   const open = (trigger = null) => {
@@ -174,22 +190,22 @@ export function initCart() {
     if (event.target.closest('[data-js-cart-close]')) close();
   });
 
-  if (api) {
-    document.addEventListener('cart:updated', refresh);
-    document.addEventListener('click', (event) => {
-      const button = event.target.closest('.add_to_cart_button[data-product_id]');
-      if (!button) return;
-      event.preventDefault();
-      addToCart(button);
-    });
-  }
+  if (api) document.addEventListener('cart:updated', refresh);
 
-  // В статике форма никуда не отправляется (action="#")
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('.add_to_cart_button[data-product_id]');
+    if (!button) return;
+    event.preventDefault();
+    addToCart(button);
+  });
+
+  // В статике форма никуда не отправляется (action="#"). Нижняя панель мобилки отправляет форму через requestSubmit()
+  // без submitter — фокус тогда вернётся на её кнопку (activeElement)
   document.addEventListener('submit', (event) => {
     const form = event.target.closest('[data-js-cart-form]');
     if (!form) return;
     event.preventDefault();
-    if (api) submitProductForm(form);
+    submitProductForm(form, event.submitter || document.activeElement);
   });
 
   document.addEventListener('click', (event) => {

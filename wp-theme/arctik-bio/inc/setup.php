@@ -28,3 +28,15 @@ add_action( 'after_setup_theme', function () {
 
 // Админ-бар на сайте скрыт: перекрывает фиксированную шапку и сбивает закреплённые сцены (решение пользователя).
 add_filter( 'show_admin_bar', '__return_false' );
+
+// Ссылка на секцию страницы (/buyers/#where-to-buy) — не «текущая страница»: WP сравнивает адрес без якоря и подсвечивал её.
+add_filter( 'wp_nav_menu_objects', function ( array $items ): array {
+	foreach ( $items as $item ) {
+		if ( 'custom' === $item->type && str_contains( (string) $item->url, '#' ) && $item->current ) {
+			$item->current = false;
+			$item->classes = array_diff( (array) $item->classes, [ 'current-menu-item' ] );
+		}
+	}
+
+	return $items;
+} );

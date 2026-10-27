@@ -12,6 +12,7 @@ foreach ( [
 	'typograph',
 	'helpers',
 	'carbon-fields',
+	'post-types',
 	'woocommerce',
 	'product',
 	'cart',

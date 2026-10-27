@@ -12,7 +12,8 @@ get_header();
 ?>
 <main class="main">
 	<?php get_template_part( 'template-parts/buyers/help' ); ?>
-	<?php get_template_part( 'template-parts/buyers/stores' ); ?>
+	<?php // «Где нас купить?» пока скрыт (просьба пользователя), поля — в inc/fields/buyers.php под комментарием. ?>
+	<?php // get_template_part( 'template-parts/buyers/stores' ); ?>
 </main>
 <?php
 get_footer();

@@ -1,7 +1,8 @@
 <?php
 /**
  * Общие блоки (Настройки сайта → Общие блоки): секции с одинаковым содержимым на главной, в каталоге и карточке товара —
- * видео, «Рекомендуемый курс» (usage), «Регулярный приём помогает» (benefits), «Почему выбирают» (comparison).
+ * видео, «Рекомендуемый курс» (usage), «Регулярный приём помогает» (benefits), «Почему выбирают» (comparison),
+ * «Процесс изготовления» (главная и «О компании»).
  * Решение пользователя: контент хранится один раз здесь. Вкладка = секция.
  */
 
@@ -105,4 +106,34 @@ Container::make( 'theme_options', 'Общие блоки' )
 					->set_width( 50 ),
 			] )
 			->set_header_template( '<%- feature %>' ),
+	] )
+
+	->add_tab( 'Процесс', [
+		Field::make( 'textarea', 'arctik_production_title', 'Заголовок' )
+			->set_rows( 2 )
+			->set_help_text( 'Перенос строки — как в макете' ),
+		Field::make( 'complex', 'arctik_production_steps', 'Шаги' )
+			->set_help_text( 'Лента рассчитана на 16 шагов. Номер — по порядку' )
+			->setup_labels( [ 'plural_name' => 'Шаги', 'singular_name' => 'шаг' ] )
+			->set_collapsed( true )
+			->add_fields( [
+				Field::make( 'textarea', 'title', 'Название' )
+					->set_rows( 2 )
+					->set_help_text( 'Перенос строки — как в макете' )
+					->set_width( 50 ),
+				Field::make( 'image', 'image', 'Фото' )
+					->set_help_text( 'Ширина от 800' )
+					->set_width( 50 ),
+				Field::make( 'text', 'popup_title', 'Заголовок попапа' )
+					->set_help_text( 'Пусто — название шага' ),
+				Field::make( 'textarea', 'popup_text', 'Текст попапа' )
+					->set_rows( 2 ),
+				Field::make( 'file', 'popup_video', 'Видео попапа (mp4, без звука, 700×394)' )
+					->set_type( [ 'video' ] )
+					->set_width( 50 ),
+				Field::make( 'image', 'popup_poster', 'Картинка попапа' )
+					->set_help_text( 'Если видео нет. 700×394' )
+					->set_width( 50 ),
+			] )
+			->set_header_template( '<%- title %>' ),
 	] );

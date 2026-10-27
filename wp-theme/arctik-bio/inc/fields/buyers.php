@@ -45,8 +45,11 @@ Container::make( 'post_meta', 'Покупателям' )
 							->set_rows( 3 ),
 					] ),
 			] ),
-	] )
+	] );
 
+// «Где нас купить?» пока скрыт (просьба пользователя): секция закомментирована в page-templates/buyers.php.
+// Вернуть — снять комментарий и поставить «)» вместо «);» выше.
+/*
 	->add_tab( 'Где нас купить?', [
 		Field::make( 'text', 'arctik_stores_title', 'Заголовок' ),
 		Field::make( 'complex', 'arctik_stores_cities', 'Города' )
@@ -63,3 +66,4 @@ Container::make( 'post_meta', 'Покупателям' )
 		Field::make( 'image', 'arctik_stores_map', 'Карта' )
 			->set_help_text( 'Картинка карты, от 1958×812' ),
 	] );
+*/

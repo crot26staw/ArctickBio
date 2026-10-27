@@ -13,8 +13,11 @@
   <include src="partials/header.html"></include>
 
   <main class="main">
-    <include src="partials/product/main.html"></include>
-    <include src="partials/home/video.html"></include>
+    <!-- video наезжает сверху на предыдущую секцию, когда её низ дошёл до низа экрана (scss/blocks/_overlap-stack.scss) -->
+    <div class="overlap-stack overlap-stack--tall" data-js-overlap-stack>
+      <include src="partials/product/main.html"></include>
+      <include src="partials/home/video.html"></include>
+    </div>
     <include src="partials/home/usage.html"></include>
     <include src="partials/home/benefits.html" data='{"mod": "benefits--hidden-mobile"}'></include>
     <include src="partials/home/comparison.html" data='{"mod": "comparison--spaced"}'></include>

@@ -51,30 +51,41 @@
     flex: 1 0 0;
     min-width: 1px;
 
-    // Подсветка колонки АрктикБиоМарин
+    // Подсветка колонки АрктикБиоМарин — по ширине второй колонки (колонки резиновые, шире 1440 плашка фиксированной ширины
+    // оставалась уже колонки и текст вылезал за неё). --highlight-inset — поле плашки внутрь колонки с каждой стороны
+    --feature-width: #{rem(180)};
+    --highlight-inset: 0px;
+
     &::before {
       content: '';
       position: absolute;
       top: calc(50% + #{rem(2)});
-      left: calc(50% - #{rem(84.5)});
-      width: rem(353);
+      left: calc(var(--feature-width) + var(--highlight-inset));
+      width: calc((100% - var(--feature-width)) / 2 - var(--highlight-inset) * 2);
       height: rem(579);
       background-color: #e9f0fb;
       border-radius: var(--radius-m);
-      transform: translate(-50%, -50%);
+      transform: translateY(-50%);
 
       @include media(tablet) {
         top: calc(50% + #{rem(1.5)});
-        left: calc(50% - #{rem(48)});
-        width: rem(250);
       }
 
       @include media(mobile) {
         top: 50%;
-        left: calc(50% - #{rem(87)});
-        width: rem(181);
         height: rem(555);
       }
+    }
+
+    // Планшет: плашка 250 в колонке 274 (макет)
+    @include media(tablet) {
+      --highlight-inset: #{rem(12)};
+    }
+
+    // Мобилка: колонки названий нет, плашка 181 чуть шире колонки
+    @include media(mobile) {
+      --feature-width: 0px;
+      --highlight-inset: #{rem(-2)};
     }
   }
 
@@ -109,7 +120,7 @@
   }
 
   &__col-feature {
-    width: rem(180);
+    width: rem(180); // = --feature-width у .comparison__table-wrap
 
     @include media(mobile) {
       width: 0;

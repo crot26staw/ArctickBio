@@ -23,6 +23,7 @@ import { initVideos } from './modules/video.js';
 import { initScrollVideos } from './modules/scroll-video.js';
 import { initCompoundRocks } from './modules/compound-rocks.js';
 import { initCompoundScenes } from './modules/compound-scene.js';
+import { initOverlapStacks } from './modules/overlap-stack.js';
 import { initRevealSequence } from './modules/reveal-sequence.js';
 import { initQuantities } from './modules/quantity.js';
 import { initProductFormats } from './modules/product-format.js';
@@ -63,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initProductFormats();
   initStickyBuy();
   initAnchorNavs();
+  initOverlapStacks();
   initDragSliders();
   initFakeGlass();
   initTitleReveal();

@@ -64,13 +64,8 @@
       display: none;
     }
 
-    position: absolute;
-    top: -12.66%;
-    left: -0.02%;
-    width: 100%;
-    max-width: none;
-    height: 135%;
-    object-fit: cover;
+    // Кадр из макета 720×800 (экспорт ноды 18123:31734 в 2×)
+    @include cover-img;
   }
 
   &__title {

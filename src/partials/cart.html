@@ -4,43 +4,43 @@
   Открывает кнопка корзины в шапке [data-js-cart-open], закрывают [data-js-cart-close] и Escape — js/modules/cart.js.
   В WordPress содержимое [data-js-cart-body] — фрагмент мини-корзины WooCommerce (обновляется AJAX-ом).
 -->
-<div class="cart" id="cart" data-js-cart inert>
-  <div class="cart__overlay" data-js-cart-close></div>
+<div class="mini-cart" id="cart" data-js-cart inert>
+  <div class="mini-cart__overlay" data-js-cart-close></div>
 
-  <div class="cart__dialog" role="dialog" aria-modal="true" aria-labelledby="cart-title" data-js-cart-dialog>
-    <div class="cart__head">
-      <h2 class="cart__title" id="cart-title">Корзина<span class="cart__count" data-js-cart-title-count> (2)</span></h2>
-      <button class="cart__close" type="button" aria-label="Закрыть корзину" data-js-cart-close>
+  <div class="mini-cart__dialog" role="dialog" aria-modal="true" aria-labelledby="cart-title" data-js-cart-dialog>
+    <div class="mini-cart__head">
+      <h2 class="mini-cart__title" id="cart-title">Корзина<span class="mini-cart__count" data-js-cart-title-count> (2)</span></h2>
+      <button class="mini-cart__close" type="button" aria-label="Закрыть корзину" data-js-cart-close>
         <svg width="44" height="44" viewBox="0 0 44 44" fill="currentColor" aria-hidden="true">
           <path d="M23.414 22L30 15.414L28.586 14L22 20.586L15.414 14L14 15.414L20.586 22L14 28.586L15.414 30L22 23.414L28.586 30L30 28.586L23.414 22Z"/>
         </svg>
       </button>
     </div>
 
-    <div class="cart__body widget_shopping_cart_content" data-js-cart-body>
+    <div class="mini-cart__body widget_shopping_cart_content" data-js-cart-body>
       <!-- Пустая корзина -->
-      <div class="cart__empty" hidden data-js-cart-empty>
-        <img class="cart__empty-img" src="./assets/images/cart-empty.webp" alt="" width="72" height="72">
-        <div class="cart__empty-text">
-          <p class="cart__empty-title woocommerce-mini-cart__empty-message">Ваша корзина пуста</p>
-          <p class="cart__empty-desc">В&nbsp;вашей корзине пока нет товаров, вы&nbsp;можете зайти в&nbsp;магазин и&nbsp;купить товары</p>
+      <div class="mini-cart__empty" hidden data-js-cart-empty>
+        <img class="mini-cart__empty-img" src="./assets/images/cart-empty.webp" alt="" width="72" height="72">
+        <div class="mini-cart__empty-text">
+          <p class="mini-cart__empty-title woocommerce-mini-cart__empty-message">Ваша корзина пуста</p>
+          <p class="mini-cart__empty-desc">В&nbsp;вашей корзине пока нет товаров, вы&nbsp;можете зайти в&nbsp;магазин и&nbsp;купить товары</p>
         </div>
         <a class="btn btn--accent btn--small" href="./catalog.html" data-js-swipe>Продолжить покупки</a>
       </div>
 
       <!-- С товарами -->
-      <div class="cart__content" data-js-cart-content>
-        <div class="cart__scroll" data-lenis-prevent>
-          <ul class="cart__list woocommerce-mini-cart cart_list product_list_widget" data-js-cart-list>
+      <div class="mini-cart__content" data-js-cart-content>
+        <div class="mini-cart__scroll" data-lenis-prevent>
+          <ul class="mini-cart__list woocommerce-mini-cart cart_list product_list_widget" data-js-cart-list>
             <include src="partials/cart-item.html" data='{"title": "Коллаген с&nbsp;брусникой", "subtitle": "30&nbsp;саше", "price": "1440₽", "price_value": "1440", "qty": "1", "link": "./product.html", "id": "1", "key": "a1"}'></include>
             <include src="partials/cart-item.html" data='{"title": "Коллаген с&nbsp;брусникой", "subtitle": "30&nbsp;саше", "price": "1440₽", "price_value": "1440", "qty": "1", "link": "./product.html", "id": "2", "key": "a2"}'></include>
             <include src="partials/cart-item.html" data='{"title": "Коллаген с&nbsp;брусникой", "subtitle": "30&nbsp;саше", "price": "", "price_value": "1440", "qty": "1", "link": "./product.html", "id": "3", "key": "a3", "mod": "cart-item--sold"}'></include>
           </ul>
 
-          <div class="cart__more">
-            <p class="cart__more-title">Попробуйте также</p>
-            <div class="cart__more-viewport" data-js-drag-slider data-drag-slider-align="start">
-              <div class="cart__more-track" data-js-drag-slider-track>
+          <div class="mini-cart__more">
+            <p class="mini-cart__more-title">Попробуйте также</p>
+            <div class="mini-cart__more-viewport" data-js-drag-slider data-drag-slider-align="start">
+              <div class="mini-cart__more-track" data-js-drag-slider-track>
                 <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с&nbsp;дикой брусникой", "price": "1440₽", "link": "./product.html", "id": "2", "mod": "mini-card--light"}'></include>
                 <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с&nbsp;дикой голубикой", "price": "1440₽", "link": "./product.html", "id": "3", "mod": "mini-card--light"}'></include>
                 <include src="partials/mini-card.html" data='{"title": "Морской коллаген", "subtitle": "с&nbsp;дикой клюквой", "price": "1440₽", "link": "./product.html", "id": "4", "mod": "mini-card--light"}'></include>
@@ -49,25 +49,25 @@
           </div>
         </div>
 
-        <div class="cart__summary">
-          <dl class="cart__totals" data-js-cart-totals>
-            <div class="cart__row cart__row--total">
+        <div class="mini-cart__summary">
+          <dl class="mini-cart__totals" data-js-cart-totals>
+            <div class="mini-cart__row mini-cart__row--total">
               <dt>Итого</dt>
-              <dd class="cart__total" data-js-cart-total>2680₽</dd>
+              <dd class="mini-cart__total" data-js-cart-total>2680₽</dd>
             </div>
-            <div class="cart__row">
+            <div class="mini-cart__row">
               <dt>Скидка</dt>
-              <dd class="cart__discount" data-js-cart-discount data-value="200">- 200&nbsp;₽</dd>
+              <dd class="mini-cart__discount" data-js-cart-discount data-value="200">- 200&nbsp;₽</dd>
             </div>
-            <div class="cart__row">
+            <div class="mini-cart__row">
               <dt>Доставка</dt>
-              <dd class="cart__free">Бесплатно</dd>
+              <dd class="mini-cart__free">Бесплатно</dd>
             </div>
           </dl>
 
-          <include src="partials/promo.html" data='{"id": "cart-coupon", "mod": "promo--outline promo--compact cart__promo"}'></include>
+          <include src="partials/promo.html" data='{"id": "cart-coupon", "mod": "promo--outline promo--compact mini-cart__promo"}'></include>
 
-          <a class="btn btn--accent cart__checkout checkout wc-forward" href="./checkout.html" data-js-cart-checkout data-js-swipe>Перейти к&nbsp;оформлению</a>
+          <a class="btn btn--accent mini-cart__checkout checkout wc-forward" href="./checkout.html" data-js-cart-checkout data-js-swipe>Перейти к&nbsp;оформлению</a>
         </div>
       </div>
     </div>

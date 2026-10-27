@@ -108,7 +108,8 @@ src/
     contacts/main.html        — «Контакты»: один экран, стеклянная карточка контактов поверх фото
     product-plan.html         — плашка набора со старой ценой (баннер каталога)
     promo.html                — поле промокода (корзина и оформление; компонент promocode 18208:49789)
-    cart.html, cart-item.html — корзина-попап (подключена в header.html) и товар в ней (счётчик quantity--mini)
+    cart.html, cart-item.html — корзина-попап (подключена в header.html) и товар в ней (счётчик quantity--mini).
+                                Блок попапа — .mini-cart, не .cart: класс cart у WooCommerce (form.cart на карточке товара) — стили попапа скрывали форму покупки
     checkout/                 — оформление заказа: main (форма), header (шапка без меню, и для «Заказ оформлен»), order-item, delivery-date,
                                 pickup-modal + pickup-point (попап ПВЗ), address-modal (адрес курьера)
     order/                    — received («Заказ оформлен»), status (статус заказа; сетка .checkout__card)

@@ -144,4 +144,29 @@ Container::make( 'post_meta', 'Главная' )
 					->set_help_text( 'Размер подставится сам. Без файла — плитка без ссылки' )
 					->set_width( 50 ),
 			] ),
+	] )
+
+	->add_tab( 'Частые вопросы', [
+		Field::make( 'html', 'arctik_home_faq_info' )
+			->set_html( '<p>Вопросы — первый раздел страницы «Покупателям» («Общие вопросы»). Кнопка ведёт на «Покупателям», соцсети — из «Настройки сайта → Соцсети».</p>' ),
+		Field::make( 'text', 'arctik_home_faq_title', 'Заголовок' )
+			->set_width( 50 ),
+		Field::make( 'text', 'arctik_home_faq_button', 'Подпись кнопки' )
+			->set_width( 50 ),
+		Field::make( 'textarea', 'arctik_home_faq_text', 'Текст' )
+			->set_rows( 2 ),
+		Field::make( 'textarea', 'arctik_home_faq_aside', 'Текст над соцсетями' )
+			->set_rows( 2 )
+			->set_help_text( 'Перенос строки — как в макете' ),
+	] )
+
+	->add_tab( 'Отзывы', [
+		Field::make( 'html', 'arctik_home_reviews_info' )
+			->set_html( '<p>Сами отзывы — в разделе «Отзывы» в меню админки. Нет отзывов — блок не выводится. Кнопка ведёт в каталог.</p>' ),
+		Field::make( 'textarea', 'arctik_home_reviews_title', 'Заголовок' )
+			->set_rows( 2 )
+			->set_help_text( 'Перенос строки — как в макете' )
+			->set_width( 50 ),
+		Field::make( 'text', 'arctik_home_reviews_button', 'Подпись кнопки' )
+			->set_width( 50 ),
 	] );

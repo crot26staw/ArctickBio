@@ -1,7 +1,7 @@
 <?php
 /**
  * Главная (src/index.html). Поля — страница, выбранная главной (inc/fields/home.php); видео, «Процесс», курс,
- * преимущества и сравнение — «Общие блоки».
+ * преимущества и сравнение — «Общие блоки»; вопросы — «Покупателям», отзывы — записи «Отзывы».
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -35,7 +35,12 @@ get_header();
 	</div>
 	<?php get_template_part( 'template-parts/home/research' ); ?>
 	<?php get_template_part( 'template-parts/home/production' ); ?>
-	<?php // Г3: comparison, usage, benefits, catalog, faq, reviews. ?>
+	<?php get_template_part( 'template-parts/home/comparison' ); ?>
+	<?php get_template_part( 'template-parts/home/usage' ); ?>
+	<?php get_template_part( 'template-parts/home/benefits' ); ?>
+	<?php get_template_part( 'template-parts/home/catalog' ); ?>
+	<?php get_template_part( 'template-parts/home/faq' ); ?>
+	<?php get_template_part( 'template-parts/home/reviews' ); ?>
 </main>
 <?php
 get_footer();

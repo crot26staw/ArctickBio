@@ -44,3 +44,20 @@ function arctik_product_content( WC_Product $product, string $key ): mixed {
 
 	return ! empty( $own ) ? $own : arctik_option( "arctik_products_{$key}" );
 }
+
+/**
+ * ID для добавления в корзину из карточки (data-product_id): у вариативного товара — вариация по умолчанию
+ * (WC_AJAX::add_to_cart принимает ID вариации), у простого — сам товар.
+ */
+function arctik_product_cart_id( WC_Product $product ): int {
+	if ( $product->is_type( 'variable' ) ) {
+		$variation_id = ( new WC_Product_Data_Store_CPT() )->find_matching_product_variation( $product, array_combine(
+			array_map( fn( $name ) => 'attribute_' . $name, array_keys( $product->get_default_attributes() ) ),
+			$product->get_default_attributes()
+		) );
+
+		return $variation_id ?: (int) ( $product->get_children()[0] ?? $product->get_id() );
+	}
+
+	return $product->get_id();
+}

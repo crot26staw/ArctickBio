@@ -16,3 +16,6 @@ add_action( 'wp_enqueue_scripts', function () {
 		wp_dequeue_style( $handle );
 	}
 }, 100 );
+
+// Каталог — все товары на одной странице (без пагинации, как в макете).
+add_filter( 'loop_shop_per_page', fn() => 100 );

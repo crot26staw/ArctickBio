@@ -142,3 +142,40 @@ function arctik_menu( string $location, string $class, string $attrs = '' ): voi
 function arctik_menu_name( string $location ): string {
 	return (string) wp_get_nav_menu_name( $location );
 }
+
+/**
+ * Текст из многострочного поля: переносы строк → <br> (заголовки «как в макете»), экранирование + типограф.
+ */
+function arctik_lines( ?string $text ): string {
+	return arctik_typograph( nl2br( esc_html( trim( (string) $text ) ), false ) );
+}
+
+/**
+ * Иконки темы (assets/icons/icn-*.svg) для выбора в полях: [ 'sun' => 'Солнце', … ].
+ */
+function arctik_icon_options(): array {
+	return [
+		'sun'        => 'Солнце',
+		'date'       => 'Календарь',
+		'glass'      => 'Стакан',
+		'skin'       => 'Кожа',
+		'joints'     => 'Суставы',
+		'ligaments'  => 'Связки',
+		'connective' => 'Соединительная ткань',
+		'hair-nails' => 'Волосы и ногти',
+	];
+}
+
+/**
+ * URL иконки темы по ключу из arctik_icon_options().
+ */
+function arctik_icon_url( string $icon ): string {
+	return arctik_asset( 'icons/icn-' . sanitize_file_name( $icon ) . '.svg' );
+}
+
+/**
+ * URL файла из медиатеки (поле file / image) или ''.
+ */
+function arctik_file_url( mixed $attachment_id ): string {
+	return $attachment_id ? (string) wp_get_attachment_url( (int) $attachment_id ) : '';
+}

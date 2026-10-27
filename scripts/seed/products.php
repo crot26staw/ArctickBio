@@ -6,31 +6,7 @@
  * Повторный запуск безопасен: товары находятся по ярлыку и обновляются, вариации пересоздаются.
  */
 
-require_once ABSPATH . 'wp-admin/includes/image.php';
-require_once ABSPATH . 'wp-admin/includes/file.php';
-require_once ABSPATH . 'wp-admin/includes/media.php';
-
-/**
- * Картинка из assets/images темы в медиатеку (один раз — повторно находится по метке _arctik_seed).
- */
-function arctik_seed_image( string $file, string $alt = '' ): int {
-	$found = get_posts( [ 'post_type' => 'attachment', 'post_status' => 'any', 'meta_key' => '_arctik_seed', 'meta_value' => $file, 'fields' => 'ids', 'numberposts' => 1 ] );
-	if ( $found ) {
-		return (int) $found[0];
-	}
-
-	$tmp = wp_tempnam( $file );
-	copy( get_theme_file_path( "assets/images/{$file}" ), $tmp );
-	$id = media_handle_sideload( [ 'name' => $file, 'tmp_name' => $tmp ], 0 );
-	if ( is_wp_error( $id ) ) {
-		WP_CLI::error( "{$file}: " . $id->get_error_message() );
-	}
-
-	update_post_meta( $id, '_arctik_seed', $file );
-	update_post_meta( $id, '_wp_attachment_image_alt', $alt );
-
-	return (int) $id;
-}
+require_once __DIR__ . '/_lib.php';
 
 function arctik_seed_product( string $slug, string $class ): WC_Product {
 	$post = get_page_by_path( $slug, OBJECT, 'product' );

@@ -30,8 +30,8 @@ $arctik_categories = [
 		<div class="cookies__inner container">
 			<p class="cookies__text"><?php echo $arctik_banner_text; // phpcs:ignore WordPress.Security.EscapeOutput -- wp_kses выше ?></p>
 			<div class="cookies__actions">
-				<button class="btn btn--light" type="button" data-js-modal-open="cookies" data-js-swipe>Настроить</button>
-				<button class="btn btn--dark" type="button" data-js-cookies-accept data-js-swipe>Хорошо</button>
+				<button class="btn btn--light cookies__btn" type="button" data-js-modal-open="cookies" data-js-swipe>Настроить</button>
+				<button class="btn btn--dark cookies__btn" type="button" data-js-cookies-accept data-js-swipe>Хорошо</button>
 			</div>
 		</div>
 	</section>

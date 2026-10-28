@@ -2,6 +2,8 @@
 
 // Баннер cookie (partials/cookies.html): полоса внизу экрана (макет 18129:38720 в файле XXwoaWCLuNuh8GMCHy1GcG)
 // и окно настроек (карточка из мобильного макета 18543:95242; на десктопе — по центру с затемнением, решение пользователя).
+// Планшет — макета нет, полоса как на десктопе (поля планшета). Мобилка (полоса 18543:95113, окно 18543:95242) — карточки
+// с полями 10 от краёв экрана, прижаты к низу; затемнение под окном — как на десктопе (в макете его нет).
 // Показ, выбор и запоминание — js/modules/cookies.js, открытие окна — modal.js.
 $cookies-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -19,12 +21,30 @@ $cookies-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     translate: 0 0;
   }
 
+  @include media(mobile) {
+    right: rem(10);
+    bottom: rem(10);
+    left: rem(10);
+    translate: 0 calc(100% + #{rem(10)});
+  }
+
+  // Пока открыто мобильное меню (mobile-menu.js, класс у шапки), полоса уезжает вниз — иначе закрывает низ меню
+  .is-menu-open &.is-visible {
+    translate: 0 calc(100% + #{rem(10)});
+  }
+
   &__inner {
     display: flex;
     gap: rem(16);
     align-items: center;
     justify-content: space-between;
     padding-block: rem(16);
+
+    @include media(mobile) {
+      flex-direction: column;
+      align-items: stretch;
+      padding: rem(16);
+    }
   }
 
   // Текст — из rich text в WordPress, ссылка без класса (как подпись в «Покупателям»)
@@ -42,6 +62,14 @@ $cookies-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-shrink: 0;
     gap: rem(16);
+  }
+
+  // Мобилка — кнопки пополам на всю ширину
+  &__btn {
+    @include media(mobile) {
+      flex: 1 1 0;
+      min-width: 0;
+    }
   }
 }
 
@@ -86,11 +114,25 @@ $cookies-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     transition:
       opacity $cookies-transition,
       transform $cookies-transition;
+
+    @include media(mobile) {
+      top: auto;
+      right: rem(10);
+      bottom: rem(10);
+      left: rem(10);
+      width: auto;
+      max-height: calc(100svh - #{rem(20)});
+      transform: translateY(rem(24));
+    }
   }
 
   &.is-open &__dialog {
     opacity: 1;
     transform: translate(-50%, -50%);
+
+    @include media(mobile) {
+      transform: none;
+    }
   }
 
   &__form {
@@ -114,6 +156,11 @@ $cookies-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     @include h3;
     padding-right: rem(32); // место под крестик
     color: var(--color-fg);
+
+    // Крестик в углу карточки — заголовок в одну строку, как в макете
+    @include media(mobile) {
+      padding-right: rem(12);
+    }
   }
 
   &__text {
@@ -137,6 +184,11 @@ $cookies-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     width: rem(24);
     height: rem(24);
     color: var(--color-fg);
+
+    @include media(mobile) {
+      top: rem(12);
+      right: rem(12);
+    }
 
     svg {
       width: 100%;

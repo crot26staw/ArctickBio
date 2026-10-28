@@ -37,7 +37,7 @@ function arctik_product_image_id( WC_Product $product, string $kind = 'main' ): 
 
 /**
  * Контент карточки товара с заменой: своё у товара, иначе общее из настроек.
- * $key: ingredients | benefits | documents | delivery.
+ * $key: ingredients | usage | delivery | documents.
  */
 function arctik_product_content( WC_Product $product, string $key ): mixed {
 	$own = arctik_field( "arctik_product_{$key}", $product->get_id() );
@@ -120,8 +120,9 @@ function arctik_product_formats( WC_Product $product ): array {
 }
 
 /**
- * Пункты аккордеона на странице товара: «О продукте» (описание товара), доставка, документы, преимущества.
- * Пустые не выводятся. html — готовое содержимое .accordion__panel.
+ * Пункты аккордеона на странице товара: «О продукте» (описание товара), «Состав и пищевая ценность» (поле товара),
+ * «Как принимать», «Доставка и хранение», «Документы» (у товара или общие). Пустые не выводятся.
+ * html — готовое содержимое .accordion__panel.
  *
  * @return array<int, array{id: string, title: string, html: string}>
  */
@@ -137,13 +138,21 @@ function arctik_product_details( WC_Product $product ): array {
 		];
 	}
 
-	$delivery = trim( (string) arctik_product_content( $product, 'delivery' ) );
-	if ( $delivery ) {
-		$details[] = [
-			'id'    => 'delivery',
-			'title' => 'Доставка',
-			'html'  => '<p class="accordion__answer">' . arctik_lines( $delivery ) . '</p>',
-		];
+	// Многострочные поля: абзацы — пустой строкой.
+	$texts = [
+		'composition' => [ 'Состав и пищевая ценность', arctik_field( 'arctik_product_composition', $product->get_id() ) ],
+		'usage'       => [ 'Как принимать', arctik_product_content( $product, 'usage' ) ],
+		'delivery'    => [ 'Доставка и хранение', arctik_product_content( $product, 'delivery' ) ],
+	];
+	foreach ( $texts as $id => [ $title, $text ] ) {
+		$html = arctik_paragraphs( (string) $text );
+		if ( $html ) {
+			$details[] = [
+				'id'    => $id,
+				'title' => $title,
+				'html'  => '<div class="accordion__answer">' . $html . '</div>',
+			];
+		}
 	}
 
 	// Документ без файла — строка без ссылки.
@@ -161,15 +170,6 @@ function arctik_product_details( WC_Product $product ): array {
 			'id'    => 'docs',
 			'title' => 'Документы',
 			'html'  => '<ul class="accordion__answer accordion__links" data-js-roll-group>' . implode( '', $items ) . '</ul>',
-		];
-	}
-
-	$benefits = array_filter( (array) arctik_product_content( $product, 'benefits' ), fn( $item ) => ! empty( $item['text'] ) );
-	if ( $benefits ) {
-		$details[] = [
-			'id'    => 'benefits',
-			'title' => 'Преимущества',
-			'html'  => '<ul class="accordion__answer">' . implode( '', array_map( fn( $item ) => '<li>' . arctik_text( $item['text'] ) . '</li>', $benefits ) ) . '</ul>',
 		];
 	}
 

@@ -6,8 +6,8 @@
  * цена, старая цена (обычная цена при заданной цене распродажи) и подпись варианта («Попробовать · 15 дней» —
  * описание вариации) задаются в вариациях. Набор на 3 месяца — простой товар, скрытый из каталога.
  *
- * Ингредиенты, преимущества, документы, доставка: общие — в настройках, у товара можно заменить своими
- * (заполнено у товара — выводится его, иначе общее; arctik_product_content()).
+ * Ингредиенты, «Как принимать», «Доставка и хранение», документы: общие — в настройках, у товара можно заменить своими
+ * (заполнено у товара — выводится его, иначе общее; arctik_product_content()). «Состав и пищевая ценность» — только у товара.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -16,7 +16,7 @@ use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
 /**
- * Поля карточки товара, общие для товара и настроек: ингредиенты, преимущества, документы, доставка.
+ * Поля карточки товара, общие для товара и настроек: ингредиенты, «Как принимать», документы, «Доставка и хранение».
  * $prefix — arctik_product_ (у товара) или arctik_products_ (в настройках).
  */
 function arctik_product_content_fields( string $prefix ): array {
@@ -36,13 +36,10 @@ function arctik_product_content_fields( string $prefix ): array {
 				] )
 				->set_header_template( '<%- title %>' ),
 		],
-		'benefits'    => [
-			Field::make( 'complex', "{$prefix}benefits", 'Преимущества' )
-				->setup_labels( [ 'plural_name' => 'Пункты', 'singular_name' => 'пункт' ] )
-				->add_fields( [
-					Field::make( 'text', 'text', 'Пункт' ),
-				] )
-				->set_header_template( '<%- text %>' ),
+		'usage'       => [
+			Field::make( 'textarea', "{$prefix}usage", 'Как принимать' )
+				->set_help_text( 'Пустая строка — новый абзац' )
+				->set_rows( 5 ),
 		],
 		'documents'   => [
 			Field::make( 'complex', "{$prefix}documents", 'Документы' )
@@ -57,8 +54,9 @@ function arctik_product_content_fields( string $prefix ): array {
 				->set_header_template( '<%- title %>' ),
 		],
 		'delivery'    => [
-			Field::make( 'textarea', "{$prefix}delivery", 'Доставка (пункт аккордеона)' )
-				->set_rows( 3 ),
+			Field::make( 'textarea', "{$prefix}delivery", 'Доставка и хранение' )
+				->set_help_text( 'Пустая строка — новый абзац' )
+				->set_rows( 5 ),
 		],
 	];
 }
@@ -97,10 +95,15 @@ Container::make( 'post_meta', 'Оформление товара' )
 	) )
 
 	->add_tab( 'Аккордеоны', array_merge(
-		[ Field::make( 'html', 'arctik_product_accordions_info' )->set_html( '<p>«О продукте» — описание товара (редактор выше). Остальное: пусто — общее из «Настройки сайта → Товары».</p>' ) ],
+		[ Field::make( 'html', 'arctik_product_accordions_info' )->set_html( '<p>Порядок на странице: «О продукте» — описание товара (редактор выше), «Состав и пищевая ценность», «Как принимать», «Доставка и хранение», «Документы». Пустой пункт не выводится; «Как принимать», «Доставка и хранение» и «Документы»: пусто — общее из «Настройки сайта → Товары».</p>' ) ],
+		[
+			Field::make( 'textarea', 'arctik_product_composition', 'Состав и пищевая ценность' )
+				->set_help_text( 'Пустая строка — новый абзац, перенос строки — новая строка' )
+				->set_rows( 8 ),
+		],
+		$arctik_own['usage'],
 		$arctik_own['delivery'],
-		$arctik_own['documents'],
-		$arctik_own['benefits']
+		$arctik_own['documents']
 	) );
 
 // Общее для всех товаров.
@@ -117,7 +120,7 @@ Container::make( 'theme_options', 'Товары' )
 	->add_tab( 'Ингредиенты', $arctik_common['ingredients'] )
 
 	->add_tab( 'Аккордеоны', array_merge(
+		$arctik_common['usage'],
 		$arctik_common['delivery'],
-		$arctik_common['documents'],
-		$arctik_common['benefits']
+		$arctik_common['documents']
 	) );

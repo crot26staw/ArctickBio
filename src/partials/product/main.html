@@ -22,7 +22,7 @@
   <!-- Светлая панель: когда она уходит под шапку, шапка переключается на светлую тему (header.js берёт последний [data-header-theme]) -->
   <div class="product-main__panel summary entry-summary" data-header-theme="light">
     <div class="product-main__heading">
-      <h1 class="product-main__title product_title" data-js-title-reveal data-title-reveal-start="top bottom">Премиальный морской коллаген c дикой черникой</h1>
+      <h1 class="product-main__title product_title" data-js-title-reveal data-title-reveal-start="top bottom">Премиальный морской коллаген с&nbsp;дикой черникой</h1>
       <p class="product-main__price price" data-js-product-price>1&nbsp;440&nbsp;₽</p>
     </div>
 
@@ -32,7 +32,7 @@
         <legend class="product-main__subtitle">Выберите формат</legend>
         <div class="product-main__formats-list">
           <include src="partials/product-format.html" data='{"name": "variation_id", "value": "15", "title": "15&nbsp;саше", "subtitle": "Попробовать · 15&nbsp;дней", "price": "1&nbsp;440&nbsp;₽", "old_price": "1&nbsp;440&nbsp;₽"}'></include>
-          <include src="partials/product-format.html" data='{"name": "variation_id", "value": "30", "title": "30&nbsp;саше", "subtitle": "Попробовать · 15&nbsp;дней", "price": "1&nbsp;440&nbsp;₽", "old_price": "1&nbsp;440&nbsp;₽", "checked": "checked"}'></include>
+          <include src="partials/product-format.html" data='{"name": "variation_id", "value": "30", "title": "30&nbsp;саше", "subtitle": "На&nbsp;месяц · 30&nbsp;дней", "price": "1&nbsp;440&nbsp;₽", "old_price": "1&nbsp;440&nbsp;₽", "checked": "checked"}'></include>
         </div>
       </fieldset>
 
@@ -53,7 +53,7 @@
       </div>
     </form>
 
-    <!-- Описание товара: аккордеоны (js/modules/accordion.js), открыт один пункт -->
+    <!-- Описание товара: аккордеоны (js/modules/accordion.js), открыт один пункт. Тексты — из документа заказчика (scripts/seed/content) -->
     <div class="product-main__details" data-js-accordion-group>
       <div class="accordion accordion--compact is-open" data-js-accordion>
         <button class="accordion__header" type="button" aria-expanded="true" aria-controls="product-about" data-js-accordion-toggle>
@@ -64,26 +64,60 @@
           </span>
         </button>
         <div class="accordion__panel" id="product-about" data-js-accordion-panel>
-          <ul class="accordion__answer">
-            <li>Содержит 100&nbsp;% суточной нормы 20&nbsp;витаминов и&nbsp;минералов</li>
-            <li>Помогает восполнить суточную потребность в&nbsp;питательных веществах благодаря точному дозированию</li>
-            <li>Разработано для&nbsp;усвоения на&nbsp;всех этапах желудочно-кишечного тракта</li>
-            <li>Содержит биодоступные питательные вещества, которые может использовать ваш организм</li>
-            <li>Поддерживает здоровое старение и&nbsp;иммунную функцию</li>
-          </ul>
+          <div class="accordion__answer">
+            <p>ArcticBerries с&nbsp;дикой черникой&nbsp;— готовый к&nbsp;употреблению морской коллаген в&nbsp;формате геля в&nbsp;саше. Коллаген получают из&nbsp;атлантической трески, а&nbsp;ягодную часть составляет натуральная дикорастущая черника. В&nbsp;каждом саше&nbsp;— 5&nbsp;000&nbsp;мг пептидов морского коллагена и&nbsp;5&nbsp;000&nbsp;мг ягод. Производится в&nbsp;Мурманской области.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion accordion--compact" data-js-accordion>
+        <button class="accordion__header" type="button" aria-expanded="false" aria-controls="product-composition" data-js-accordion-toggle>
+          <span class="accordion__question">Состав и&nbsp;пищевая ценность</span>
+          <span class="accordion__icon icon-btn icon-btn--24" aria-hidden="true">
+            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+            <img src="./assets/icons/icn-minus.svg" alt="" width="18" height="18">
+          </span>
+        </button>
+        <div class="accordion__panel" id="product-composition" data-js-accordion-panel>
+          <div class="accordion__answer">
+            <p>Ингредиенты: концентрат гидролизованного коллагена из&nbsp;атлантической трески, дикорастущая черника, агар-агар, бензоат натрия, сорбат калия.</p>
+            <p>В&nbsp;одном саше (15&nbsp;г): 5&nbsp;000&nbsp;мг пептидов морского коллагена и&nbsp;5&nbsp;000&nbsp;мг черники.</p>
+            <p>На&nbsp;100&nbsp;г: белки&nbsp;— 32,7&nbsp;г; жиры&nbsp;— 0,2&nbsp;г; углеводы&nbsp;— 2,5&nbsp;г; энергетическая ценность&nbsp;— 142&nbsp;ккал.</p>
+            <p>15&nbsp;саше&nbsp;— масса нетто 225&nbsp;г.</p>
+            <p>30&nbsp;саше&nbsp;— масса нетто 450&nbsp;г.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion accordion--compact" data-js-accordion>
+        <button class="accordion__header" type="button" aria-expanded="false" aria-controls="product-usage" data-js-accordion-toggle>
+          <span class="accordion__question">Как принимать</span>
+          <span class="accordion__icon icon-btn icon-btn--24" aria-hidden="true">
+            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
+            <img src="./assets/icons/icn-minus.svg" alt="" width="18" height="18">
+          </span>
+        </button>
+        <div class="accordion__panel" id="product-usage" data-js-accordion-panel>
+          <div class="accordion__answer">
+            <p>Принимайте по&nbsp;одному саше в&nbsp;день. Содержимое саше можно запить достаточным количеством воды или&nbsp;растворить в&nbsp;150–200&nbsp;мл воды. Рекомендуется принимать за&nbsp;40&nbsp;минут до&nbsp;еды, отдельно от&nbsp;пищи, запивая несладким негорячим напитком. Рекомендуемый непрерывный курс&nbsp;— не&nbsp;менее 3&nbsp;месяцев. Эффект накопительный.</p>
+            <p>Возможна индивидуальная непереносимость компонентов. Содержит компоненты рыбы.</p>
+          </div>
         </div>
       </div>
 
       <div class="accordion accordion--compact" data-js-accordion>
         <button class="accordion__header" type="button" aria-expanded="false" aria-controls="product-delivery" data-js-accordion-toggle>
-          <span class="accordion__question">Доставка</span>
+          <span class="accordion__question">Доставка и&nbsp;хранение</span>
           <span class="accordion__icon icon-btn icon-btn--24" aria-hidden="true">
             <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
             <img src="./assets/icons/icn-minus.svg" alt="" width="18" height="18">
           </span>
         </button>
         <div class="accordion__panel" id="product-delivery" data-js-accordion-panel>
-          <p class="accordion__answer">Бесплатная доставка от&nbsp;3&nbsp;000&nbsp;₽ Ozon</p>
+          <div class="accordion__answer">
+            <p>Доставляем заказы по&nbsp;всей России из&nbsp;Мурманска. При&nbsp;оформлении заказа можно выбрать СДЭК или&nbsp;Ozon. Стоимость и&nbsp;ориентировочный срок доставки рассчитываются автоматически до&nbsp;оплаты. Передаём заказ в&nbsp;службу доставки в&nbsp;течение 1–2&nbsp;рабочих дней после оплаты.</p>
+            <p>Храните в&nbsp;сухом, прохладном месте, защищённом от&nbsp;солнечных лучей. При&nbsp;температуре от&nbsp;0&nbsp;до&nbsp;+4&nbsp;°C срок годности составляет 12&nbsp;месяцев; при&nbsp;температуре от&nbsp;0&nbsp;до&nbsp;+20&nbsp;°C&nbsp;— не&nbsp;более 6&nbsp;месяцев с&nbsp;даты изготовления. После получения рекомендуем хранить продукт в&nbsp;холодильнике.</p>
+          </div>
         </div>
       </div>
 
@@ -97,28 +131,8 @@
         </button>
         <div class="accordion__panel" id="product-docs" data-js-accordion-panel>
           <ul class="accordion__answer accordion__links" data-js-roll-group>
-            <li><a href="#" download>Аминокислотный профиль</a></li>
-            <li><a href="#" download>Протоколы испытаний продукции</a></li>
-            <li><a href="#" download>Отчет РАН</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="accordion accordion--compact" data-js-accordion>
-        <button class="accordion__header" type="button" aria-expanded="false" aria-controls="product-benefits" data-js-accordion-toggle>
-          <span class="accordion__question">Преимущества</span>
-          <span class="accordion__icon icon-btn icon-btn--24" aria-hidden="true">
-            <img src="./assets/icons/icn-plus.svg" alt="" width="18" height="18">
-            <img src="./assets/icons/icn-minus.svg" alt="" width="18" height="18">
-          </span>
-        </button>
-        <div class="accordion__panel" id="product-benefits" data-js-accordion-panel>
-          <ul class="accordion__answer">
-            <li>Упругость и&nbsp;эластичность кожи</li>
-            <li>Подвижность суставов</li>
-            <li>Связки при&nbsp;физических нагрузках суставов</li>
-            <li>Соединительную ткань при&nbsp;ежедневных нагрузках</li>
-            <li>Здоровый рост волос и&nbsp;ногтей</li>
+            <li><a href="#" download>Декларация соответствия</a></li>
+            <li><a href="#" download>Результаты лабораторных исследований</a></li>
           </ul>
         </div>
       </div>

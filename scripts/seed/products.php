@@ -1,7 +1,7 @@
 <?php
 /**
  * Наполнение товаров (этап «Т»): атрибут «Формат», 5 вкусов (вариативные: 15 / 30 саше), набор на 3 месяца,
- * общие поля товаров — тексты и картинки из статики (цены и фото там заглушки — как в вёрстке).
+ * ингредиенты и картинки из статики (цены и фото там заглушки — как в вёрстке); тексты — content-products.php.
  * Запуск: docker compose run --rm wpcli wp eval-file /seed/products.php
  * Повторный запуск безопасен: товары находятся по ярлыку и обновляются, вариации пересоздаются.
  */
@@ -42,19 +42,17 @@ $gallery   = [
 	arctik_seed_image( 'product-7.webp', 'Упаковка коллагена среди кристаллов льда' ),
 ];
 
-$description = "<ul>\n<li>Содержит 100 % суточной нормы 20 витаминов и минералов</li>\n<li>Помогает восполнить суточную потребность в питательных веществах благодаря точному дозированию</li>\n<li>Разработано для усвоения на всех этапах желудочно-кишечного тракта</li>\n<li>Содержит биодоступные питательные вещества, которые может использовать ваш организм</li>\n<li>Поддерживает здоровое старение и иммунную функцию</li>\n</ul>";
-
-// Вкусы: ярлык => [ название, родительный падеж ягоды ].
+// Вкусы: ярлык => название.
 $flavors = [
-	'kollagen-chernika' => [ 'Коллаген с черникой', 'черникой' ],
-	'kollagen-brusnika' => [ 'Коллаген с брусникой', 'брусникой' ],
-	'kollagen-golubika' => [ 'Коллаген с голубикой', 'голубикой' ],
-	'kollagen-klyukva'  => [ 'Коллаген с клюквой', 'клюквой' ],
-	'kollagen-moroshka' => [ 'Коллаген с морошкой', 'морошкой' ],
+	'kollagen-chernika' => 'Коллаген с черникой',
+	'kollagen-brusnika' => 'Коллаген с брусникой',
+	'kollagen-golubika' => 'Коллаген с голубикой',
+	'kollagen-klyukva'  => 'Коллаген с клюквой',
+	'kollagen-moroshka' => 'Коллаген с морошкой',
 ];
 
 $order = 0;
-foreach ( $flavors as $slug => [ $name, $berry ] ) {
+foreach ( $flavors as $slug => $name ) {
 	/** @var WC_Product_Variable $product */
 	$product = arctik_seed_product( $slug, WC_Product_Variable::class );
 
@@ -72,7 +70,6 @@ foreach ( $flavors as $slug => [ $name, $berry ] ) {
 		'status'             => 'publish',
 		'catalog_visibility' => 'visible',
 		'menu_order'         => $order++,
-		'description'        => $description,
 		'image_id'           => $img_card,
 		'gallery_image_ids'  => $gallery,
 		'default_attributes' => [ 'pa_format' => '30-sashe' ],
@@ -89,7 +86,6 @@ foreach ( $flavors as $slug => [ $name, $berry ] ) {
 			'parent_id'     => $id,
 			'status'        => 'publish',
 			'regular_price' => '1440',
-			'description'   => 'Попробовать · 15 дней',
 			'image_id'      => $img_mini,
 		] );
 		$variation->set_attributes( [ 'pa_format' => $format ] );
@@ -97,9 +93,6 @@ foreach ( $flavors as $slug => [ $name, $berry ] ) {
 	}
 	WC_Product_Variable::sync( $id );
 
-	carbon_set_post_meta( $id, 'arctik_product_full_title', "Премиальный морской коллаген с дикой {$berry}" );
-	carbon_set_post_meta( $id, 'arctik_product_mini_title', 'Морской коллаген' );
-	carbon_set_post_meta( $id, 'arctik_product_mini_subtitle', "с дикой {$berry}" );
 	carbon_set_post_meta( $id, 'arctik_product_hover_image', $img_hover );
 	carbon_set_post_meta( $id, 'arctik_product_mini_image', $img_mini );
 }
@@ -113,13 +106,10 @@ $set->set_props( [
 	'catalog_visibility' => 'search',
 	'menu_order'         => 100,
 	'regular_price'      => '1440',
-	'description'        => $description,
 	'image_id'           => arctik_seed_image( 'offer-plan.webp', 'Набор на 3 месяца' ),
 	'gallery_image_ids'  => $gallery,
 ] );
 $set_id = $set->save();
-carbon_set_post_meta( $set_id, 'arctik_product_mini_title', 'Набор на 3 месяца' );
-carbon_set_post_meta( $set_id, 'arctik_product_mini_subtitle', 'Спеццена' );
 
 // Общие поля товаров (Настройки сайта → Товары).
 $ingredients = [
@@ -134,19 +124,9 @@ carbon_set_theme_option( 'arctik_products_ingredients', array_map(
 	fn( $i ) => [ 'image' => arctik_seed_image( $i[0] ), 'title' => $i[1], 'text' => $i[2] ],
 	$ingredients
 ) );
-carbon_set_theme_option( 'arctik_products_benefits', array_map( fn( $t ) => [ 'text' => $t ], [
-	'Упругость и эластичность кожи',
-	'Подвижность суставов',
-	'Связки при физических нагрузках суставов',
-	'Соединительную ткань при ежедневных нагрузках',
-	'Здоровый рост волос и ногтей',
-] ) );
-carbon_set_theme_option( 'arctik_products_documents', array_map( fn( $t ) => [ 'title' => $t, 'file' => '' ], [
-	'Аминокислотный профиль',
-	'Протоколы испытаний продукции',
-	'Отчет РАН',
-] ) );
-carbon_set_theme_option( 'arctik_products_delivery', 'Бесплатная доставка от 3 000 ₽ Ozon' );
 carbon_set_theme_option( 'arctik_products_delivery_note', 'Бесплатная доставка от 3 000 ₽ Ozon' );
 
 WP_CLI::success( 'Товары и общие поля товаров заполнены' );
+
+// Тексты товаров (названия, подписи форматов, аккордеоны) — из документа заказчика.
+require __DIR__ . '/content-products.php';

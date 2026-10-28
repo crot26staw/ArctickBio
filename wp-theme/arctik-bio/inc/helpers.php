@@ -157,6 +157,16 @@ function arctik_lines( ?string $text, string $br_class = '' ): string {
 }
 
 /**
+ * Текст из многострочного поля абзацами: пустая строка — новый <p class="$class">, перенос строки — <br>.
+ */
+function arctik_paragraphs( ?string $text, string $class = '' ): string {
+	$blocks = array_filter( array_map( 'trim', preg_split( '/\R\s*\R/', trim( (string) $text ) ) ) );
+	$open   = $class ? '<p class="' . esc_attr( $class ) . '">' : '<p>';
+
+	return implode( '', array_map( fn( $block ) => $open . arctik_lines( $block ) . '</p>', $blocks ) );
+}
+
+/**
  * Иконки темы (assets/icons/icn-*.svg) для выбора в полях: [ 'sun' => 'Солнце', … ].
  */
 function arctik_icon_options(): array {

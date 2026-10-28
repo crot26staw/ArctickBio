@@ -24,6 +24,9 @@ const ARCTIK_PICKUP_SERVICES = [
 	'cdek' => [ 'name' => 'СДЭК', 'logo' => 'images/logo-cdek.webp' ],
 ];
 
+// Службы в попапе пункта выдачи (Озон — когда будет его API)
+const ARCTIK_PICKUP_ACTIVE = [ 'cdek' ];
+
 // Срок хранения в пункте выдачи, дней (в статике — «Срок хранения заказа — 14 дней», checkout.js)
 const ARCTIK_PICKUP_STORAGE_DAYS = 14;
 

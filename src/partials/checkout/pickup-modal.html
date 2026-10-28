@@ -1,7 +1,8 @@
 <!--
   Попап выбора пункта выдачи (макет 18270:36436, список служб — 18271:38011; планшет 18270:37670; мобилка — 18263:87991 «На карте» и 18263:88439 «Списком»).
   Открывает [data-js-modal-open="pickup"] (js/modules/modal.js), выбор — js/modules/pickup.js.
-  Карта — статичная картинка из макета: в WordPress на её месте Яндекс Карты (контейнер [data-js-pickup-map], метки — из того же списка пунктов).
+  Карта — статичная картинка из макета, город — демо (подсказки из короткого списка, пункты не меняются).
+  В WordPress: Яндекс Карты в [data-js-pickup-ymap], пункты и город — из API СДЭК (window.arctik.pickup), список — из <template data-js-pickup-point-template>.
 -->
 <div class="map-modal" id="pickup" data-js-modal="pickup" data-js-pickup inert>
   <div class="map-modal__overlay" data-js-modal-close></div>
@@ -33,8 +34,8 @@
         <img src="./assets/icons/map-marker-ozon.svg" alt="" width="35" height="35">
       </button>
 
-      <button class="map-modal__city" type="button">
-        <span>Москва</span>
+      <button class="map-modal__city" type="button" data-js-pickup-city-open>
+        <span data-js-pickup-city-name>Москва</span>
         <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.74935 10.7507L13.5827 6.91732L14.7493 8.08398L9.74935 13.084L4.74935 8.08398L5.91602 6.91732L9.74935 10.7507Z"/></svg>
       </button>
 
@@ -62,10 +63,16 @@
       </div>
 
       <div class="map-modal__controls">
-        <button class="map-modal__city-edit" type="button">
-          <span>Москва, Россия</span>
+        <button class="map-modal__city-edit" type="button" data-js-pickup-city-open>
+          <span data-js-pickup-city-label>Москва, Россия</span>
           <img src="./assets/icons/icn-edit.svg" alt="" width="16" height="16">
         </button>
+
+        <!-- Выбор города (макета нет): поле с подсказками вместо строки города, открывается карандашом или городом на карте (мобилка) -->
+        <div class="map-modal__suggest" hidden data-js-pickup-city>
+          <include src="partials/form-field.html" data='{"id": "pickup-city", "type": "text", "name": "pickup_city", "label": "Город", "autocomplete": "off", "mod": "field--light", "attrs": "role=\"combobox\" aria-expanded=\"false\" aria-controls=\"pickup-city-suggest\" aria-autocomplete=\"list\" data-js-pickup-city-input"}'></include>
+          <ul class="map-modal__suggest-list" id="pickup-city-suggest" role="listbox" aria-label="Подсказки города" hidden data-js-pickup-city-list></ul>
+        </div>
 
         <div class="select" data-js-pickup-select>
           <button class="select__btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="pickup-services" data-js-pickup-select-btn>
@@ -92,6 +99,7 @@
         <include src="partials/checkout/pickup-point.html" data='{"id": "p5", "service": "cdek", "title": "ПВЗ СДЭК", "address": "Москва улица Хамовнический Вал 24", "price": "бесплатно", "date": "завтра"}'></include>
         <include src="partials/checkout/pickup-point.html" data='{"id": "p6", "service": "cdek", "title": "ПВЗ СДЭК", "address": "Москва улица Хамовнический Вал 24", "price": "бесплатно", "date": "завтра"}'></include>
       </ul>
+      <p class="map-modal__empty" hidden data-js-pickup-empty>В&nbsp;этом городе пунктов выдачи нет&nbsp;— выберите другой город</p>
     </div>
   </div>
 </div>

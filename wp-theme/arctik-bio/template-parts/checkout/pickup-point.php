@@ -15,8 +15,8 @@ defined( 'ABSPATH' ) || exit;
 			<span class="pickup-point__title" data-js-pickup-point-title><?php echo esc_html( $args['title'] ?? '' ); ?></span>
 			<span class="pickup-point__info">
 				<span data-js-pickup-point-address><?php echo esc_html( $args['address'] ?? '' ); ?></span>
-				<span class="pickup-point__price">стоимость <span aria-hidden="true">—</span> <?php echo esc_html( $args['price'] ?? '' ); ?></span>
-				<span>дата доставки&nbsp;— <?php echo esc_html( $args['date'] ?? '' ); ?></span>
+				<span class="pickup-point__price">стоимость <span aria-hidden="true">—</span> <span data-js-pickup-point-price><?php echo esc_html( $args['price'] ?? '' ); ?></span></span>
+				<span>дата доставки&nbsp;— <span data-js-pickup-point-date><?php echo esc_html( $args['date'] ?? '' ); ?></span></span>
 			</span>
 		</span>
 	</label>

@@ -148,6 +148,12 @@ $map-modal-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     @include cover-img;
   }
 
+  // Яндекс Карта (WordPress) на месте картинки
+  &__ymap {
+    position: absolute;
+    inset: 0;
+  }
+
   &__marker {
     position: absolute;
     top: var(--y);
@@ -224,6 +230,13 @@ $map-modal-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     @include media(mobile) {
       top: auto;
       bottom: 0;
+    }
+  }
+
+  // Мобилка: над подписью и кнопкой «В Карты» Яндекса
+  &__ymap ~ &__services {
+    @include media(mobile) {
+      bottom: rem(28);
     }
   }
 
@@ -319,6 +332,11 @@ $map-modal-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       height: rem(16);
     }
 
+    // Открыт выбор города
+    &[hidden] {
+      display: none;
+    }
+
     @include media(mobile) {
       display: none;
     }
@@ -334,6 +352,27 @@ $map-modal-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
   &__list {
     padding-bottom: rem(20);
+    transition: opacity $transition;
+
+    // Пункты загружаются (смена города)
+    [aria-busy='true'] & {
+      opacity: 0.4;
+    }
+  }
+
+  // Нет пунктов в городе (макета нет)
+  &__empty {
+    @include body-m;
+    padding: rem(16) rem(20) rem(20);
+    color: var(--color-fg-muted);
+
+    &[hidden] {
+      display: none;
+    }
+
+    @include media(mobile) {
+      padding-inline: rem(10);
+    }
   }
 
   // ---------- Адрес курьера ----------

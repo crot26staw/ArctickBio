@@ -22,13 +22,9 @@ if ( ! isset( $arctik_gateways[ $arctik_gateway ] ) ) {
 	$arctik_gateway = (string) array_key_first( $arctik_gateways );
 }
 
-// Способы доставки: выбран сохранённый в сессии или первый (в статике — пункт выдачи).
+// Способы доставки (тариф СДЭК до города покупателя): выбран сохранённый в сессии или первый (в статике — пункт выдачи).
 $arctik_rates     = arctik_shipping_rates();
-$arctik_rate_ids  = array_map( fn( $rate ) => $rate['rate']->get_id(), $arctik_rates );
-$arctik_rate      = WC()->session->get( 'chosen_shipping_methods' )[0] ?? '';
-if ( ! in_array( $arctik_rate, $arctik_rate_ids, true ) ) {
-	$arctik_rate = (string) ( $arctik_rate_ids[0] ?? '' );
-}
+$arctik_rate      = arctik_checkout_chosen_rate( $arctik_rates );
 $arctik_slot      = arctik_shipping_slot( $arctik_rate );
 $arctik_courier   = current( array_filter( $arctik_rates, fn( $rate ) => 'courier' === $rate['slot'] ) );
 $arctik_address   = (string) $checkout->get_value( 'shipping_address_1' );
@@ -96,23 +92,7 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 
 			<fieldset class="checkout__section checkout__section--delivery woocommerce-shipping-methods">
 				<legend class="checkout__subtitle">Способ получения</legend>
-				<div class="checkout__options checkout__options--delivery">
-					<?php foreach ( $arctik_rates as [ 'rate' => $arctik_r, 'slot' => $arctik_s, 'term' => $arctik_term ] ) : ?>
-						<?php $arctik_cost = (float) $arctik_r->get_cost() + (float) $arctik_r->get_shipping_tax(); ?>
-						<label class="checkout-ship">
-							<input class="checkout-ship__input shipping_method" type="radio" name="shipping_method[0]" value="<?php echo esc_attr( $arctik_r->get_id() ); ?>" <?php checked( $arctik_r->get_id(), $arctik_rate ); ?> data-js-checkout-shipping="<?php echo esc_attr( $arctik_s ); ?>">
-							<span class="checkout-ship__title"><?php echo arctik_text( $arctik_r->get_label() ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
-							<span class="checkout-ship__meta">
-								<?php echo $arctik_term ? arctik_text( $arctik_term ) . ', ' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-								<?php if ( $arctik_cost > 0 ) : ?>
-									<?php echo esc_html( arctik_price_text( $arctik_cost ) ); ?>
-								<?php else : ?>
-									<span class="checkout-ship__free">бесплатно</span>
-								<?php endif; ?>
-							</span>
-						</label>
-					<?php endforeach; ?>
-				</div>
+				<?php get_template_part( 'template-parts/checkout/rates', null, [ 'rates' => $arctik_rates, 'chosen' => $arctik_rate ] ); ?>
 
 				<?php /* Пункт выдачи: пока не выбран — кнопка «Пункт выдачи», после выбора — служба и адрес (макет 18271:39375) */ ?>
 				<div class="checkout__delivery" <?php echo 'pickup' === $arctik_slot ? '' : 'hidden'; ?> data-js-checkout-panel="pickup">

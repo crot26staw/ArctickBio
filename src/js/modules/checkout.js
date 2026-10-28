@@ -1,5 +1,6 @@
 import { validateForm, setFieldError } from './field.js';
 import { initSwipeButtons } from './swipe-button.js';
+import { cartRequest } from './cart-api.js';
 
 const MOBILE_QUERY = '(max-width: 767px)';
 const ERROR_CLASS = 'is-error';
@@ -11,11 +12,14 @@ const FAIL_MESSAGE = 'Не удалось оформить заказ, попр
  * - Способ получения [data-js-checkout-shipping="pickup|courier"]: показывает блок [data-js-checkout-panel] — пункт выдачи или курьер.
  * - «Оформляем 2 товара» / мобильная строка «Итого» [data-js-checkout-toggle] сворачивает список товаров;
  *   на мобилке список изначально свёрнут (макет 18270:36258).
- * - Выбор пункта выдачи / адреса приходит из попапов событиями pickup:choose / address:choose (pickup.js, address.js).
+ * - Выбор пункта выдачи / адреса приходит из попапов событиями pickup:choose / address:choose (pickup.js, address.js);
+ *   pickup:clear (сменили город) сбрасывает выбранный пункт.
  * - Отправка: поля (field.js), выбран пункт выдачи / указан адрес курьера, согласие с офертой. В статике — переход на «Заказ оформлен».
  *   В WordPress (window.arctik.checkout — inc/checkout.php) — POST в ?wc-ajax=checkout: успех — переход по redirect,
  *   ошибки WC — у полей по data-id, у согласия — рамка, прочие (товар закончился) — под кнопкой оплаты [data-js-checkout-error="general"].
  *   Итоги [data-js-checkout-summary] после промокода обновляются фрагментами (cart-api.js) — кнопке оплаты заново ховер.
+ *   Смена способа получения — wc-ajax arctik_checkout_shipping: стоимость доставки СДЭК в итогах; способы [data-js-checkout-rates]
+ *   тоже приходят фрагментом (после смены города — новые цены и сроки).
  */
 export function initCheckout() {
   const form = document.querySelector('[data-js-checkout]');
@@ -33,6 +37,7 @@ export function initCheckout() {
   const pickupIcon = form.querySelector('[data-js-checkout-pickup-icon] img');
   const pickupTitle = form.querySelector('[data-js-checkout-pickup-title]');
   const pickupText = form.querySelector('[data-js-checkout-pickup-text]');
+  const pickupDefault = { icon: pickupIcon.getAttribute('src'), title: pickupTitle.textContent };
   const addressValue = form.querySelector('[data-js-checkout-address-value]');
   const addressText = form.querySelector('[data-js-checkout-address-text]');
   const courierError = form.querySelector('[data-js-checkout-error="courier"]');
@@ -62,8 +67,18 @@ export function initCheckout() {
     list.hidden = !expanded;
   };
 
+  // Способ получения в WordPress: стоимость доставки — в итогах, фокус остаётся на новой радиокнопке (блок заменён фрагментом)
+  const saveShipping = async (input) => {
+    const focused = document.activeElement === input;
+    await cartRequest('arctik_checkout_shipping', { method: input.value });
+    if (focused) form.querySelector('[data-js-checkout-shipping]:checked')?.focus();
+  };
+
   form.addEventListener('change', (event) => {
-    if (event.target.matches('[data-js-checkout-shipping]')) showPanel();
+    if (event.target.matches('[data-js-checkout-shipping]')) {
+      showPanel();
+      if (api) saveShipping(event.target);
+    }
     if (event.target === termsInput) terms.classList.remove(ERROR_CLASS);
   });
 
@@ -78,6 +93,16 @@ export function initCheckout() {
     pickupText.hidden = false;
     if (detail.logo) pickupIcon.src = detail.logo;
     pickupError.hidden = true;
+  });
+
+  document.addEventListener('pickup:clear', () => {
+    pickupValue.value = '';
+    pickupAddress.value = '';
+    pickupService.value = '';
+    pickupTitle.textContent = pickupDefault.title;
+    pickupText.textContent = '';
+    pickupText.hidden = true;
+    pickupIcon.src = pickupDefault.icon;
   });
 
   document.addEventListener('address:choose', ({ detail }) => {
@@ -166,7 +191,13 @@ export function initCheckout() {
     else window.location.assign(form.getAttribute('action'));
   });
 
-  if (api) document.addEventListener('cart:updated', initSwipeButtons);
+  if (api) {
+    document.addEventListener('cart:updated', () => {
+      initSwipeButtons();
+      // Способы получения пришли фрагментом — блок курьера / пункта по выбранному
+      showPanel();
+    });
+  }
 
   showPanel();
   setExpanded(!window.matchMedia(MOBILE_QUERY).matches);

@@ -43,6 +43,8 @@ add_action( 'wp_enqueue_scripts', function () {
 add_filter( 'arctik_js_data', function ( array $data ): array {
 	if ( arctik_is_checkout_form() ) {
 		$data['checkout'] = [ 'endpoint' => WC_AJAX::get_endpoint( 'checkout' ) ];
+		// Попап пункта выдачи (pickup.js): запросы — через cart-api.js, здесь только ключ карт
+		$data['pickup'] = [ 'mapKey' => (string) arctik_option( 'arctik_yandex_maps_key' ) ];
 	}
 
 	return $data;
@@ -71,6 +73,16 @@ add_filter( 'woocommerce_checkout_posted_data', function ( array $data ): array 
 } );
 
 /**
+ * ID выбранной ставки доставки: из сессии WC, если она есть среди ставок, иначе первая ('' — ставок нет).
+ */
+function arctik_checkout_chosen_rate( array $rates ): string {
+	$ids    = array_map( fn( $rate ) => $rate['rate']->get_id(), $rates );
+	$chosen = WC()->session->get( 'chosen_shipping_methods' )[0] ?? '';
+
+	return in_array( $chosen, $ids, true ) ? $chosen : (string) ( $ids[0] ?? '' );
+}
+
+/**
  * Способ получения из формы: pickup / courier / ''.
  */
 function arctik_checkout_slot( array $data ): string {
@@ -93,7 +105,8 @@ add_action( 'woocommerce_after_checkout_validation', function ( array $data, WP_
 	$slot = arctik_checkout_slot( $data );
 
 	// phpcs:disable WordPress.Security.NonceVerification.Missing -- nonce проверил WC_Checkout::process_checkout()
-	if ( 'pickup' === $slot && empty( $_POST['pickup_point'] ) ) {
+	// Пункт — из пунктов СДЭК города покупателя (город могли сменить после выбора пункта)
+	if ( 'pickup' === $slot && ! arctik_cdek_point( arctik_city()['code'], sanitize_text_field( wp_unslash( $_POST['pickup_point'] ?? '' ) ) ) ) {
 		$errors->add( 'shipping', 'Выберите пункт выдачи' );
 	}
 	if ( 'courier' === $slot && '' === trim( (string) ( $_POST['shipping_address_1'] ?? '' ) ) ) {
@@ -110,11 +123,18 @@ add_action( 'woocommerce_checkout_create_order', function ( WC_Order $order, arr
 	// phpcs:disable WordPress.Security.NonceVerification.Missing
 	$slot = arctik_checkout_slot( $data );
 
+	// Город СДЭК — для передачи заказа в СДЭК (Оф2б)
+	$city = arctik_city();
+	$order->update_meta_data( '_arctik_cdek_city', $city['code'] );
+	$order->set_shipping_city( $city['name'] );
+
 	if ( 'pickup' === $slot ) {
-		$address = sanitize_text_field( wp_unslash( $_POST['pickup_point_address'] ?? '' ) );
-		$order->update_meta_data( '_arctik_pickup_point', sanitize_text_field( wp_unslash( $_POST['pickup_point'] ?? '' ) ) );
+		// Адрес — из справочника СДЭК (проверен в woocommerce_after_checkout_validation), не из формы
+		$point   = arctik_cdek_point( $city['code'], sanitize_text_field( wp_unslash( $_POST['pickup_point'] ?? '' ) ) );
+		$address = 'СДЭК, ' . $city['name'] . ', ' . $point['address'];
+		$order->update_meta_data( '_arctik_pickup_point', $point['id'] );
 		$order->update_meta_data( '_arctik_pickup_address', $address );
-		$order->update_meta_data( '_arctik_pickup_service', sanitize_key( wp_unslash( $_POST['pickup_point_service'] ?? '' ) ) );
+		$order->update_meta_data( '_arctik_pickup_service', 'cdek' );
 		$order->set_shipping_address_1( $address );
 	}
 
@@ -210,12 +230,17 @@ function arctik_checkout_total(): string {
 	return arctik_price_text( (float) WC()->cart->get_total( 'edit' ) );
 }
 
-// Промокод на оформлении (cart-api.js) — итоги и сумма в свёрнутом списке обновляются фрагментами, как корзина-попап.
+// Промокод, город и способ получения на оформлении (cart-api.js) — итоги, сумма в свёрнутом списке и способы получения обновляются фрагментами, как корзина-попап.
 add_filter( 'woocommerce_add_to_cart_fragments', function ( array $fragments ): array {
 	ob_start();
 	get_template_part( 'template-parts/checkout/summary' );
 	$fragments['[data-js-checkout-summary]'] = (string) ob_get_clean();
 	$fragments['[data-js-checkout-total]']   = '<span class="checkout__toggle-price" data-js-checkout-total>' . esc_html( arctik_checkout_total() ) . '</span>';
+
+	// Способы получения — стоимость и срок зависят от города (inc/ajax/delivery.php)
+	ob_start();
+	get_template_part( 'template-parts/checkout/rates' );
+	$fragments['[data-js-checkout-rates]'] = (string) ob_get_clean();
 
 	return $fragments;
 }, 20 );

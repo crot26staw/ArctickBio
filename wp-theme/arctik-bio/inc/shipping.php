@@ -1,9 +1,10 @@
 <?php
 /**
- * Способы доставки оформления заказа: «Пункт выдачи» (arctik_pickup) и «Курьер» (arctik_courier).
- * Добавляются в зону доставки (WooCommerce → Настройки → Доставка), у каждого — название, стоимость и срок («Завтра»).
- * Блок способа в форме (pickup / courier) — по ID способа, arctik_shipping_slot().
- * Пункт выдачи, адрес курьера и дата пока выбираются в демо-попапах (этап Оф2 — службы доставки и карта).
+ * Способы доставки оформления заказа: «Пункт выдачи» (arctik_pickup) и «Курьер» (arctik_courier) — СДЭК.
+ * Добавляются в зону доставки (WooCommerce → Настройки → Доставка), у каждого — название и наценка.
+ * Стоимость и срок — тариф СДЭК (inc/cdek.php) до города покупателя (arctik_city()); тарифы — «Настройки сайта → Доставка».
+ * СДЭК не ответил или не возит в город — способа нет. Блок способа в форме (pickup / courier) — по ID способа, arctik_shipping_slot().
+ * Адрес курьера и дата пока — демо-попап и даты с завтрашнего дня (этап Оф2б — DaData и даты по сроку СДЭК).
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -20,6 +21,15 @@ function arctik_shipping_slot( string $rate_or_method_id ): string {
 	return ARCTIK_SHIPPING_SLOTS[ strtok( $rate_or_method_id, ':' ) ] ?? '';
 }
 
+/**
+ * Тариф СДЭК для блока способа (pickup / courier) до города и упаковки пакета WC: результат arctik_cdek_tariff() или null.
+ */
+function arctik_shipping_quote( string $slot, int $city_code, array $contents ): ?array {
+	$tariff = (int) arctik_option( 'pickup' === $slot ? 'arctik_cdek_tariff_pickup' : 'arctik_cdek_tariff_courier' );
+
+	return arctik_cdek_tariff( $tariff ?: ( 'pickup' === $slot ? 136 : 137 ), $city_code, arctik_cdek_package( $contents ) );
+}
+
 if ( class_exists( 'WC_Shipping_Method' ) ) {
 	abstract class Arctik_Shipping_Method extends WC_Shipping_Method {
 		public function __construct( $instance_id = 0 ) {
@@ -31,17 +41,11 @@ if ( class_exists( 'WC_Shipping_Method' ) ) {
 					'type'    => 'text',
 					'default' => $this->method_title,
 				],
-				'cost'  => [
-					'title'       => 'Стоимость, ₽',
+				'markup' => [
+					'title'       => 'Наценка, ₽',
 					'type'        => 'price',
 					'default'     => '0',
-					'description' => '0 — «бесплатно»',
-				],
-				'term'  => [
-					'title'       => 'Срок',
-					'type'        => 'text',
-					'default'     => 'Завтра',
-					'description' => 'Подпись под названием: «Завтра, бесплатно»',
+					'description' => 'Прибавляется к тарифу СДЭК (можно отрицательную — скидка на доставку)',
 				],
 			];
 			$this->title = $this->get_option( 'title' );
@@ -50,11 +54,21 @@ if ( class_exists( 'WC_Shipping_Method' ) ) {
 		}
 
 		public function calculate_shipping( $package = [] ) {
+			$slot  = arctik_shipping_slot( $this->id );
+			$quote = arctik_shipping_quote( $slot, (int) ( $package['arctik_city_code'] ?? arctik_city()['code'] ), $package['contents'] ?? [] );
+			if ( ! $quote ) {
+				return;
+			}
+
 			$this->add_rate( [
 				'id'        => $this->get_rate_id(),
 				'label'     => $this->title,
-				'cost'      => (float) $this->get_option( 'cost' ),
-				'meta_data' => [ 'term' => $this->get_option( 'term' ) ],
+				'cost'      => max( 0, $quote['sum'] + (float) $this->get_option( 'markup' ) ),
+				'meta_data' => [
+					'term'     => arctik_days_text( $quote['min'], $quote['max'] ),
+					'dates'    => arctik_dates_text( $quote['date_min'], $quote['date_max'] ),
+					'date_min' => $quote['date_min'],
+				],
 			] );
 		}
 	}
@@ -63,7 +77,7 @@ if ( class_exists( 'WC_Shipping_Method' ) ) {
 		public function __construct( $instance_id = 0 ) {
 			$this->id                 = 'arctik_pickup';
 			$this->method_title       = 'Пункт выдачи';
-			$this->method_description = 'Самовывоз из пункта выдачи (Озон, СДЭК) — пункт выбирается на карте.';
+			$this->method_description = 'Пункт выдачи СДЭК (позже — Озон): пункт выбирается на карте, стоимость и срок — тариф СДЭК.';
 			parent::__construct( $instance_id );
 		}
 	}
@@ -72,7 +86,7 @@ if ( class_exists( 'WC_Shipping_Method' ) ) {
 		public function __construct( $instance_id = 0 ) {
 			$this->id                 = 'arctik_courier';
 			$this->method_title       = 'Курьер';
-			$this->method_description = 'Доставка курьером по адресу, с выбором даты.';
+			$this->method_description = 'Курьер СДЭК по адресу, с выбором даты; стоимость и срок — тариф СДЭК.';
 			parent::__construct( $instance_id );
 		}
 	}
@@ -86,7 +100,7 @@ if ( class_exists( 'WC_Shipping_Method' ) ) {
 }
 
 /**
- * Ставки доставки корзины для формы: [ [ 'rate' => WC_Shipping_Rate, 'slot' => pickup|courier, 'term' => 'Завтра' ], … ].
+ * Ставки доставки корзины для формы: [ [ 'rate' => WC_Shipping_Rate, 'slot' => pickup|courier, 'term' => '3–4 дня', 'dates' => '31 окт – 1 нояб' ], … ].
  */
 function arctik_shipping_rates(): array {
 	$package = WC()->shipping()->get_packages()[0] ?? [];
@@ -96,9 +110,10 @@ function arctik_shipping_rates(): array {
 		$slot = arctik_shipping_slot( $rate->get_id() );
 		if ( $slot ) {
 			$rates[] = [
-				'rate' => $rate,
-				'slot' => $slot,
-				'term' => (string) ( $rate->get_meta_data()['term'] ?? '' ),
+				'rate'  => $rate,
+				'slot'  => $slot,
+				'term'  => (string) ( $rate->get_meta_data()['term'] ?? '' ),
+				'dates' => (string) ( $rate->get_meta_data()['dates'] ?? '' ),
 			];
 		}
 	}

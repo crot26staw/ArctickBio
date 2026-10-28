@@ -186,8 +186,11 @@ src/
                    cart-api.js (только WordPress, window.arctik.cart: POST на ?wc-ajax=…, фрагменты { селектор: разметка } заменяют элементы целиком → событие cart:updated; в статике объекта нет — модули в демо-режиме)
                    promo.js (промокод [data-js-promo]: is-filled — крестик очистки и синяя кнопка; «Применить»/Enter — демо: всегда «Промокод не найден» (is-error); в WordPress — купоны WC через cart-api.js, применённый код остаётся в поле, крестик снимает)
                    modal.js (попапы с картой на оформлении: [data-js-modal="имя"], [data-js-modal-open], [data-js-modal-close]; openModal / closeModal)
-                   pickup.js (попап ПВЗ: службы — метки на карте и список «Службы выдачи», пункты, вкладки мобилки; событие pickup:choose)
-                   address.js (попап адреса: подсказки-combobox, событие address:choose)
+                   pickup.js (попап ПВЗ: службы — метки на карте и список «Службы выдачи», пункты, вкладки мобилки, выбор города; события pickup:choose / pickup:clear;
+                   в статике — демо-карта и демо-города, в WordPress — Яндекс Карта и пункты СДЭК из API)
+                   address.js (попап адреса: подсказки, событие address:choose)
+                   suggest.js (поле с подсказками — combobox: initSuggest({ input, list, source, onPick }); город ПВЗ, адрес курьера)
+                   ymaps.js (загрузка Яндекс Карт JS API 2.1 один раз, loadYmaps(key))
                    checkout.js (форма оформления: способ получения [data-js-checkout-shipping="pickup|courier"], свёртка товаров, проверка (пункт выдачи / адрес курьера / согласие); в статике — демо-переход на order-received.html, в WordPress — ?wc-ajax=checkout, ошибки сервера у полей и под кнопкой оплаты)
                    order-success.js (анимация «Заказ оформлен»), order-track.js (шкала статусов: is-current и «капсула» за текущим и следующим шагом)
                    account.js (ЛК: вкладки заказов, кнопки форм аккаунта, адреса — добавить/изменить/удалить, свёртка «Ваш заказ»)

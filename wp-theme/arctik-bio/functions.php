@@ -17,12 +17,14 @@ foreach ( [
 	'product',
 	'cart',
 	'auth',
+	'cdek',
 	'shipping',
 	'payment',
 	'checkout',
 	'order',
 	'ajax/cart',
 	'ajax/auth',
+	'ajax/delivery',
 ] as $arctik_file ) {
 	require_once get_theme_file_path( "inc/{$arctik_file}.php" );
 }

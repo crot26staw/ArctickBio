@@ -1,14 +1,18 @@
 <?php
 /**
- * Попап выбора пункта выдачи (src/partials/checkout/pickup-modal.html). Пока демо: карта — картинка, службы и пункты — из статики (этап Оф2 — Яндекс Карты и API служб).
+ * Попап выбора пункта выдачи (src/partials/checkout/pickup-modal.html). Карта — Яндекс Карты, город и пункты — API СДЭК
+ * (pickup.js запрашивает их у inc/ajax/delivery.php при открытии; window.arctik.pickup — inc/checkout.php).
+ * Службы — ARCTIK_PICKUP_ACTIVE (пока только СДЭК; Озон — когда будет его API). Пункт списка — <template> из pickup-point.php.
  */
 
 defined( 'ABSPATH' ) || exit;
+
+$arctik_city     = arctik_city();
+$arctik_services = array_intersect_key( ARCTIK_PICKUP_SERVICES, array_flip( ARCTIK_PICKUP_ACTIVE ) );
 ?>
 <?php /*
 	Попап выбора пункта выдачи (макет 18270:36436, список служб — 18271:38011; планшет 18270:37670; мобилка — 18263:87991 «На карте» и 18263:88439 «Списком»).
 	Открывает [data-js-modal-open="pickup"] (js/modules/modal.js), выбор — js/modules/pickup.js.
-	Карта — статичная картинка из макета: в WordPress на её месте Яндекс Карты (контейнер [data-js-pickup-map], метки — из того же списка пунктов).
 */ ?>
 <div class="map-modal" id="pickup" data-js-modal="pickup" data-js-pickup inert>
 	<div class="map-modal__overlay" data-js-modal-close></div>
@@ -26,35 +30,21 @@ defined( 'ABSPATH' ) || exit;
 		</div>
 
 		<div class="map-modal__map" data-js-pickup-map>
-			<img class="map-modal__map-img" src="<?php echo esc_url( arctik_asset( 'images/checkout-map.webp' ) ); ?>" alt="" width="1152" height="998">
-			<button class="map-modal__marker" type="button" style="--x: 59.9%; --y: 31.2%;" aria-label="ПВЗ Озон, Москва улица Хамовнический Вал 24" data-js-pickup-marker="p1" data-service="ozon">
-				<img src="<?php echo esc_url( arctik_asset( 'icons/map-marker-ozon.svg' ) ); ?>" alt="" width="35" height="35">
-			</button>
-			<button class="map-modal__marker" type="button" style="--x: 43.3%; --y: 25.8%;" aria-label="ПВЗ Озон, Москва улица Хамовнический Вал 24" data-js-pickup-marker="p2" data-service="ozon">
-				<img src="<?php echo esc_url( arctik_asset( 'icons/map-marker-ozon.svg' ) ); ?>" alt="" width="35" height="35">
-			</button>
-			<button class="map-modal__marker" type="button" style="--x: 47.1%; --y: 42.5%;" aria-label="ПВЗ Озон, Москва улица Хамовнический Вал 24" data-js-pickup-marker="p3" data-service="ozon">
-				<img src="<?php echo esc_url( arctik_asset( 'icons/map-marker-ozon.svg' ) ); ?>" alt="" width="35" height="35">
-			</button>
-			<button class="map-modal__marker" type="button" style="--x: 21.3%; --y: 81.3%;" aria-label="ПВЗ Озон, Москва улица Хамовнический Вал 24" data-js-pickup-marker="p4" data-service="ozon">
-				<img src="<?php echo esc_url( arctik_asset( 'icons/map-marker-ozon.svg' ) ); ?>" alt="" width="35" height="35">
-			</button>
+			<div class="map-modal__ymap" data-js-pickup-ymap></div>
 
-			<button class="map-modal__city" type="button">
-				<span>Москва</span>
+			<button class="map-modal__city" type="button" data-js-pickup-city-open>
+				<span data-js-pickup-city-name><?php echo esc_html( $arctik_city['name'] ); ?></span>
 				<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.74935 10.7507L13.5827 6.91732L14.7493 8.08398L9.74935 13.084L4.74935 8.08398L5.91602 6.91732L9.74935 10.7507Z"/></svg>
 			</button>
 
 			<?php /* Фильтр служб на карте */ ?>
 			<div class="map-modal__services">
-				<button class="service-chip" type="button" aria-pressed="true" data-js-pickup-chip="ozon">
-					<img class="service-chip__logo" src="<?php echo esc_url( arctik_asset( 'icons/logo-ozon.svg' ) ); ?>" alt="" width="24" height="24">
-					<span>Озон</span>
-				</button>
-				<button class="service-chip" type="button" aria-pressed="false" data-js-pickup-chip="cdek">
-					<img class="service-chip__logo" src="<?php echo esc_url( arctik_asset( 'images/logo-cdek.webp' ) ); ?>" alt="" width="24" height="24">
-					<span>СДЭК</span>
-				</button>
+				<?php foreach ( $arctik_services as $arctik_id => $arctik_service ) : ?>
+					<button class="service-chip" type="button" aria-pressed="true" data-js-pickup-chip="<?php echo esc_attr( $arctik_id ); ?>" data-pickup-marker="<?php echo esc_url( arctik_asset( 'icons/map-marker-' . $arctik_id . '.svg' ) ); ?>">
+						<img class="service-chip__logo" src="<?php echo esc_url( arctik_asset( $arctik_service['logo'] ) ); ?>" alt="" width="24" height="24">
+						<span><?php echo esc_html( $arctik_service['name'] ); ?></span>
+					</button>
+				<?php endforeach; ?>
 			</div>
 		</div>
 
@@ -69,10 +59,16 @@ defined( 'ABSPATH' ) || exit;
 			</div>
 
 			<div class="map-modal__controls">
-				<button class="map-modal__city-edit" type="button">
-					<span>Москва, Россия</span>
+				<button class="map-modal__city-edit" type="button" data-js-pickup-city-open>
+					<span data-js-pickup-city-label><?php echo esc_html( $arctik_city['label'] ); ?></span>
 					<img src="<?php echo esc_url( arctik_asset( 'icons/icn-edit.svg' ) ); ?>" alt="" width="16" height="16">
 				</button>
+
+				<?php /* Выбор города (макета нет): поле с подсказками СДЭК вместо строки города */ ?>
+				<div class="map-modal__suggest" hidden data-js-pickup-city>
+					<?php get_template_part( 'template-parts/form-field', null, [ 'id' => 'pickup-city', 'type' => 'text', 'name' => 'pickup_city', 'label' => 'Город', 'autocomplete' => 'off', 'mod' => 'field--light', 'attrs' => 'role="combobox" aria-expanded="false" aria-controls="pickup-city-suggest" aria-autocomplete="list" data-js-pickup-city-input' ] ); ?>
+					<ul class="map-modal__suggest-list" id="pickup-city-suggest" role="listbox" aria-label="Подсказки города" hidden data-js-pickup-city-list></ul>
+				</div>
 
 				<div class="select" data-js-pickup-select>
 					<button class="select__btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="pickup-services" data-js-pickup-select-btn>
@@ -80,8 +76,9 @@ defined( 'ABSPATH' ) || exit;
 						<svg class="select__chevron" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.6992 12.9008L16.2992 8.30078L17.6992 9.70078L11.6992 15.7008L5.69922 9.70078L7.09922 8.30078L11.6992 12.9008Z"/></svg>
 					</button>
 					<ul class="select__list" id="pickup-services" role="listbox" aria-label="Службы выдачи" hidden data-js-pickup-select-list>
-						<li class="select__option" role="option" tabindex="-1" aria-selected="false" data-value="ozon">Озон</li>
-						<li class="select__option" role="option" tabindex="-1" aria-selected="false" data-value="cdek">СДЭК</li>
+						<?php foreach ( $arctik_services as $arctik_id => $arctik_service ) : ?>
+							<li class="select__option" role="option" tabindex="-1" aria-selected="false" data-value="<?php echo esc_attr( $arctik_id ); ?>"><?php echo esc_html( $arctik_service['name'] ); ?></li>
+						<?php endforeach; ?>
 					</ul>
 				</div>
 
@@ -91,14 +88,12 @@ defined( 'ABSPATH' ) || exit;
 				</div>
 			</div>
 
-			<ul class="map-modal__list" data-js-pickup-list>
-				<?php get_template_part( 'template-parts/checkout/pickup-point', null, [ 'id' => 'p1', 'service' => 'ozon', 'title' => 'ПВЗ Озон', 'address' => 'Москва улица Хамовнический Вал 24', 'price' => 'бесплатно', 'date' => 'завтра' ] ); ?>
-				<?php get_template_part( 'template-parts/checkout/pickup-point', null, [ 'id' => 'p2', 'service' => 'ozon', 'title' => 'ПВЗ Озон', 'address' => 'Москва улица Хамовнический Вал 24', 'price' => 'бесплатно', 'date' => 'завтра' ] ); ?>
-				<?php get_template_part( 'template-parts/checkout/pickup-point', null, [ 'id' => 'p3', 'service' => 'ozon', 'title' => 'ПВЗ Озон', 'address' => 'Москва улица Хамовнический Вал 24', 'price' => 'бесплатно', 'date' => 'завтра' ] ); ?>
-				<?php get_template_part( 'template-parts/checkout/pickup-point', null, [ 'id' => 'p4', 'service' => 'ozon', 'title' => 'ПВЗ Озон', 'address' => 'Москва улица Хамовнический Вал 24', 'price' => 'бесплатно', 'date' => 'завтра' ] ); ?>
-				<?php get_template_part( 'template-parts/checkout/pickup-point', null, [ 'id' => 'p5', 'service' => 'cdek', 'title' => 'ПВЗ СДЭК', 'address' => 'Москва улица Хамовнический Вал 24', 'price' => 'бесплатно', 'date' => 'завтра' ] ); ?>
-				<?php get_template_part( 'template-parts/checkout/pickup-point', null, [ 'id' => 'p6', 'service' => 'cdek', 'title' => 'ПВЗ СДЭК', 'address' => 'Москва улица Хамовнический Вал 24', 'price' => 'бесплатно', 'date' => 'завтра' ] ); ?>
-			</ul>
+			<?php /* Пункты — из API при открытии (pickup.js) */ ?>
+			<ul class="map-modal__list" data-js-pickup-list></ul>
+			<template data-js-pickup-point-template>
+				<?php get_template_part( 'template-parts/checkout/pickup-point' ); ?>
+			</template>
+			<p class="map-modal__empty" hidden data-js-pickup-empty>В&nbsp;этом городе пунктов выдачи нет&nbsp;— выберите другой город</p>
 		</div>
 	</div>
 </div>

@@ -1,0 +1,76 @@
+# Выгрузка темы WordPress на хостинг Reg.ru по FTP (WORDPRESS.md → «Деплой»).
+# Запуск: тег theme-v* (git tag theme-v1 && git push origin theme-v1) или вручную (Actions → Deploy theme → Run workflow;
+# кнопка видна, только когда этот файл есть и в ветке по умолчанию).
+# Секреты репозитория: FTP_HOST, FTP_USER, FTP_PASSWORD, FTP_THEME_PATH (путь к папке темы от корня FTP, со слешем в конце:
+# www/<домен>/wp-content/themes/arctik-bio/). Переменные (необязательно): FTP_PROTOCOL — ftps (по умолчанию) или ftp, FTP_PORT — 21.
+# Грузятся только изменённые файлы: на сервере лежит .ftp-deploy-sync-state.json (удалить его — следующая выгрузка будет полной).
+name: Deploy theme (FTP)
+
+on:
+  push:
+    tags: ['theme-v*']
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Только показать, что изменится (без выгрузки)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-theme
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Сборка ассетов темы (dist/, assets/)
+        run: |
+          npm ci
+          npm run build:wp
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          coverage: none
+
+      - name: Composer (Carbon Fields) без dev-зависимостей
+        run: composer install --no-dev --optimize-autoloader --no-interaction --no-progress --working-dir=wp-theme/arctik-bio
+
+      - name: Проверка сборки
+        run: |
+          test -f wp-theme/arctik-bio/dist/.vite/manifest.json
+          test -f wp-theme/arctik-bio/vendor/autoload.php
+          test -d wp-theme/arctik-bio/assets/images
+          test ! -e wp-theme/arctik-bio/hot
+
+      - name: Выгрузка по FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          port: ${{ vars.FTP_PORT || 21 }}
+          local-dir: ./wp-theme/arctik-bio/
+          server-dir: ${{ secrets.FTP_THEME_PATH }}
+          dry-run: ${{ inputs.dry_run || false }}
+          # Шаблон без «/» совпадает с именем файла в любой папке (matchBase): composer.json так не исключить —
+          # пропал бы и vendor/htmlburger/carbon-fields/composer.json; composer.* темы на сервере безвредны
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.DS_Store
+            hot

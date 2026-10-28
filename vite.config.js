@@ -14,6 +14,7 @@ const pages = {
   product: 'product.html',
   buyers: 'buyers.html',
   contacts: 'contacts.html',
+  documents: 'documents.html',
   checkout: 'checkout.html',
   'order-received': 'order-received.html',
   order: 'order.html',

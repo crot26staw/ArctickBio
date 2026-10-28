@@ -72,3 +72,30 @@ function arctik_seed_faq( string $file ): array {
 
 	return $groups;
 }
+
+/**
+ * Юридический документ заказчика: первая строка — заголовок (ПРОПИСНЫЕ → с заглавной), остальные — абзацы;
+ * «1. Раздел», «Текст согласия», «Сведения об …» — подзаголовки h3. Служебный блок «Перед публикацией — заполнить»
+ * и всё после него отбрасывается, колонки через «   |   » и длинные пробелы — через « · ».
+ *
+ * @return array{title: string, body: string}
+ */
+function arctik_seed_document( string $file ): array {
+	$lines = array_values( array_filter( array_map( 'trim', preg_split( '/\R/u', arctik_seed_content( $file ) ) ) ) );
+	$title = array_shift( $lines );
+	if ( mb_strtoupper( $title ) === $title ) {
+		$title = mb_strtoupper( mb_substr( $title, 0, 1 ) ) . mb_strtolower( mb_substr( $title, 1 ) );
+	}
+
+	$body = [];
+	foreach ( $lines as $line ) {
+		if ( str_starts_with( $line, 'Перед публикацией' ) ) {
+			break;
+		}
+		$line = preg_replace( '/\s*\|\s*|\s{3,}/u', ' · ', $line );
+		$tag  = preg_match( '/^(\d+\.\s|Текст согласия$|Сведения об? )/u', $line ) && mb_strlen( $line ) < 80 ? 'h3' : 'p';
+		$body[] = "<{$tag}>" . esc_html( $line ) . "</{$tag}>";
+	}
+
+	return [ 'title' => $title, 'body' => implode( "\n", $body ) ];
+}

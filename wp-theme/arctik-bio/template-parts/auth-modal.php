@@ -119,7 +119,7 @@ defined( 'ABSPATH' ) || exit;
 						<label class="checkbox checkbox--inverse auth__checkbox" data-js-field>
 							<input class="checkbox__input" type="checkbox" name="privacy_policy" data-js-field-input data-validate="checked">
 							<span class="checkbox__box" aria-hidden="true"></span>
-							<span class="checkbox__label">Я&nbsp;соглашаюсь с <a href="<?php echo esc_url( get_privacy_policy_url() ?: '#' ); ?>" target="_blank" rel="noopener" data-js-roll>политикой конфиденциальности</a><br> и&nbsp;<a href="#" target="_blank" rel="noopener" data-js-roll>пользовательским соглашением</a></span>
+							<span class="checkbox__label">Я&nbsp;соглашаюсь с <a href="<?php echo esc_url( get_privacy_policy_url() ?: '#' ); ?>" target="_blank" rel="noopener" data-js-roll>политикой конфиденциальности</a><br> и&nbsp;<a href="<?php echo esc_url( arctik_document_url( 'agreement' ) ); ?>" target="_blank" rel="noopener" data-js-roll>пользовательским соглашением</a></span>
 						</label>
 						<button class="btn btn--accent auth__btn" type="submit" name="register" data-js-swipe>Зарегистрироваться</button>
 					</div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Оформление заказа (этап «Оф1»): классический шорткод вместо блока Checkout, «Публичная оферта» (страница условий WC),
+ * Оформление заказа (этап «Оф1»): классический шорткод вместо блока Checkout,
  * аккаунт при оформлении, зона доставки «Россия» с «Пунктом выдачи» и «Курьером», способы оплаты СБП / карта (заглушки),
  * меню ссылок внизу формы. Повторный запуск безопасен.
  * Запуск: docker compose run --rm wpcli wp eval-file /seed/checkout.php
@@ -16,16 +16,7 @@ wp_update_post( [
 	'post_content' => '<!-- wp:shortcode -->[woocommerce_checkout]<!-- /wp:shortcode -->',
 ] );
 
-// «Публичная оферта» — страница условий WC (ссылка в согласии), текст — заглушка, заполняется в админке.
-$terms = get_page_by_path( 'oferta' );
-$terms_id = $terms ? $terms->ID : wp_insert_post( [
-	'post_type'    => 'page',
-	'post_status'  => 'publish',
-	'post_title'   => 'Публичная оферта',
-	'post_name'    => 'oferta',
-	'post_content' => '<!-- wp:paragraph --><p>Текст публичной оферты.</p><!-- /wp:paragraph -->',
-] );
-update_option( 'woocommerce_terms_page_id', $terms_id );
+// «Публичная оферта» (страница условий WC) — документ на странице «Документы», ставит /seed/documents.php.
 
 // Аккаунт: гостю создаётся при оформлении (логин и пароль — автоматически, письмо со ссылкой на пароль), см. inc/checkout.php.
 update_option( 'woocommerce_enable_guest_checkout', 'yes' );

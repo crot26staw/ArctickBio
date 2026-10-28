@@ -112,26 +112,26 @@
     background-color: var(--color-white);
     border-radius: var(--radius-m);
 
+    // Вкладки, которые не помещаются (мобилка, «Документы» на планшете), листаются по горизонтали до края экрана
     @include media(tablet) {
       position: absolute;
       top: rem(-(56 + 20));
-      right: 0;
+      right: rem(-20);
       left: 0;
       width: auto;
       padding: 0;
-      background-color: transparent;
-    }
-
-    // Мобилка: вкладки не помещаются — листаются по горизонтали до края экрана
-    @include media(mobile) {
-      top: rem(-(56 + 10));
-      right: rem(-10);
       overflow-x: auto;
       scrollbar-width: none;
+      background-color: transparent;
 
       &::-webkit-scrollbar {
         display: none;
       }
+    }
+
+    @include media(mobile) {
+      top: rem(-(56 + 10));
+      right: rem(-10);
     }
   }
 
@@ -154,6 +154,10 @@
         padding: 0;
         border: 0;
       }
+    }
+
+    @include media(tablet) {
+      padding-right: rem(20);
     }
 
     @include media(mobile) {
@@ -239,6 +243,28 @@
     @include media(mobile) {
       font-size: rem(18);
       line-height: 1.1;
+    }
+  }
+
+  // Текст документа («Документы»): разделы — h3 из редактора, абзацы
+  &__doc {
+    @include body-m;
+    line-height: 1.4;
+    color: var(--color-fg-muted);
+
+    h3 {
+      @include body-l;
+      margin: rem(32) 0 rem(12);
+      font-weight: 500;
+      color: var(--color-heading);
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    p + p {
+      margin-top: rem(12);
     }
   }
 }

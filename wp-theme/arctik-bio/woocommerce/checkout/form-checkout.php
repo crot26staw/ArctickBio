@@ -15,6 +15,12 @@ $arctik_cart     = WC()->cart;
 $arctik_count    = arctik_checkout_count_text( $arctik_cart->get_cart_contents_count() );
 $arctik_terms_id = wc_terms_and_conditions_page_id();
 
+// Оферта — страница условий WC; если это «Документы» — сразу к оферте (inc/documents.php).
+$arctik_terms_url = $arctik_terms_id ? get_permalink( $arctik_terms_id ) : '#';
+if ( $arctik_terms_id && 'page-templates/documents.php' === get_page_template_slug( $arctik_terms_id ) ) {
+	$arctik_terms_url .= '#oferta';
+}
+
 // Способы оплаты: выбран сохранённый в сессии или первый (в статике — СБП).
 $arctik_gateways = WC()->payment_gateways()->get_available_payment_gateways();
 $arctik_gateway  = WC()->session->get( 'chosen_payment_method' );
@@ -195,7 +201,7 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 			<label class="checkbox checkout__terms woocommerce-form__label-for-checkbox" data-js-checkout-terms>
 				<input class="checkbox__input input-checkbox" type="checkbox" name="terms" id="terms">
 				<span class="checkbox__box" aria-hidden="true"></span>
-				<span class="checkbox__label">Я&nbsp;принимаю <a href="<?php echo esc_url( $arctik_terms_id ? get_permalink( $arctik_terms_id ) : '#' ); ?>" target="_blank" rel="noopener" data-js-roll>Публичную оферту</a> и&nbsp;<a href="<?php echo esc_url( get_privacy_policy_url() ?: '#' ); ?>" target="_blank" rel="noopener" data-js-roll>Политику обработки персональных данных</a></span>
+				<span class="checkbox__label">Я&nbsp;принимаю <a href="<?php echo esc_url( $arctik_terms_url ); ?>" target="_blank" rel="noopener" data-js-roll>Публичную оферту</a> и&nbsp;<a href="<?php echo esc_url( get_privacy_policy_url() ?: '#' ); ?>" target="_blank" rel="noopener" data-js-roll>Политику обработки персональных данных</a></span>
 			</label>
 			<?php if ( $arctik_terms_id ) : ?>
 				<input type="hidden" name="terms-field" value="1">

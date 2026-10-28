@@ -7,19 +7,15 @@
 
 // Страницы разделов (шаблоны — на этапах страниц).
 $pages = [
-	'about'    => 'О компании',
-	'buyers'   => 'Покупателям',
-	'contacts' => 'Контакты',
+	'about'     => 'О компании',
+	'buyers'    => 'Покупателям',
+	'contacts'  => 'Контакты',
+	'documents' => 'Документы',
 ];
 foreach ( $pages as $slug => $title ) {
 	if ( ! get_page_by_path( $slug ) ) {
 		wp_insert_post( [ 'post_type' => 'page', 'post_status' => 'publish', 'post_title' => $title, 'post_name' => $slug ] );
 	}
-}
-
-$privacy = (int) get_option( 'wp_page_for_privacy_policy' );
-if ( $privacy ) {
-	wp_update_post( [ 'ID' => $privacy, 'post_status' => 'publish' ] );
 }
 
 $page = fn( string $slug ) => get_page_by_path( $slug );
@@ -61,9 +57,10 @@ $menus = [
 		[ 'Где купить', $url( '/buyers/#where-to-buy' ) ],
 	] ],
 	'footer_docs'   => [ 'Документы', [
-		[ 'Политика конфиденциальности', $privacy ],
-		[ 'Пользовательское соглашение', '#' ],
-		[ 'Политика Cookies', '#' ],
+		[ 'Публичная оферта', $url( '/documents/#oferta' ) ],
+		[ 'Политика конфиденциальности', $url( '/documents/#privacy' ) ],
+		[ 'Пользовательское соглашение', $url( '/documents/#agreement' ) ],
+		[ 'Политика Cookies', $url( '/documents/#cookie' ) ],
 	] ],
 ];
 

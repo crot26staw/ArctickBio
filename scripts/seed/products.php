@@ -1,7 +1,7 @@
 <?php
 /**
  * Наполнение товаров (этап «Т»): атрибут «Формат», 5 вкусов (вариативные: 15 / 30 саше), набор на 3 месяца,
- * ингредиенты и картинки из статики (цены и фото там заглушки — как в вёрстке); тексты — content-products.php.
+ * ингредиенты и картинки из статики (цены — заглушки, как в вёрстке); тексты — content-products.php, картинки вкусов — product-images.php.
  * Запуск: docker compose run --rm wpcli wp eval-file /seed/products.php
  * Повторный запуск безопасен: товары находятся по ярлыку и обновляются, вариации пересоздаются.
  */
@@ -28,11 +28,8 @@ foreach ( $formats as $slug => $name ) {
 	}
 }
 
-// Картинки (одни на все вкусы — как в статике).
-$img_card  = arctik_seed_image( 'product-card.webp', 'Морской коллаген' );
-$img_hover = arctik_seed_image( 'product-card-hover.webp' );
-$img_mini  = arctik_seed_image( 'product-mini.webp' );
-$gallery   = [
+// Галерея набора на 3 месяца (прежние фото с синей пачкой). Картинки вкусов — product-images.php (вызывается в конце).
+$gallery = [
 	arctik_seed_image( 'product-1.webp', 'Премиальный морской коллаген с дикой черникой' ),
 	arctik_seed_image( 'product-2.webp', 'Упаковка коллагена на камнях у моря' ),
 	arctik_seed_image( 'product-3.webp', 'Упаковка коллагена на берегу Баренцева моря' ),
@@ -70,8 +67,6 @@ foreach ( $flavors as $slug => $name ) {
 		'status'             => 'publish',
 		'catalog_visibility' => 'visible',
 		'menu_order'         => $order++,
-		'image_id'           => $img_card,
-		'gallery_image_ids'  => $gallery,
 		'default_attributes' => [ 'pa_format' => '30-sashe' ],
 	] );
 	$product->set_attributes( [ $attribute ] );
@@ -86,15 +81,12 @@ foreach ( $flavors as $slug => $name ) {
 			'parent_id'     => $id,
 			'status'        => 'publish',
 			'regular_price' => '1440',
-			'image_id'      => $img_mini,
 		] );
 		$variation->set_attributes( [ 'pa_format' => $format ] );
 		$variation->save();
 	}
 	WC_Product_Variable::sync( $id );
 
-	carbon_set_post_meta( $id, 'arctik_product_hover_image', $img_hover );
-	carbon_set_post_meta( $id, 'arctik_product_mini_image', $img_mini );
 }
 
 // Набор на 3 месяца: простой товар, скрыт из каталога (баннер в каталоге ведёт на него).
@@ -130,3 +122,6 @@ WP_CLI::success( 'Товары и общие поля товаров запол�
 
 // Тексты товаров (названия, подписи форматов, аккордеоны) — из документа заказчика.
 require __DIR__ . '/content-products.php';
+
+// Картинки вкусов (пачка, мини-пачка, фото при наведении, галерея).
+require __DIR__ . '/product-images.php';

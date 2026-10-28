@@ -1,7 +1,7 @@
 <!-- Вариант товара (формат упаковки) в карточке товара: радиокнопка в виде плашки product-plan, выбранная — с акцентной рамкой -->
 <label class="product-plan product-plan--option">
   <input class="product-plan__input" type="radio" name="{{ name }}" value="{{ value }}" data-price="{{ price }}" data-js-product-format {{ checked }}>
-  <img class="product-plan__img" src="./assets/images/product-mini.webp" alt="" width="240" height="186" loading="lazy">
+  <img class="product-plan__img" src="./assets/images/product-{{ flavor }}-mini.webp" alt="" width="240" height="186" loading="lazy">
   <span class="product-plan__text">
     <span class="product-plan__title">{{ title }}</span>
     <span class="product-plan__subtitle">{{ subtitle }}</span>

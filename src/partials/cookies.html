@@ -1,0 +1,46 @@
+<!--
+  Баннер cookie (макет 18129:38720 в файле XXwoaWCLuNuh8GMCHy1GcG) и окно настроек (18543:95242).
+  Баннер скрыт, пока js/modules/cookies.js не проверит, есть ли уже выбор (cookie arctik_cookie_consent).
+  «Хорошо» — разрешить все категории, «Настроить» — окно настроек (modal.js), в нём «Принять cookie» сохраняет выбор.
+  Имена переключателей (name) — категории: necessary (всегда), analytics, marketing.
+-->
+<section class="cookies" aria-label="Файлы cookie" hidden data-js-cookies>
+  <div class="cookies__inner container">
+    <p class="cookies__text">Мы используем файлы куки для&nbsp;корректной и&nbsp;быстрой работы сайта. Ознакомиться с&nbsp;политикой конфиденциальности. <a href="./documents.html#cookie">Подробнее</a></p>
+    <div class="cookies__actions">
+      <button class="btn btn--light" type="button" data-js-modal-open="cookies" data-js-swipe>Настроить</button>
+      <button class="btn btn--dark" type="button" data-js-cookies-accept data-js-swipe>Хорошо</button>
+    </div>
+  </div>
+</section>
+
+<div class="cookie-settings" data-js-modal="cookies" inert>
+  <div class="cookie-settings__overlay" data-js-modal-close></div>
+
+  <div class="cookie-settings__dialog" role="dialog" aria-modal="true" aria-labelledby="cookie-settings-title" data-js-modal-dialog>
+    <form class="cookie-settings__form" action="#" method="post" data-js-cookies-form>
+      <div class="cookie-settings__body" data-lenis-prevent>
+        <div class="cookie-settings__head">
+          <h2 class="cookie-settings__title" id="cookie-settings-title">Мы используем файлы cookie</h2>
+          <p class="cookie-settings__text">Мы и&nbsp;наши партнёры используем файлы cookie и&nbsp;другие технологии, чтобы персонализировать ваш опыт, показывать рекламу и&nbsp;анализировать посещаемость сайта. Подробнее&nbsp;— в&nbsp;нашей <a href="./documents.html#cookie">Политике использования cookie</a>.</p>
+          <p class="cookie-settings__note">Чтобы закрыть окно, сохраните настройки</p>
+        </div>
+
+        <div class="cookie-settings__groups" role="group" aria-labelledby="cookie-settings-legend">
+          <p class="cookie-settings__legend" id="cookie-settings-legend">Вы разрешаете:</p>
+          <include src="partials/cookie-group.html" data='{"id": "cookie-group-necessary", "state": "is-open", "expanded": "true", "category": "necessary", "name": "Необходимые", "badge": "Обязательно", "label": "Необходимые cookie — всегда включены", "attrs": "checked disabled", "text": "Необходимые файлы cookie обеспечивают работу основных функций сайта, включая безопасный вход в&nbsp;аккаунт и&nbsp;сохранение ваших настроек конфиденциальности."}'></include>
+          <include src="partials/cookie-group.html" data='{"id": "cookie-group-analytics", "expanded": "false", "category": "analytics", "name": "Аналитика", "label": "Разрешить cookie аналитики", "text": "Помогают понять, как&nbsp;посетители пользуются сайтом: какие страницы открывают и&nbsp;где возникают сложности. Данные обезличены и&nbsp;нужны, чтобы делать сайт удобнее."}'></include>
+          <include src="partials/cookie-group.html" data='{"id": "cookie-group-marketing", "expanded": "false", "category": "marketing", "name": "Маркетинг и&nbsp;реклама", "label": "Разрешить рекламные cookie", "text": "Нужны, чтобы показывать вам подходящие предложения ArcticBerries на&nbsp;других сайтах и&nbsp;оценивать эффективность рекламы. Если&nbsp;их&nbsp;отключить, реклама станет менее персональной."}'></include>
+        </div>
+      </div>
+
+      <button class="cookie-settings__close" type="button" aria-label="Закрыть" data-js-modal-close>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M13.06 12L18 7.06L16.94 6L12 10.94L7.06 6L6 7.06L10.94 12L6 16.94L7.06 18L12 13.06L16.94 18L18 16.94L13.06 12Z"/>
+        </svg>
+      </button>
+
+      <button class="btn btn--dark cookie-settings__submit" type="submit" data-js-swipe>Принять cookie</button>
+    </form>
+  </div>
+</div>

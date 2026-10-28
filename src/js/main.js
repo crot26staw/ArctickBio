@@ -33,6 +33,7 @@ import { initFields } from './modules/field.js';
 import { initAuth } from './modules/auth.js';
 import { initCart } from './modules/cart.js';
 import { initModals } from './modules/modal.js';
+import { initCookies } from './modules/cookies.js';
 import { initPickup } from './modules/pickup.js';
 import { initAddress } from './modules/address.js';
 import { initCheckout } from './modules/checkout.js';
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAuth();
   initCart();
   initModals();
+  initCookies();
   initPickup();
   initAddress();
   initCheckout();

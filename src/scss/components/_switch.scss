@@ -1,0 +1,75 @@
+@use '../base' as *;
+
+// Переключатель-тумблер (окно настроек cookie, макет 18543:95242): дорожка 48×24, кружок 18 с галочкой во включённом состоянии.
+// <label class="switch"><input class="switch__input" type="checkbox"><span class="switch__track"><span class="switch__knob"><img></span></span></label>
+// Неактивный (disabled) — полупрозрачный, как «Необходимые» в макете.
+.switch {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  cursor: pointer;
+
+  &__input {
+    @include visually-hidden;
+  }
+
+  &__track {
+    position: relative;
+    display: block;
+    width: rem(48);
+    height: rem(24);
+    overflow: hidden;
+    background-color: var(--color-switch-off);
+    border-radius: 9999px;
+
+    // Градиент включённого состояния — отдельным слоем: градиент не анимируется, а прозрачность — да
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(to right, var(--color-switch-on-start), var(--color-switch-on-end));
+      opacity: 0;
+      transition: opacity $transition;
+    }
+  }
+
+  &__knob {
+    position: absolute;
+    top: rem(3);
+    left: rem(4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(18);
+    height: rem(18);
+    background-color: var(--color-white);
+    border-radius: 50%;
+    transition: translate $transition;
+
+    img {
+      width: rem(7.194);
+      height: rem(4.938);
+      opacity: 0;
+      transition: opacity $transition;
+    }
+  }
+
+  &__input:checked + &__track::before,
+  &__input:checked + &__track &__knob img {
+    opacity: 1;
+  }
+
+  &__input:checked + &__track &__knob {
+    translate: rem(23) 0;
+  }
+
+  &__input:focus-visible + &__track {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  &:has(&__input:disabled) {
+    cursor: default;
+    opacity: 0.25;
+  }
+}

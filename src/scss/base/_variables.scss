@@ -54,6 +54,11 @@ $transition: 0.3s ease;
   --color-border-muted: rgba(1, 39, 62, 0.15);
   --color-border-default: rgba(1, 39, 62, 0.5);
   --color-neutral: rgba(1, 39, 62, 0.1);
+  // Переключатель (окно настроек cookie, макет 18543:95242): выключен / включён (градиент) / подпись «Обязательно»
+  --color-switch-off: #27272a;
+  --color-switch-on-start: #75ce56;
+  --color-switch-on-end: #0f983c;
+  --color-success: #22c55e;
   --radius-s: 4px;
   --radius-m: 6px;
   --radius-l: 8px;

@@ -1,0 +1,23 @@
+<div class="cookie-group {{ state }}" data-js-accordion>
+  <div class="cookie-group__row">
+    <div class="cookie-group__head">
+      <button class="cookie-group__toggle" type="button" aria-expanded="{{ expanded }}" aria-controls="{{ id }}" data-js-accordion-toggle>
+        <span class="cookie-group__icon" aria-hidden="true">
+          <img src="./assets/icons/icn-plus-16.svg" alt="" width="16" height="16">
+          <img src="./assets/icons/icn-minus-16.svg" alt="" width="16" height="16">
+        </span>
+        <span class="cookie-group__name">{{ name }}</span>
+      </button>
+      <span class="cookie-group__badge">{{ badge }}</span>
+    </div>
+    <label class="switch">
+      <input class="switch__input" type="checkbox" name="{{ category }}" value="1" aria-label="{{ label }}" {{ attrs }}>
+      <span class="switch__track" aria-hidden="true">
+        <span class="switch__knob"><img src="./assets/icons/icn-switch-check.svg" alt="" width="8" height="5"></span>
+      </span>
+    </label>
+  </div>
+  <div class="cookie-group__panel" id="{{ id }}" data-js-accordion-panel>
+    <p class="cookie-group__text">{{ text }}</p>
+  </div>
+</div>

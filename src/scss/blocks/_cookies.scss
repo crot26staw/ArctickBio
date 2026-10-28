@@ -1,0 +1,258 @@
+@use '../base' as *;
+
+// Баннер cookie (partials/cookies.html): полоса внизу экрана (макет 18129:38720 в файле XXwoaWCLuNuh8GMCHy1GcG)
+// и окно настроек (карточка из мобильного макета 18543:95242; на десктопе — по центру с затемнением, решение пользователя).
+// Показ, выбор и запоминание — js/modules/cookies.js, открытие окна — modal.js.
+$cookies-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+.cookies {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 15; // над шапкой (10), под корзиной и входом (20)
+  background-color: var(--color-white);
+  translate: 0 100%;
+  transition: translate $cookies-transition;
+
+  &.is-visible {
+    translate: 0 0;
+  }
+
+  &__inner {
+    display: flex;
+    gap: rem(16);
+    align-items: center;
+    justify-content: space-between;
+    padding-block: rem(16);
+  }
+
+  // Текст — из rich text в WordPress, ссылка без класса (как подпись в «Покупателям»)
+  &__text {
+    @include body-m;
+    color: var(--color-fg);
+
+    a {
+      text-decoration: underline;
+      text-decoration-skip-ink: none;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: rem(16);
+  }
+}
+
+// ---------- Окно настроек ----------
+.cookie-settings {
+  position: fixed;
+  inset: 0;
+  z-index: 30; // над баннером, шапкой и попапами
+  visibility: hidden;
+  transition: visibility 0s linear 0.4s;
+
+  &.is-open {
+    visibility: visible;
+    transition: none;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(16px);
+    opacity: 0;
+    transition: opacity $cookies-transition;
+  }
+
+  &.is-open &__overlay {
+    opacity: 1;
+  }
+
+  &__dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: rem(440);
+    max-height: calc(100svh - #{rem(40)});
+    background-color: var(--color-white);
+    box-shadow:
+      0 rem(10) rem(50) rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.25);
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + #{rem(24)}));
+    transition:
+      opacity $cookies-transition,
+      transform $cookies-transition;
+  }
+
+  &.is-open &__dialog {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: rem(32);
+    max-height: inherit;
+    padding: rem(24) rem(16) rem(16);
+  }
+
+  &__body {
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  &__head {
+    padding-inline: rem(8);
+  }
+
+  &__title {
+    @include h3;
+    padding-right: rem(32); // место под крестик
+    color: var(--color-fg);
+  }
+
+  &__text {
+    @include body-m;
+    padding-top: rem(8);
+    color: var(--color-fg);
+
+    a {
+      text-decoration: underline;
+      text-decoration-skip-ink: none;
+    }
+  }
+
+  &__note {
+    @include body-m;
+    padding-top: rem(24);
+    color: var(--color-fg);
+  }
+
+  // Крестика в макете не видно (обрезан краем карточки) — по решению пользователя окно закрывается без сохранения
+  &__close {
+    position: absolute;
+    top: rem(24);
+    right: rem(24);
+    display: flex;
+    width: rem(24);
+    height: rem(24);
+    color: var(--color-fg);
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__groups {
+    margin-top: rem(24);
+    padding: rem(16);
+    background-color: var(--color-bg-light);
+    border-radius: rem(10);
+  }
+
+  &__legend {
+    @include body-m-strong;
+    color: var(--color-fg);
+  }
+
+  &__submit {
+    flex-shrink: 0;
+    width: 100%;
+  }
+}
+
+// Категория cookie: строка (раскрыть + название + переключатель) и описание — аккордеон (accordion.js)
+.cookie-group {
+  padding-block: rem(16);
+
+  &:not(:last-child) {
+    border-bottom: 2px solid rgba(209, 213, 219, 0.2);
+  }
+
+  &__row {
+    display: flex;
+    gap: rem(12);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+  }
+
+  &__toggle {
+    display: flex;
+    gap: rem(12);
+    align-items: center;
+    text-align: left;
+  }
+
+  &__icon {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: rem(24);
+    height: rem(24);
+    border: 1px solid var(--color-fg-muted);
+    border-radius: rem(12);
+
+    img {
+      width: rem(16);
+      height: rem(16);
+      transition: opacity $transition;
+
+      & + img {
+        position: absolute;
+        opacity: 0;
+      }
+    }
+  }
+
+  &.is-open &__icon img {
+    opacity: 0;
+
+    & + img {
+      opacity: 1;
+    }
+  }
+
+  &__name {
+    @include body-m-strong;
+    color: var(--color-fg);
+  }
+
+  &__badge {
+    @include desc-s;
+    padding-left: rem(8);
+    color: var(--color-success);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &__panel {
+    height: 0;
+    overflow: hidden;
+  }
+
+  &.is-open &__panel {
+    height: auto;
+  }
+
+  &__text {
+    @include body-m;
+    padding-top: rem(8);
+    padding-left: rem(36);
+    color: var(--color-fg);
+  }
+}

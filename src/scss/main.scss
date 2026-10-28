@@ -24,6 +24,7 @@
 @use 'components/ingredient-card';
 @use 'components/field';
 @use 'components/checkbox';
+@use 'components/switch';
 @use 'components/promo';
 @use 'components/image-reveal';
 
@@ -65,3 +66,4 @@
 @use 'blocks/order-success';
 @use 'blocks/account';
 @use 'blocks/order-status';
+@use 'blocks/cookies';

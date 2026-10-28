@@ -76,5 +76,6 @@ $arctik_phone = (string) arctik_option( 'arctik_phone' );
 	}
 
 	get_template_part( 'template-parts/cart' );
+	get_template_part( 'template-parts/cookies' );
 	?>
 </header>

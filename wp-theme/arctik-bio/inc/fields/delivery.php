@@ -13,6 +13,13 @@ Container::make( 'theme_options', 'Доставка' )
 	->set_page_parent( 'arctik-options' )
 	->set_page_file( 'arctik-options-delivery' )
 
+	->add_tab( 'Условия', [
+		Field::make( 'text', 'arctik_free_shipping_from', 'Бесплатная доставка от, ₽' )
+			->set_attribute( 'type', 'number' )
+			->set_default_value( '5000' )
+			->set_help_text( 'Сумма товаров в заказе (после скидки по промокоду). Пусто или 0 — бесплатной доставки нет. Строка под кнопкой «В корзину» — «Настройки сайта → Товары»' ),
+	] )
+
 	->add_tab( 'СДЭК', [
 		Field::make( 'checkbox', 'arctik_cdek_test', 'Тестовый режим' )
 			->set_option_value( 'yes' )

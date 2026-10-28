@@ -213,6 +213,20 @@
     }
   }
 
+  // Логотипы платёжных систем под способами оплаты (требование банка, макета нет); поля — как у &__options
+  &__pay-logos {
+    padding: rem(16) rem(32) 0;
+    color: var(--color-fg-muted);
+
+    @include media(tablet) {
+      padding-inline: rem(20);
+    }
+
+    @include media(mobile) {
+      padding: rem(12) rem(10) 0;
+    }
+  }
+
   &__delivery {
     display: flex;
     flex-direction: column;

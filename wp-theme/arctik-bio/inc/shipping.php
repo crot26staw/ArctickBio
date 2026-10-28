@@ -3,6 +3,7 @@
  * Способы доставки оформления заказа: «Пункт выдачи» (arctik_pickup) и «Курьер» (arctik_courier) — СДЭК.
  * Добавляются в зону доставки (WooCommerce → Настройки → Доставка), у каждого — название и наценка.
  * Стоимость и срок — тариф СДЭК (inc/cdek.php) до города покупателя (arctik_city()); тарифы — «Настройки сайта → Доставка».
+ * От суммы товаров «Бесплатная доставка от» («Настройки сайта → Доставка → Условия», 5 000 ₽ от заказчика) — стоимость 0.
  * СДЭК не ответил или не возит в город — способа нет. Блок способа в форме (pickup / courier) — по ID способа, arctik_shipping_slot().
  * Адрес курьера и дата пока — демо-попап и даты с завтрашнего дня (этап Оф2б — DaData и даты по сроку СДЭК).
  */
@@ -19,6 +20,15 @@ const ARCTIK_SHIPPING_SLOTS = [
  */
 function arctik_shipping_slot( string $rate_or_method_id ): string {
 	return ARCTIK_SHIPPING_SLOTS[ strtok( $rate_or_method_id, ':' ) ] ?? '';
+}
+
+/**
+ * Доставка бесплатна для суммы товаров (после скидки): порог из настроек, 0 / пусто — бесплатной доставки нет.
+ */
+function arctik_is_free_shipping( float $sum ): bool {
+	$from = (float) arctik_option( 'arctik_free_shipping_from' );
+
+	return $from > 0 && $sum >= $from;
 }
 
 /**
@@ -63,7 +73,7 @@ if ( class_exists( 'WC_Shipping_Method' ) ) {
 			$this->add_rate( [
 				'id'        => $this->get_rate_id(),
 				'label'     => $this->title,
-				'cost'      => max( 0, $quote['sum'] + (float) $this->get_option( 'markup' ) ),
+				'cost'      => arctik_is_free_shipping( (float) ( $package['contents_cost'] ?? 0 ) ) ? 0 : max( 0, $quote['sum'] + (float) $this->get_option( 'markup' ) ),
 				'meta_data' => [
 					'term'     => arctik_days_text( $quote['min'], $quote['max'] ),
 					'dates'    => arctik_dates_text( $quote['date_min'], $quote['date_max'] ),

@@ -1,7 +1,7 @@
 <?php
 /**
  * Оформление заказа (этап «Оф1»): классический шорткод вместо блока Checkout,
- * аккаунт при оформлении, зона доставки «Россия» с «Пунктом выдачи» и «Курьером», способы оплаты СБП / карта (заглушки),
+ * аккаунт при оформлении, зона доставки «Россия» с «Пунктом выдачи» (курьера нет), бесплатная доставка от 5 000 ₽, способы оплаты СБП / карта (заглушки),
  * меню ссылок внизу формы. Повторный запуск безопасен.
  * Запуск: docker compose run --rm wpcli wp eval-file /seed/checkout.php
  */
@@ -28,7 +28,7 @@ update_option( 'woocommerce_ship_to_countries', 'specific' );
 update_option( 'woocommerce_specific_ship_to_countries', [ 'RU' ] );
 update_option( 'woocommerce_default_customer_address', 'base' );
 
-// Зона «Россия»: пункт выдачи и курьер, бесплатно, «Завтра» (inc/shipping.php).
+// Зона «Россия»: только пункт выдачи (inc/shipping.php) — курьерской доставки нет (решение пользователя, 28.10.2026), прежний способ удаляется.
 $zone = null;
 foreach ( WC_Shipping_Zones::get_zones() as $data ) {
 	if ( 'Россия' === $data['zone_name'] ) {
@@ -41,12 +41,17 @@ if ( ! $zone ) {
 	$zone->add_location( 'RU', 'country' );
 	$zone->save();
 }
-$methods = array_map( fn( $method ) => $method->id, $zone->get_shipping_methods() );
-foreach ( [ 'arctik_pickup', 'arctik_courier' ] as $method ) {
-	if ( ! in_array( $method, $methods, true ) ) {
-		$zone->add_shipping_method( $method );
+foreach ( $zone->get_shipping_methods() as $instance_id => $method ) {
+	if ( 'arctik_courier' === $method->id ) {
+		$zone->delete_shipping_method( $instance_id );
 	}
 }
+if ( ! in_array( 'arctik_pickup', array_map( fn( $method ) => $method->id, $zone->get_shipping_methods() ), true ) ) {
+	$zone->add_shipping_method( 'arctik_pickup' );
+}
+
+// Бесплатная доставка от 5 000 ₽ (от заказчика, «Настройки сайта → Доставка → Условия»).
+carbon_set_theme_option( 'arctik_free_shipping_from', '5000' );
 
 // Оплата: СБП и карта (заглушки, inc/payment.php) — включены, в этом порядке.
 foreach ( [ 'arctik_sbp', 'arctik_card' ] as $gateway ) {

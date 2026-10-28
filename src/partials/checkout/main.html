@@ -3,7 +3,7 @@
   десктоп 18270:36245 (ошибки — 18649:81751, выбран ПВЗ — 18271:39375, курьер — 18271:40435), планшет 18281:45602,
   мобилка 18270:36258 (товары раскрыты — 18281:46200).
   Форма — разметка WooCommerce (form.checkout, поля billing_*, payment_method, shipping_method, terms); логика — js/modules/checkout.js.
-  Пункт выдачи и адрес курьера выбираются в попапах (partials/checkout/pickup-modal.html, address-modal.html).
+  Пункт выдачи выбирается в попапе (partials/checkout/pickup-modal.html). Курьера нет — см. комментарий в «Способе получения».
 -->
 <section class="checkout-wrap" data-header-theme="dark">
   <form class="checkout__card checkout woocommerce-checkout" name="checkout" action="./order-received.html" method="post" novalidate data-js-checkout>
@@ -39,6 +39,7 @@
             <span class="checkout-pay__label">Оплатить картой</span>
           </label>
         </div>
+        <include src="partials/pay-logos.html" data='{"mod": "checkout__pay-logos"}'></include>
       </fieldset>
 
       <fieldset class="checkout__section checkout__section--delivery woocommerce-shipping-methods">
@@ -47,11 +48,6 @@
           <label class="checkout-ship">
             <input class="checkout-ship__input shipping_method" type="radio" name="shipping_method[0]" value="pickup" checked data-js-checkout-shipping="pickup">
             <span class="checkout-ship__title">Пункт выдачи</span>
-            <span class="checkout-ship__meta">Завтра, <span class="checkout-ship__free">бесплатно</span></span>
-          </label>
-          <label class="checkout-ship">
-            <input class="checkout-ship__input shipping_method" type="radio" name="shipping_method[0]" value="courier" data-js-checkout-shipping="courier">
-            <span class="checkout-ship__title">Курьер</span>
             <span class="checkout-ship__meta">Завтра, <span class="checkout-ship__free">бесплатно</span></span>
           </label>
         </div>
@@ -75,39 +71,8 @@
           <p class="checkout__error" hidden data-js-checkout-error="pickup">Выберите пункт выдачи</p>
         </div>
 
-        <!-- Курьер: адрес и дата доставки (макет 18271:40435) -->
-        <div class="checkout__delivery" hidden data-js-checkout-panel="courier">
-          <button class="checkout-target" type="button" aria-haspopup="dialog" aria-controls="address" data-js-modal-open="address">
-            <span class="checkout-target__icon">
-              <img src="./assets/icons/icn-location.svg" alt="" width="20" height="20">
-            </span>
-            <span class="checkout-target__body">
-              <span class="checkout-target__title">Адрес доставки
-                <svg class="checkout-target__chevron" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.5 10L6.66667 6.16667L7.83333 5L12.8333 10L7.83333 15L6.66667 13.8333L10.5 10Z"/></svg>
-              </span>
-              <span class="checkout-target__text" data-js-checkout-address-text>Екатеринбург, Уральская ул., 70</span>
-            </span>
-          </button>
-          <input type="hidden" name="shipping_address_1" value="Екатеринбург, Уральская ул., 70" data-js-checkout-address-value>
-          <p class="checkout__error" hidden data-js-checkout-error="courier">Укажите адрес доставки</p>
-
-          <p class="checkout__dates-title">
-            <img src="./assets/icons/icn-package.svg" alt="" width="32" height="32">
-            <span>30&nbsp;сентября - 1&nbsp;октября</span>
-          </p>
-          <div class="checkout__dates" data-js-drag-slider data-drag-slider-align="start">
-            <div class="checkout__dates-track" data-js-drag-slider-track>
-              <include src="partials/checkout/delivery-date.html" data='{"day": "Ср, 30 сент", "value": "2026-09-30", "price": "0 ₽", "checked": "checked"}'></include>
-              <include src="partials/checkout/delivery-date.html" data='{"day": "Чт, 1 окт", "value": "2026-10-01", "price": "0 ₽"}'></include>
-              <include src="partials/checkout/delivery-date.html" data='{"day": "Пт, 2 окт", "value": "2026-10-02", "price": "0 ₽"}'></include>
-              <include src="partials/checkout/delivery-date.html" data='{"day": "Сб, 3 окт", "value": "2026-10-03", "price": "0 ₽"}'></include>
-              <include src="partials/checkout/delivery-date.html" data='{"day": "Вс, 4 окт", "value": "2026-10-04", "price": "0 ₽"}'></include>
-              <include src="partials/checkout/delivery-date.html" data='{"day": "Пн, 5 окт", "value": "2026-10-05", "price": "0 ₽"}'></include>
-              <include src="partials/checkout/delivery-date.html" data='{"day": "Вт, 6 окт", "value": "2026-10-06", "price": "0 ₽"}'></include>
-              <include src="partials/checkout/delivery-date.html" data='{"day": "Ср, 7 окт", "value": "2026-10-07", "price": "0 ₽"}'></include>
-            </div>
-          </div>
-        </div>
+        <!-- Курьерской доставки нет (решение пользователя, 28.10.2026): только пункт выдачи. Прежняя панель курьера (адрес, даты, макет 18271:40435)
+             и попап адреса — partials/checkout/address-modal.html, delivery-date.html — не подключены. -->
       </fieldset>
     </div>
 

@@ -1,0 +1,31 @@
+@use '../base' as *;
+
+// Логотипы платёжных систем (partials/pay-logos.html): одноцветные, цвет — color блока.
+// Высоты подобраны на глаз, чтобы знаки выглядели одного размера (у Mastercard — круги, у Visa и МИР — надпись).
+.pay-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: rem(16);
+  align-items: center;
+
+  &__item {
+    display: flex;
+
+    svg {
+      width: auto;
+      height: 100%;
+    }
+
+    &--visa {
+      height: rem(12);
+    }
+
+    &--mastercard {
+      height: rem(20);
+    }
+
+    &--mir {
+      height: rem(13);
+    }
+  }
+}

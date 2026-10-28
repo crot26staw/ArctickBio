@@ -45,7 +45,7 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 	десктоп 18270:36245 (ошибки — 18649:81751, выбран ПВЗ — 18271:39375, курьер — 18271:40435), планшет 18281:45602,
 	мобилка 18270:36258 (товары раскрыты — 18281:46200).
 	Форма — разметка WooCommerce (form.checkout, поля billing_*, payment_method, shipping_method, terms); логика — js/modules/checkout.js.
-	Пункт выдачи и адрес курьера выбираются в попапах (template-parts/checkout/pickup-modal.php, address-modal.php).
+	Пункт выдачи выбирается в попапе (template-parts/checkout/pickup-modal.php); адрес курьера (address-modal.php) — только если есть способ «Курьер».
 */ ?>
 <section class="checkout-wrap" data-header-theme="dark">
 	<form class="checkout__card checkout woocommerce-checkout" name="checkout" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" method="post" novalidate data-js-checkout>
@@ -94,6 +94,7 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 						</label>
 					<?php endforeach; ?>
 				</div>
+				<?php get_template_part( 'template-parts/pay-logos', null, [ 'mod' => 'checkout__pay-logos' ] ); ?>
 			</fieldset>
 
 			<fieldset class="checkout__section checkout__section--delivery woocommerce-shipping-methods">
@@ -119,7 +120,13 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 					<p class="checkout__error" hidden data-js-checkout-error="pickup">Выберите пункт выдачи</p>
 				</div>
 
-				<?php /* Курьер: адрес и дата доставки (макет 18271:40435). Адрес — из профиля покупателя, если был */ ?>
+				<?php
+				/*
+					Курьер: адрес и дата доставки (макет 18271:40435). Адрес — из профиля покупателя, если был.
+					Курьерской доставки нет (решение пользователя, 28.10.2026): способа «Курьер» нет в зоне — блок не выводится, в статике его нет.
+				*/
+				?>
+				<?php if ( $arctik_courier ) : ?>
 				<div class="checkout__delivery" <?php echo 'courier' === $arctik_slot ? '' : 'hidden'; ?> data-js-checkout-panel="courier">
 					<button class="checkout-target" type="button" aria-haspopup="dialog" aria-controls="address" data-js-modal-open="address">
 						<span class="checkout-target__icon">
@@ -157,6 +164,7 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 						</div>
 					</div>
 				</div>
+				<?php endif; ?>
 			</fieldset>
 		</div>
 

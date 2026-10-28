@@ -116,7 +116,7 @@ carbon_set_theme_option( 'arctik_products_ingredients', array_map(
 	fn( $i ) => [ 'image' => arctik_seed_image( $i[0] ), 'title' => $i[1], 'text' => $i[2] ],
 	$ingredients
 ) );
-carbon_set_theme_option( 'arctik_products_delivery_note', 'Бесплатная доставка от 3 000 ₽ Ozon' );
+carbon_set_theme_option( 'arctik_products_delivery_note', 'Бесплатная доставка от 5 000 ₽' );
 
 WP_CLI::success( 'Товары и общие поля товаров заполнены' );
 

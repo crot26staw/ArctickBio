@@ -246,6 +246,12 @@ $footer-products-height-mobile: rem(90); // мини-карточка: 72 + от
     }
   }
 
+  // Логотипы платёжных систем под документами (требование банка, макета нет)
+  &__pay {
+    margin-top: rem(24);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
   &__disclaimer {
     padding-block: rem(50) rem(39);
     font-family: $font-display;

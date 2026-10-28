@@ -1,13 +1,15 @@
 <?php
 /**
  * Итоги корзины-попапа (фрагмент [data-js-cart-totals], inc/cart.php). «Скидка» — только если применён промокод.
- * «Итого» — без разобранных товаров (как в статике; WC считает их в сумме корзины).
+ * «Итого» — без разобранных товаров (как в статике; WC считает их в сумме корзины) и без доставки: её стоимость зависит
+ * от города и способа — считается на оформлении; от порога бесплатной доставки — «Бесплатно» (arctik_is_free_shipping()).
  */
 
 defined( 'ABSPATH' ) || exit;
 
 $arctik_discount = (float) WC()->cart->get_discount_total() + (float) WC()->cart->get_discount_tax();
-$arctik_total    = (float) WC()->cart->get_total( 'edit' );
+$arctik_total    = (float) WC()->cart->get_total( 'edit' ) - (float) WC()->cart->get_shipping_total() - (float) WC()->cart->get_shipping_tax();
+$arctik_free     = arctik_is_free_shipping( (float) WC()->cart->get_cart_contents_total() );
 
 foreach ( WC()->cart->get_cart() as $arctik_item ) {
 	if ( arctik_cart_item_is_sold( $arctik_item ) ) {
@@ -28,6 +30,10 @@ foreach ( WC()->cart->get_cart() as $arctik_item ) {
 	<?php endif; ?>
 	<div class="mini-cart__row">
 		<dt>Доставка</dt>
-		<dd class="mini-cart__free">Бесплатно</dd>
+		<?php if ( $arctik_free ) : ?>
+			<dd class="mini-cart__free">Бесплатно</dd>
+		<?php else : ?>
+			<dd>При&nbsp;оформлении</dd>
+		<?php endif; ?>
 	</div>
 </dl>

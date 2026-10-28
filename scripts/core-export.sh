@@ -5,6 +5,7 @@
 #   ./scripts/core-export.sh --probe     — выгрузить установщик и проверить хостинг: PHP, ZipArchive, вход в базу прода
 #   ./scripts/core-export.sh --core      — выгрузить zip и wp-config.php, распаковать на сервере, убрать заглушку Reg.ru index.html
 #   ./scripts/core-export.sh --db        — импорт scripts/out/dump.sql.gz (сначала ./scripts/db-export.sh) в ПУСТУЮ базу прода
+#   ./scripts/core-export.sh --theme     — тема без GitHub Actions: сборка как в deploy-theme.yml, zip, распаковка установщиком
 # Установщик удаляет себя (и zip / дамп) после каждого запуска; токен передаётся POST-запросом.
 # Тема — workflow deploy-theme.yml (должна быть на сервере до импорта базы), загрузки — uploads-export.sh --upload.
 set -euo pipefail
@@ -58,6 +59,21 @@ case "$MODE" in
   --core)
     [ -f "$OUT/wp-core.zip" ] || { echo "Нет $OUT/wp-core.zip — сначала ./scripts/core-export.sh"; exit 1; }
     run_installer core "$OUT/wp-core.zip" wp-core.zip "$OUT/wp-config.php" wp-config.php
+    exit 0 ;;
+  --theme)
+    # Без GitHub Actions (нет секретов) — сборка как в deploy-theme.yml, распаковка тем же установщиком; лишние файлы на сервере не удаляются
+    echo "→ Сборка темы (build:wp, composer --no-dev)"
+    npm run build:wp --silent >/dev/null
+    rm -rf "$OUT/theme" "$OUT/theme.zip"
+    mkdir -p "$OUT/theme/wp-content/themes"
+    rsync -a --exclude node_modules --exclude '.git*' --exclude .DS_Store --exclude hot --exclude vendor \
+      wp-theme/arctik-bio/ "$OUT/theme/wp-content/themes/arctik-bio/"
+    composer install --no-dev --optimize-autoloader --no-interaction --no-progress --quiet --working-dir="$OUT/theme/wp-content/themes/arctik-bio"
+    [ -f "$OUT/theme/wp-content/themes/arctik-bio/dist/.vite/manifest.json" ] || { echo "Нет dist/.vite/manifest.json"; exit 1; }
+    (cd "$OUT/theme" && zip -qr -X ../theme.zip .)
+    echo "   $(find "$OUT/theme" -type f | wc -l | tr -d ' ') файлов, zip — $(du -h "$OUT/theme.zip" | cut -f1 | tr -d ' ')"
+    rm -rf "$OUT/theme"
+    run_installer core "$OUT/theme.zip" wp-core.zip
     exit 0 ;;
   --db)
     [ -f scripts/out/dump.sql.gz ] || { echo "Нет scripts/out/dump.sql.gz — сначала ./scripts/db-export.sh"; exit 1; }

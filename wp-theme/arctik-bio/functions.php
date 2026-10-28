@@ -22,9 +22,11 @@ foreach ( [
 	'payment',
 	'checkout',
 	'order',
+	'account',
 	'ajax/cart',
 	'ajax/auth',
 	'ajax/delivery',
+	'ajax/account',
 ] as $arctik_file ) {
 	require_once get_theme_file_path( "inc/{$arctik_file}.php" );
 }

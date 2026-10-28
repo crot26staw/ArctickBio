@@ -1,5 +1,39 @@
-import { validateForm, resetForm } from './field.js';
+import { validateForm, resetForm, setFieldError } from './field.js';
 import { initSwipeButtons } from './swipe-button.js';
+
+const api = () => window.arctik?.account;
+
+/**
+ * Запрос в WordPress (window.arctik.account — inc/account.php, обработчики inc/ajax/account.php).
+ * Возвращает данные успешного ответа или null; ошибки { errors: { имя поля: текст } } показываются у полей формы.
+ */
+async function accountRequest(action, body, form = null) {
+  const { endpoint, nonce } = api();
+  body.append('security', nonce);
+
+  form?.setAttribute('aria-busy', 'true');
+  const json = await fetch(endpoint.replace('%%endpoint%%', action), { method: 'POST', body, credentials: 'same-origin' })
+    .then((response) => response.json())
+    .catch(() => ({ success: false }));
+  form?.removeAttribute('aria-busy');
+
+  if (json.success) return json.data || {};
+  if (!form) return null;
+
+  const errors = json.data?.errors || {};
+  const inputs = [...form.querySelectorAll('[data-js-field-input]')];
+  // Поле без имени в ответе (или нет ответа) — ошибка у первого поля формы
+  if (!Object.keys(errors).length) errors[inputs[0].name] = 'Не\u00a0удалось сохранить, попробуйте ещё раз';
+
+  let first = null;
+  Object.entries(errors).forEach(([name, message]) => {
+    const input = inputs.find((el) => el.name === name) || inputs[0];
+    setFieldError(input, message);
+    first ??= input;
+  });
+  first?.focus();
+  return null;
+}
 
 /** Вкладки «Активные» / «Завершенные» в «Моих заказах» (role="tab" + aria-controls) */
 function initTabs(root) {
@@ -29,7 +63,8 @@ function initTabs(root) {
 
 /**
  * Формы «Аккаунта»: кнопка активна, только когда есть что сохранять —
- * данные отличаются от сохранённых (details) или заполнены все поля пароля (password). До WordPress — демо-сохранение.
+ * данные отличаются от сохранённых (details) или заполнены все поля пароля (password).
+ * В WordPress — arctik_account_details / arctik_account_password (после смены пароля nonce новый), в статике — демо-сохранение.
  */
 function initAccountForm(form) {
   const submit = form.querySelector('[data-js-account-submit]');
@@ -44,16 +79,24 @@ function initAccountForm(form) {
   };
 
   form.addEventListener('input', update);
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (!validateForm(form)) return;
+    if (!validateForm(form) || form.hasAttribute('aria-busy')) return;
+
+    let data = {};
+    if (api()) {
+      data = await accountRequest(isPassword ? 'arctik_account_password' : 'arctik_account_details', new FormData(form), form);
+      if (!data) return;
+    }
 
     if (isPassword) {
+      if (data.nonce) api().nonce = data.nonce;
       resetForm(form);
     } else {
-      saved = inputs.map((input) => input.value.trim());
+      inputs.forEach((input) => (input.value = input.value.trim()));
+      saved = inputs.map((input) => input.value);
       const name = document.querySelector('[data-js-account-name]');
-      if (name) name.textContent = form.elements.account_display_name.value.trim();
+      if (name) name.textContent = data.name || form.elements.account_display_name.value;
     }
     update();
   });
@@ -61,9 +104,21 @@ function initAccountForm(form) {
   update();
 }
 
+// Поля формы адреса ← data-address-* карточки (WordPress; в статике — из текста карточки)
+const ADDRESS_FIELDS = {
+  shipping_full_name: 'addressName',
+  shipping_phone: 'addressPhone',
+  shipping_address_1: 'addressAddress1',
+  shipping_address_2: 'addressAddress2',
+  shipping_country: 'addressCountry',
+  shipping_city: 'addressCity',
+  shipping_postcode: 'addressPostcode',
+};
+
 /**
  * «Мои адреса»: «Добавить адрес» / «Изменить» открывают форму вместо списка, «Назад» возвращает.
- * До WordPress: сохранение добавляет/обновляет карточку из <template>, корзина удаляет карточку.
+ * В WordPress сохранение, удаление и выбор основного (радиокнопка) — запросы arctik_address_save / _remove / _default,
+ * ответ — новый список карточек. В статике: сохранение добавляет/обновляет карточку из <template>, корзина удаляет карточку.
  */
 function initAddresses(root) {
   const list = root.querySelector('[data-js-addresses-list]');
@@ -83,7 +138,10 @@ function initAddresses(root) {
   const showForm = (card = null) => {
     editing = card;
     resetForm(form);
-    if (card) {
+    form.elements.address_id.value = card?.querySelector('input[type="radio"]').value || '';
+    if (card?.dataset.addressName !== undefined) {
+      Object.entries(ADDRESS_FIELDS).forEach(([name, key]) => (form.elements[name].value = card.dataset[key] || ''));
+    } else if (card) {
       form.elements.shipping_full_name.value = card.querySelector('[data-js-address-card-name]').textContent.replace(/\u00a0/g, ' ');
       form.elements.shipping_address_1.value = card.querySelector('[data-js-address-card-address]').textContent.replace(/\u00a0/g, ' ');
     }
@@ -102,16 +160,47 @@ function initAddresses(root) {
   root.querySelector('[data-js-addresses-add]').addEventListener('click', () => showForm());
   form.querySelector('[data-js-addresses-back]').addEventListener('click', showList);
 
+  const renderList = (html) => {
+    items.innerHTML = html;
+    initSwipeButtons();
+  };
+
+  // Запрос по карточке (удаление, основной адрес): адрес — значение её радиокнопки
+  const cardRequest = async (action, card) => {
+    const body = new FormData();
+    body.append('address_id', card.querySelector('input[type="radio"]').value);
+    card.setAttribute('aria-busy', 'true');
+    const data = await accountRequest(action, body);
+    card.removeAttribute('aria-busy');
+    if (data) renderList(data.html);
+  };
+
   items.addEventListener('click', (event) => {
     const card = event.target.closest('[data-js-address-card]');
     if (!card) return;
     if (event.target.closest('[data-js-address-edit]')) showForm(card);
-    if (event.target.closest('[data-js-address-remove]')) card.remove();
+    if (event.target.closest('[data-js-address-remove]')) {
+      if (api()) cardRequest('arctik_address_remove', card);
+      else card.remove();
+    }
   });
 
-  form.addEventListener('submit', (event) => {
+  items.addEventListener('change', (event) => {
+    const card = event.target.closest('[data-js-address-card]');
+    if (card && api()) cardRequest('arctik_address_default', card);
+  });
+
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (!validateForm(form)) return;
+    if (!validateForm(form) || form.hasAttribute('aria-busy')) return;
+
+    if (api()) {
+      const data = await accountRequest('arctik_address_save', new FormData(form), form);
+      if (!data) return;
+      renderList(data.html);
+      showList();
+      return;
+    }
 
     const { shipping_full_name: name, shipping_address_1: street, shipping_address_2: flat, shipping_city: city, shipping_postcode: postcode } = form.elements;
     const address = [postcode.value, city.value, street.value, flat.value].map((value) => value.trim()).filter(Boolean).join(', ');

@@ -193,7 +193,7 @@ src/
                    ymaps.js (загрузка Яндекс Карт JS API 2.1 один раз, loadYmaps(key))
                    checkout.js (форма оформления: способ получения [data-js-checkout-shipping="pickup|courier"], свёртка товаров, проверка (пункт выдачи / адрес курьера / согласие); в статике — демо-переход на order-received.html, в WordPress — ?wc-ajax=checkout, ошибки сервера у полей и под кнопкой оплаты)
                    order-success.js (анимация «Заказ оформлен»), order-track.js (шкала статусов: is-current и «капсула» за текущим и следующим шагом)
-                   account.js (ЛК: вкладки заказов, кнопки форм аккаунта, адреса — добавить/изменить/удалить, свёртка «Ваш заказ»)
+                   account.js (ЛК: вкладки заказов, кнопки форм аккаунта, адреса — добавить/изменить/удалить/основной, свёртка «Ваш заказ»; в статике — демо, в WordPress (window.arctik.account) — запросы в inc/ajax/account.php)
                    scroll-shift.js (секция [data-js-scroll-shift] закрепляется (pin), лента [data-js-scroll-shift-track] по скроллу уезжает из начального сдвига (CSS translate у ленты) в 0,
                    путь = сдвигу; translate, не transform — transform занят drag-slider.js. Только ≥1200. Сейчас — сотрудники «О компании»: лента правее заголовка (398) → к левому полю)
                    scroll-video.js (видео, которое проматывает скролл: createVideoScrubber(video) → функция «доля видео 0…1» для своей шкалы;

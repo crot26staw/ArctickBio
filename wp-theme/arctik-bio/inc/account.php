@@ -70,8 +70,8 @@ add_filter( 'body_class', function ( array $classes ): array {
 	return $classes;
 } );
 
-// <title>: «Мои заказы» / «Аккаунт» / «Мои адреса» вместо «Мой аккаунт»
-add_filter( 'document_title_parts', function ( array $parts ): array {
+// <title>: «Мои заказы» / «Аккаунт» / «Мои адреса» вместо «Мой аккаунт» (заголовок задаёт Yoast SEO — inc/seo.php)
+add_filter( 'wpseo_title', function ( string $title ): string {
 	$titles = [
 		'orders'       => 'Мои заказы',
 		'edit-account' => 'Аккаунт',
@@ -79,11 +79,7 @@ add_filter( 'document_title_parts', function ( array $parts ): array {
 	];
 	$section = arctik_account_section();
 
-	if ( $section ) {
-		$parts['title'] = $titles[ $section ];
-	}
-
-	return $parts;
+	return $section ? $titles[ $section ] . ' — ' . get_bloginfo( 'name' ) : $title;
 } );
 
 // ---------- Заказы ----------

@@ -188,6 +188,11 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     flex-direction: column;
     gap: rem(12);
     margin-top: auto;
+
+    // WordPress: в корзине все вкусы — предложить нечего
+    &[hidden] {
+      display: none;
+    }
   }
 
   &__more-title {

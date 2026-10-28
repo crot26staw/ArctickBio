@@ -30,7 +30,7 @@ echo '→ Постоянные ссылки'
 wp rewrite structure "/%postname%/"
 
 echo '→ Плагины'
-wp plugin install woocommerce wp-mail-smtp --activate
+wp plugin install woocommerce wp-mail-smtp wordpress-seo --activate
 wp plugin delete akismet hello >/dev/null 2>&1 || true
 wp language plugin install --all ru_RU
 

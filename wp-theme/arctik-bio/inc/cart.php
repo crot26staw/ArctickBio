@@ -39,14 +39,36 @@ function arctik_cart_count(): int {
 }
 
 /**
- * Промокод, применённый к корзине (в попапе — один, см. inc/ajax/cart.php).
+ * Текст первой ошибки из уведомлений WC (добавление в корзину) — без ссылок («Просмотр корзины»), с неразрывными пробелами;
+ * пусто — ошибок нет. clear — снять уведомления.
  */
-function arctik_cart_coupon(): string {
-	return function_exists( 'WC' ) && WC()->cart ? (string) ( WC()->cart->get_applied_coupons()[0] ?? '' ) : '';
+function arctik_cart_notice( bool $clear = true ): string {
+	$notices = wc_get_notices( 'error' );
+	if ( $clear ) {
+		wc_clear_notices();
+	}
+	if ( ! $notices ) {
+		return '';
+	}
+
+	$text = preg_replace( '#<a\b[^>]*>.*?</a>#is', '', (string) $notices[0]['notice'] );
+
+	return trim( arctik_typograph( wp_strip_all_tags( html_entity_decode( $text, ENT_QUOTES, 'UTF-8' ) ) ) );
 }
 
 /**
- * Разметка части корзины: list — товары, totals — итоги, title-count — « (2)» в заголовке, count — бейдж шапки.
+ * Промокод, применённый к корзине (в попапе — один, см. inc/ajax/cart.php). WC хранит коды в нижнем регистре —
+ * выводим код так, как его ввёл покупатель («SALE10»; сессия arctik_coupon_input, inc/ajax/cart.php).
+ */
+function arctik_cart_coupon(): string {
+	$code = function_exists( 'WC' ) && WC()->cart ? (string) ( WC()->cart->get_applied_coupons()[0] ?? '' ) : '';
+	$typed = $code && WC()->session ? (string) WC()->session->get( 'arctik_coupon_input' ) : '';
+
+	return $typed && wc_format_coupon_code( $typed ) === $code ? $typed : $code;
+}
+
+/**
+ * Разметка части корзины: list — товары, more — «Попробуйте также», totals — итоги, title-count — « (2)» в заголовке, count — бейдж шапки.
  */
 function arctik_cart_part( string $part ): string {
 	if ( 'title-count' === $part ) {
@@ -71,7 +93,7 @@ add_filter( 'woocommerce_add_to_cart_fragments', function ( array $fragments ): 
 
 	WC()->cart->calculate_totals();
 
-	foreach ( [ 'list', 'totals', 'title-count', 'count' ] as $part ) {
+	foreach ( [ 'list', 'more', 'totals', 'title-count', 'count' ] as $part ) {
 		$selector               = 'count' === $part ? '[data-js-cart-count]' : "[data-js-cart-{$part}]";
 		$fragments[ $selector ] = arctik_cart_part( $part );
 	}

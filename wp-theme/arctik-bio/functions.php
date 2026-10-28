@@ -23,6 +23,7 @@ foreach ( [
 	'checkout',
 	'order',
 	'account',
+	'seo',
 	'ajax/cart',
 	'ajax/auth',
 	'ajax/delivery',

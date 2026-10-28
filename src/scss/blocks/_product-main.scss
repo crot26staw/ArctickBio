@@ -229,6 +229,17 @@
     }
   }
 
+  // Ошибка добавления в корзину (WordPress: «в корзине уже весь остаток»; макета нет — решение пользователя, как ошибка под кнопкой оплаты)
+  &__error {
+    @include desc-m;
+    margin-top: rem(-8);
+    color: var(--color-error);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
   &__delivery {
     @include body-m-strong;
     display: flex;

@@ -14,7 +14,8 @@ gsap.registerPlugin(Draggable, InertiaPlugin);
  */
 function initSlider(viewport) {
   const track = viewport.querySelector('[data-js-drag-slider-track]');
-  if (!track) return;
+  if (!track || viewport.dataset.dragSliderReady !== undefined) return;
+  viewport.dataset.dragSliderReady = '';
 
   const mobileQuery = window.matchMedia('(max-width: 767px)');
   const isAlignStart = () =>
@@ -72,6 +73,7 @@ function initSlider(viewport) {
   });
 }
 
-export function initDragSliders() {
-  document.querySelectorAll('[data-js-drag-slider]').forEach(initSlider);
+// scope — область поиска (лента «Попробуйте также» после обновления корзины фрагментами, cart.js); готовые ленты пропускаются
+export function initDragSliders(scope = document) {
+  scope.querySelectorAll('[data-js-drag-slider]').forEach(initSlider);
 }

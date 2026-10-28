@@ -43,21 +43,7 @@ $arctik_empty = WC()->cart->is_empty();
 				<div class="mini-cart__scroll" data-lenis-prevent>
 					<?php echo arctik_cart_part( 'list' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 
-					<div class="mini-cart__more">
-						<p class="mini-cart__more-title">Попробуйте также</p>
-						<div class="mini-cart__more-viewport" data-js-drag-slider data-drag-slider-align="start">
-							<div class="mini-cart__more-track" data-js-drag-slider-track>
-								<?php
-								foreach ( arctik_products() as $arctik_product ) {
-									get_template_part( 'template-parts/mini-card', null, [
-										'product' => $arctik_product,
-										'mod'     => 'mini-card--light',
-									] );
-								}
-								?>
-							</div>
-						</div>
-					</div>
+					<?php echo arctik_cart_part( 'more' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</div>
 
 				<div class="mini-cart__summary">

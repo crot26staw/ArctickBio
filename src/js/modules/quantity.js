@@ -13,9 +13,10 @@ function initQuantity(root) {
 
   const clamp = (value) => Math.min(max(), Math.max(min(), Math.round(value) || min()));
 
+  // Неактивное поле (товара нет в наличии, WordPress) — обе кнопки неактивны
   const update = () => {
-    minus.disabled = Number(input.value) <= min();
-    plus.disabled = Number(input.value) >= max();
+    minus.disabled = input.disabled || Number(input.value) <= min();
+    plus.disabled = input.disabled || Number(input.value) >= max();
   };
 
   const set = (value) => {

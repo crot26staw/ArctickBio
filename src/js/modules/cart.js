@@ -2,6 +2,8 @@ import { getLenis } from './smooth-scroll.js';
 import { cartRequest, hasCartApi } from './cart-api.js';
 import { initQuantities } from './quantity.js';
 import { initRollText } from './roll-text.js';
+import { initDragSliders } from './drag-slider.js';
+import { initSwipeButtons } from './swipe-button.js';
 
 const OPEN_CLASS = 'is-open';
 const LOCK_CLASS = 'is-scroll-locked';
@@ -113,6 +115,9 @@ export function initCart() {
       initQuantities(list);
       initRollText(list);
     }
+    // «Попробуйте также» — без товаров из корзины, лента пришла новой
+    initDragSliders(root);
+    initSwipeButtons();
     update();
   };
 
@@ -150,14 +155,22 @@ export function initCart() {
     }
     if (button.getAttribute('aria-busy') === 'true') return;
     button.setAttribute('aria-busy', 'true');
-    const json = await cartRequest('add_to_cart', { product_id: button.dataset.product_id, quantity: 1 });
+    // keep_notice — текст ошибки покажет страница товара
+    const json = await cartRequest('arctik_cart_add', { product_id: button.dataset.product_id, quantity: 1, keep_notice: 1 });
     button.removeAttribute('aria-busy');
     if (json.error && json.product_url) window.location.href = json.product_url;
     else if (json.fragments) showAdded(button);
   };
 
+  const showFormError = (form, message) => {
+    const error = form.querySelector('[data-js-cart-form-error]');
+    if (!error) return;
+    error.textContent = message || '';
+    error.hidden = !message;
+  };
+
   // Форма покупки на странице товара: выбранная вариация (радио формата, variation_id) или сам товар (add-to-cart).
-  // Ошибку (не хватило остатка) WC пишет в уведомления — на странице товара их нет, кнопка просто снова активна
+  // Ошибка (не хватило остатка) — текстом под кнопкой [data-js-cart-form-error], гаснет при смене формата/количества
   const submitProductForm = async (form, trigger) => {
     if (!api) {
       showAdded(trigger);
@@ -168,9 +181,10 @@ export function initCart() {
       || form.elements['add-to-cart']?.value;
     if (!productId) return;
     form.setAttribute('aria-busy', 'true');
-    const json = await cartRequest('add_to_cart', { product_id: productId, quantity: form.elements.quantity?.value || 1 });
+    const json = await cartRequest('arctik_cart_add', { product_id: productId, quantity: form.elements.quantity?.value || 1 });
     form.removeAttribute('aria-busy');
     if (json.fragments && !json.error) showAdded(trigger);
+    showFormError(form, json.error ? json.message : '');
   };
 
   const open = (trigger = null) => {
@@ -238,6 +252,12 @@ export function initCart() {
     if (!form) return;
     event.preventDefault();
     submitProductForm(form, event.submitter || document.activeElement);
+  });
+
+  // Смена формата или количества — ошибка добавления больше не про то, что выбрано
+  document.addEventListener('change', (event) => {
+    const form = event.target.closest('[data-js-cart-form]');
+    if (form) showFormError(form, '');
   });
 
   document.addEventListener('click', (event) => {

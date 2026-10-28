@@ -34,6 +34,9 @@ if ( $arctik_product->is_type( 'variable' ) ) {
 	$arctik_available = $arctik_product->is_purchasable() && $arctik_product->is_in_stock();
 }
 
+// Ошибка добавления в корзину из уведомлений WC («+» у карточки, форма без JS; на сайте они нигде не выводятся — снимаем)
+$arctik_error = arctik_cart_notice();
+
 $arctik_price    = arctik_price_text( $arctik_selected ? wc_get_price_to_display( $arctik_selected ) : $arctik_product->get_price() );
 $arctik_max      = $arctik_selected ? arctik_product_max_qty( $arctik_selected ) : 99;
 $arctik_delivery = (string) arctik_option( 'arctik_products_delivery_note' );
@@ -96,7 +99,7 @@ $arctik_related = array_filter( arctik_products(), fn( $item ) => $item->get_id(
 
 			<div class="product-main__buy">
 				<div class="product-main__actions" data-js-sticky-buy-source>
-					<?php get_template_part( 'template-parts/quantity', null, [ 'name' => 'quantity', 'max' => $arctik_max ] ); ?>
+					<?php get_template_part( 'template-parts/quantity', null, [ 'name' => 'quantity', 'max' => $arctik_max, 'disabled' => ! $arctik_available ] ); ?>
 					<button class="product-main__cart btn btn--accent single_add_to_cart_button button" type="submit" data-js-swipe<?php disabled( ! $arctik_available ); ?>>
 						<?php if ( $arctik_available ) : ?>
 							<span>В&nbsp;корзину</span>
@@ -106,6 +109,8 @@ $arctik_related = array_filter( arctik_products(), fn( $item ) => $item->get_id(
 						<?php endif; ?>
 					</button>
 				</div>
+				<?php /* Ошибка добавления в корзину: AJAX — cart.js; после «+» у карточки или отправки формы без JS — уведомление WC */ ?>
+				<p class="product-main__error" role="alert"<?php echo $arctik_error ? '' : ' hidden'; ?> data-js-cart-form-error><?php echo esc_html( $arctik_error ); ?></p>
 				<?php if ( $arctik_delivery ) : ?>
 					<p class="product-main__delivery">
 						<img src="<?php echo esc_url( arctik_asset( 'icons/icn-box.svg' ) ); ?>" alt="" width="24" height="24">

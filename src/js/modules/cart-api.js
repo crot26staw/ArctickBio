@@ -1,6 +1,6 @@
 /**
  * Запросы к корзине WooCommerce (только WordPress: window.arctik.cart — inc/cart.php; в статике модулей-демо это не касается).
- * POST на ?wc-ajax=<endpoint>: стандартные add_to_cart / remove_from_cart и свои arctik_cart_qty, arctik_coupon_apply,
+ * POST на ?wc-ajax=<endpoint>: стандартный remove_from_cart и свои arctik_cart_add, arctik_cart_qty, arctik_coupon_apply,
  * arctik_coupon_remove (inc/ajax/cart.php). В ответе — фрагменты WC { селектор: разметка }: элементы заменяются целиком,
  * затем событие cart:updated на document (cart.js заново подключает счётчики и ховеры новых товаров).
  */

@@ -38,7 +38,16 @@ run_installer() {
   echo "→ Выгрузка по FTP в $FTP_SITE_PATH"
   "${CURL[@]}" "${ARGS[@]}"
   echo "→ Установщик: $ACTION"
-  curl --silent --show-error --max-time 900 --data-urlencode "t=$TOKEN" --data-urlencode "do=$ACTION" "${PROD_URL%/}/$NAME" || true
+  # Сразу после выгрузки сервер иногда ещё отдаёт 404 — повтор через пару секунд
+  local TRY CODE
+  for TRY in 1 2 3; do
+    CODE="$(curl --silent --show-error --max-time 900 -o "$OUT/installer-response" -w '%{http_code}' \
+      --data-urlencode "t=$TOKEN" --data-urlencode "do=$ACTION" "${PROD_URL%/}/$NAME" || true)"
+    [ "$CODE" = "404" ] || break
+    sleep 3
+  done
+  cat "$OUT/installer-response" 2>/dev/null; rm -f "$OUT/installer-response"
+  [ "$CODE" = "200" ] || echo "   ответ сервера: HTTP $CODE"
   echo ""
   # Подстраховка: установщик удаляет себя сам, но если запрос оборвался — удалить по FTP
   "${CURL[@]}" "ftp://$FTP_HOST/" -Q "DELE ${FTP_SITE_PATH%/}/$NAME" -o /dev/null 2>/dev/null && echo "   (установщик удалён по FTP)" || true

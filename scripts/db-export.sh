@@ -74,6 +74,8 @@ fi
 
 echo "→ Выгрузка"
 twp db export /out/dump.sql --default-character-set=utf8mb4 --quiet
+# На хостинге MySQL 8: строки MariaDB «/*M!… */;» для него — комментарий и пустой запрос, импорт через multi_query на нём падает
+sed -i.bak '/^\/\*M!/d' "$OUT/dump.sql" && rm -f "$OUT/dump.sql.bak"
 LEFT="$( { grep -o "${OLD_URL#*://}" "$OUT/dump.sql" || true; } | wc -l | tr -d ' ')"
 gzip -9 "$OUT/dump.sql"
 SIZE="$(du -h "$OUT/dump.sql.gz" | cut -f1 | tr -d ' ')"

@@ -37,8 +37,6 @@ Container::make( 'theme_options', 'Cookie' )
 			Field::make( 'rich_text', 'arctik_cookie_text', 'Текст' )
 				->set_settings( [ 'media_buttons' => false ] )
 				->set_help_text( 'Ссылки — например, на /documents/#cookie' ),
-			Field::make( 'text', 'arctik_cookie_note', 'Строка под текстом' )
-				->set_help_text( 'Пусто — не выводится' ),
 		],
 		$arctik_cookie_category( 'necessary', 'Необходимые (всегда включены)' ),
 		$arctik_cookie_category( 'analytics', 'Аналитика' ),

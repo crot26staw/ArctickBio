@@ -16,7 +16,6 @@ $arctik_inline = static function ( string $name ): string {
 
 $arctik_banner_text = $arctik_inline( 'arctik_cookie_banner_text' );
 $arctik_text        = $arctik_inline( 'arctik_cookie_text' );
-$arctik_note        = (string) arctik_option( 'arctik_cookie_note' );
 $arctik_title       = (string) arctik_option( 'arctik_cookie_title' ) ?: 'Мы используем файлы cookie';
 
 $arctik_categories = [
@@ -48,9 +47,6 @@ $arctik_categories = [
 					<h2 class="cookie-settings__title" id="cookie-settings-title"><?php echo arctik_text( $arctik_title ); // phpcs:ignore WordPress.Security.EscapeOutput ?></h2>
 					<?php if ( $arctik_text ) : ?>
 						<p class="cookie-settings__text"><?php echo $arctik_text; // phpcs:ignore WordPress.Security.EscapeOutput -- wp_kses выше ?></p>
-					<?php endif; ?>
-					<?php if ( $arctik_note ) : ?>
-						<p class="cookie-settings__note"><?php echo arctik_text( $arctik_note ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 					<?php endif; ?>
 				</div>
 

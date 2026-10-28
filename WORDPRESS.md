@@ -43,13 +43,20 @@
 - `./scripts/uploads-export.sh` — копия `wp-content/uploads` из Docker в `scripts/out/uploads` (без `wc-logs`), `--upload` — она же по FTP в `<FTP_SITE_PATH>/wp-content/uploads/` (curl, FTPS; ~600 файлов, 50 МБ), `--check` — вход по FTP и есть ли `wp-config.php` в папке сайта. Проверено на тестовом FTP: все файлы на месте.
 - `scripts/out/` в `.gitignore` (там дамп и пароль админа).
 
+### Хостинг — что уже известно (проверено по FTP 28.10.2026)
+- FTP: `server126.hosting.reg.ru` (IP 37.140.192.213 — по IP FTPS не проходит: сертификат на `*.hosting.reg.ru`), логин `u3592099_dev`, FTPS работает. Доступы — в `.env` (взяты из FileZilla, запись «ArktikBio»).
+- Папка сайта — `www/arcticbiomarine.ru` (сейчас там только заглушка Reg.ru `index.html`), WordPress не установлен.
+- Домен `arcticbiomarine.ru` и `www` указывают на этот сервер, http отвечает. **SSL — самоподписанный** (браузер ругается) — выпустить бесплатный Let's Encrypt в панели.
+- PHP **8.3** (`php-bin/arcticbiomarine.ru/php` → `/opt/php/8.3`), `php.ini`: memory 1024M, upload/post 256M, max_execution_time 300, `max_input_vars` 100000, письма через sendmail от `info@arcticbiomarine.ru`.
+- **Только в панели (по FTP нельзя):** создать базу MySQL (имя, пользователь, пароль → `PROD_DB_*` в `.env`), выпустить SSL Let's Encrypt и включить редирект на https. Остальное — по FTP: ядро WordPress и плагины — копия локальных (те же версии, с русскими переводами) из Docker, `wp-config.php` прода — из `.env`, импорт базы — временным PHP-скриптом с токеном (phpMyAdmin не нужен; скрипт сразу удаляется), тема — workflow, загрузки — `uploads-export.sh --upload`. Установщик WordPress Reg.ru не нужен.
+
 ### Первый перенос — порядок (следующая сессия)
-1. **Панель Reg.ru:** домен `arcticbiomarine.ru` привязан к хостингу, PHP 8.2+, SSL (бесплатный Let's Encrypt) и редирект на https; создана база MySQL (имя, пользователь, пароль — в `wp-config.php`).
-2. **WordPress 7.1.3** — установщиком Reg.ru или архивом по FTP, язык русский, **префикс таблиц `wp_`**. В `wp-config.php`: `WP_DEBUG` false, `define( 'WP_ENVIRONMENT_TYPE', 'production' );`, `define( 'DISALLOW_FILE_EDIT', true );`.
-3. **Плагины** тех же версий, что локально: WooCommerce 11.2.1, WP Mail SMTP 4.10.3, Yoast SEO 28.8 — загрузить в `wp-content/plugins/` (через админку или FTP), активировать не обязательно — после импорта базы они станут активными (список активных — в базе). Carbon Fields — в `vendor` темы, отдельно не ставится.
+1. **Панель Reg.ru (пользователь):** база MySQL создана, SSL Let's Encrypt выпущен, редирект на https (домен и PHP 8.3 — уже, см. выше).
+2. **WordPress 7.1.3 по FTP** — копия ядра из локального Docker (`/var/www/html` без `wp-content/uploads`, `wp-config.php`, `.htaccess`), язык — `wp-content/languages`; `wp-config.php` прода — из `PROD_DB_*`, новые ключи соли, **префикс `wp_`**, `WP_DEBUG` false, `define( 'WP_ENVIRONMENT_TYPE', 'production' );`, `define( 'DISALLOW_FILE_EDIT', true );`. Заглушку `index.html` Reg.ru — удалить (иначе открывается она).
+3. **Плагины** — из локального Docker (`wp-content/plugins`: WooCommerce 11.2.1, WP Mail SMTP 4.10.3, Yoast SEO 28.8), активными станут после импорта базы. Carbon Fields — в `vendor` темы.
 4. **`.env`:** `PROD_URL`, `PROD_ADMIN_EMAIL` (и при желании `PROD_ADMIN_PASSWORD`), `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`, `FTP_SITE_PATH` (папка с `wp-config.php` от корня FTP), `FTP_PROTOCOL`. Проверка — `./scripts/uploads-export.sh --check`.
 5. **Тема:** `./scripts/gh-secrets.sh` → тег `theme-v1` → дождаться зелёного workflow (тема должна лежать на сервере до импорта базы — в базе активна `arctik-bio`).
-6. **База:** `./scripts/db-export.sh` → в phpMyAdmin хостинга удалить все таблицы, созданные установщиком, → импорт `scripts/out/dump.sql.gz`.
+6. **База:** `./scripts/db-export.sh` → импорт `scripts/out/dump.sql.gz` в пустую базу прода (временный PHP-скрипт с токеном по FTP, после — удалить; или phpMyAdmin из панели).
 7. **Загрузки:** `./scripts/uploads-export.sh --upload`.
 8. **Админка на хостинге** (`/wp-admin/`, логин `admin`, пароль — `scripts/out/admin-password.txt`): Настройки → Постоянные ссылки → «Сохранить» (пишет `.htaccess`); Консоль → Обновления → обновить переводы; WP Mail SMTP — SMTP прода (сейчас в базе Mailpit), отправить тестовое письмо; Yoast → Инструменты → оптимизация данных SEO; WooCommerce → Статус → Инструменты → очистить временные данные; «Настройки → Чтение → Видимость для поисковиков» — закрыто уже в базе (`blog_public` 0, решение пользователя 28.10.2026: сайт показывают заказчику); **открыть при запуске**.
 9. **Проверка на домене:** главная, каталог, карточка, корзина, оформление (СДЭК пока в тестовом режиме — до Оф2б), письма, вход и ЛК, «Документы», картинки и видео, нет ли `localhost` в коде страницы.

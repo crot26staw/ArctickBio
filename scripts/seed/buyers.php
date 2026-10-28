@@ -1,6 +1,6 @@
 <?php
 /**
- * Наполнение «Покупателям» (этап «Б»): шаблон страницы и поля — тексты и картинки из статики.
+ * Наполнение «Покупателям» (этап «Б»): шаблон страницы и поля — тексты и картинки из статики, вопросы — из документа заказчика.
  * Запуск: docker compose run --rm wpcli wp eval-file /seed/buyers.php
  */
 
@@ -13,20 +13,14 @@ if ( ! $page ) {
 
 update_post_meta( $page->ID, '_wp_page_template', 'page-templates/buyers.php' );
 
-// В статике ответ во всех вопросах один (из макета), вопросы «Оплаты» и «Возврата» — копия «Общих».
-$answer  = '15 саше — попробовать продукт и выбрать любимую ягоду. 30 саше — месяц ежедневного приёма';
-$general = [
-	'Какую упаковку выбрать: 15 или 30 стиков?',
-	'Как принимать коллаген?',
-	'Нужно ли хранить стики в холодильнике?',
-	'Есть ли в коллагене вкус или запах рыбы?',
-	'Сколько занимает доставка?',
-	'Можно ли вернуть заказ?',
-	'Есть ли скидка на курс?',
+// Вопросы — документ заказчика (этап Кт2): разделы по порядку, названия разделов и якоря — как в вёрстке.
+$sections = [
+	[ 'title' => 'Общие вопросы', 'menu' => '', 'anchor' => 'help-general' ],
+	[ 'title' => 'Доставка', 'menu' => '', 'anchor' => 'help-delivery' ],
+	[ 'title' => 'Оплата', 'menu' => '', 'anchor' => 'help-payment' ],
+	[ 'title' => 'Возврат', 'menu' => 'Возврат товара', 'anchor' => 'help-returns' ],
 ];
-$delivery = array_merge( [ 'Куда вы доставляете заказы?', 'Какие способы доставки доступны?' ], array_slice( $general, 2 ) );
-
-$questions = fn( array $list ) => array_map( fn( $question ) => [ 'question' => $question, 'answer' => $answer ], $list );
+$faq = arctik_seed_faq( 'ArcticBerries_FAQ_pokupatelyam.txt' );
 
 $contacts = get_page_by_path( 'contacts' );
 
@@ -36,12 +30,11 @@ carbon_set_post_meta( $page->ID, 'arctik_buyers_note', sprintf(
 	'Не нашли ответы на свои вопросы? <a href="%s">Напишите</a> нам, и мы ответим вам в кратчайшие сроки.',
 	$contacts ? get_permalink( $contacts ) : '#'
 ) );
-carbon_set_post_meta( $page->ID, 'arctik_buyers_groups', [
-	[ 'title' => 'Общие вопросы', 'menu' => '', 'anchor' => 'help-general', 'questions' => $questions( $general ) ],
-	[ 'title' => 'Доставка', 'menu' => '', 'anchor' => 'help-delivery', 'questions' => $questions( $delivery ) ],
-	[ 'title' => 'Оплата', 'menu' => '', 'anchor' => 'help-payment', 'questions' => $questions( $general ) ],
-	[ 'title' => 'Возврат', 'menu' => 'Возврат товара', 'anchor' => 'help-returns', 'questions' => $questions( $general ) ],
-] );
+carbon_set_post_meta( $page->ID, 'arctik_buyers_groups', array_map(
+	fn( $section, $group ) => $section + [ 'questions' => $group['questions'] ],
+	$sections,
+	array_slice( $faq, 0, count( $sections ) )
+) );
 
 // «Где нас купить?» пока скрыт (просьба пользователя) — поля закомментированы в inc/fields/buyers.php.
 /*

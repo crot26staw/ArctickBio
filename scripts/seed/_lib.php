@@ -41,3 +41,34 @@ function arctik_seed_file( string $file, string $alt = '' ): int {
 function arctik_seed_image( string $file, string $alt = '' ): int {
 	return arctik_seed_file( $file, $alt );
 }
+
+/**
+ * Текст заказчика из scripts/seed/content/ (имя файла).
+ */
+function arctik_seed_content( string $file ): string {
+	return (string) file_get_contents( __DIR__ . "/content/{$file}" );
+}
+
+/**
+ * FAQ из документа заказчика: блоки через пустую строку; блок из одной строки ПРОПИСНЫМИ — раздел,
+ * иначе первая строка — вопрос, остальные — ответ.
+ *
+ * @return array<int, array{title: string, questions: array<int, array{question: string, answer: string}>}>
+ */
+function arctik_seed_faq( string $file ): array {
+	$groups = [];
+	foreach ( preg_split( '/\R\s*\R/u', trim( arctik_seed_content( $file ) ) ) as $block ) {
+		$lines = array_values( array_filter( array_map( 'trim', preg_split( '/\R/u', $block ) ) ) );
+		if ( ! $lines ) {
+			continue;
+		}
+		if ( mb_strtoupper( $lines[0] ) === $lines[0] ) {
+			$groups[] = [ 'title' => array_shift( $lines ), 'questions' => [] ];
+		}
+		if ( $lines && $groups ) {
+			$groups[ array_key_last( $groups ) ]['questions'][] = [ 'question' => $lines[0], 'answer' => implode( "\n", array_slice( $lines, 1 ) ) ];
+		}
+	}
+
+	return $groups;
+}

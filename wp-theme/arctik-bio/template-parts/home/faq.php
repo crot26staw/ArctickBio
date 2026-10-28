@@ -1,26 +1,20 @@
 <?php
 /**
  * «Частые вопросы» (src/partials/home/faq.html). Заголовок, текст, кнопка, подпись — главная, вкладка «Частые вопросы»;
- * вопросы — первый раздел страницы «Покупателям» (решение пользователя), кнопка ведёт туда же; соцсети — «Настройки сайта».
- * Открыт первый вопрос, как на «Покупателям» (в статике — второй, как в макете).
+ * там же вопросы — свой список (решение пользователя, этап Кт2); кнопка ведёт на «Покупателям»; соцсети — «Настройки сайта».
+ * Открыт первый вопрос, как на «Покупателям».
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$arctik_page   = (int) get_option( 'page_on_front' );
-$arctik_buyers = get_pages( [ 'meta_key' => '_wp_page_template', 'meta_value' => 'page-templates/buyers.php', 'number' => 1 ] );
-$arctik_buyers = $arctik_buyers ? $arctik_buyers[0]->ID : 0;
-
-$arctik_questions = [];
-foreach ( (array) ( $arctik_buyers ? arctik_field( 'arctik_buyers_groups', $arctik_buyers ) : [] ) as $arctik_group ) {
-	$arctik_questions = array_values( array_filter( (array) ( $arctik_group['questions'] ?? [] ), fn( $item ) => '' !== trim( (string) ( $item['question'] ?? '' ) ) ) );
-	if ( $arctik_questions ) {
-		break;
-	}
-}
+$arctik_page      = (int) get_option( 'page_on_front' );
+$arctik_questions = array_values( array_filter( (array) arctik_field( 'arctik_home_faq_items', $arctik_page ), fn( $item ) => '' !== trim( (string) ( $item['question'] ?? '' ) ) ) );
 if ( ! $arctik_questions ) {
 	return;
 }
+
+$arctik_buyers = get_pages( [ 'meta_key' => '_wp_page_template', 'meta_value' => 'page-templates/buyers.php', 'number' => 1 ] );
+$arctik_buyers = $arctik_buyers ? $arctik_buyers[0]->ID : 0;
 
 $arctik_text   = (string) arctik_field( 'arctik_home_faq_text', $arctik_page );
 $arctik_button = (string) arctik_field( 'arctik_home_faq_button', $arctik_page );
@@ -34,7 +28,7 @@ $arctik_aside  = (string) arctik_field( 'arctik_home_faq_aside', $arctik_page );
 				<?php if ( $arctik_text ) : ?>
 					<p class="faq__text" data-js-reveal-sequence-item><?php echo arctik_lines( $arctik_text ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 				<?php endif; ?>
-				<?php if ( $arctik_button ) : ?>
+				<?php if ( $arctik_button && $arctik_buyers ) : ?>
 					<a class="faq__btn btn btn--accent" href="<?php echo esc_url( get_permalink( $arctik_buyers ) ); ?>" data-js-swipe data-js-reveal-sequence-item><?php echo arctik_text( $arctik_button ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a>
 				<?php endif; ?>
 			</div>

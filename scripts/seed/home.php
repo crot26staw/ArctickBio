@@ -1,6 +1,6 @@
 <?php
 /**
- * Наполнение главной (этапы Г1–Г3): страница «Главная» как главная сайта, поля hero, «О бренде», «Каталог», «Состав», «Исследования», «Частые вопросы», «Отзывы» и сами отзывы — тексты, фото и видео из статики.
+ * Наполнение главной (этапы Г1–Г3): страница «Главная» как главная сайта, поля hero, «О бренде», «Каталог», «Состав», «Исследования», «Частые вопросы», «Отзывы» и сами отзывы — тексты, фото и видео из статики; вопросы FAQ и отзывы — из документов заказчика.
  * Запуск: docker compose run --rm wpcli wp eval-file /seed/home.php
  */
 
@@ -63,33 +63,56 @@ carbon_set_post_meta( $id, 'arctik_home_research_docs', [
 	[ 'title' => 'Отчет РАН', 'file' => '' ],
 ] );
 
-// «Частые вопросы»: вопросы — первый раздел «Покупателям» (scripts/seed/buyers.php).
+// «Частые вопросы»: вопросы — документ заказчика (этап Кт2).
 carbon_set_post_meta( $id, 'arctik_home_faq_title', 'Частые вопросы' );
 carbon_set_post_meta( $id, 'arctik_home_faq_text', 'Мы собрали всё самое важное о продукте, приёме и заказе' );
 carbon_set_post_meta( $id, 'arctik_home_faq_button', 'Все вопросы' );
 carbon_set_post_meta( $id, 'arctik_home_faq_aside', "Нужна помощь?\nНаша команда всегда на связи." );
+carbon_set_post_meta( $id, 'arctik_home_faq_items', arctik_seed_faq( 'ArcticBerries_FAQ_glavnaya.txt' )[0]['questions'] ?? [] );
 
-// Отзывы: в статике один отзыв повторён 10 раз — так и заносим (метка _arctik_seed — без дублей при повторном запуске).
+// Отзывы — документ заказчика (этап Кт2): имя с возрастом, дата, вкус, текст; оценка 5.
+// Заголовков в документе нет — придуманы по тексту (показать пользователю). Метка _arctik_seed — без дублей при повторном запуске.
 carbon_set_post_meta( $id, 'arctik_home_reviews_title', "Начните свой курс с одного\nсаше в день" );
 carbon_set_post_meta( $id, 'arctik_home_reviews_button', 'Выбрать вкус' );
 
-$review_text = "Открыла саше и сразу почувствовала запах, реально морской. А я когда всякие штучки типа этой заказывала на ВБ, там вообще никакого запаха не было, просто обычное желе. Пробую, вкус очень выраженный, морской, и прямо чувствуется, что это натурально, без кучи каких-то непонятных добавок, как было в баночках с валбериса, там прям привкус этой химозности чувствовался\nЯ вообще не очень к рыбе и морскому, но здесь, пару глотков, вообще отлично заходят";
-$brusnika    = get_page_by_path( 'kollagen-brusnika', OBJECT, 'product' );
-$reviews     = get_posts( [ 'post_type' => 'arctik_review', 'post_status' => 'any', 'meta_key' => '_arctik_seed', 'fields' => 'ids', 'numberposts' => -1 ] );
-for ( $i = count( $reviews ); $i < 10; $i++ ) {
-	$reviews[] = wp_insert_post( [
+$review_titles = [
+	'Виктория, 25' => 'Натуральный вкус',
+	'Вероника, 42' => 'Кожа менее сухая',
+	'Кристина, 27' => 'Вкус очень нравится!',
+	'Мария, 45'    => 'Пьётся легко',
+	'Светлана, 50' => 'Колену стало легче',
+	'Видана, 22'   => 'Кожа стала ровнее',
+	'Лариса, 32'   => 'Очень довольна!',
+];
+$berries = [ 'Брусника' => 'kollagen-brusnika', 'Черника' => 'kollagen-chernika', 'Морошка' => 'kollagen-moroshka', 'Голубика' => 'kollagen-golubika', 'Клюква' => 'kollagen-klyukva' ];
+
+$items = [];
+foreach ( preg_split( '/\R\s*\R(?=[^\n]+\RДата:)/u', trim( arctik_seed_content( 'ArcticBerries_reviews_home.txt' ) ) ) as $block ) {
+	if ( preg_match( '/^(?<name>[^\n]+)\RДата: (?<d>\d+)\.(?<m>\d+)\.(?<y>\d+)\RВкус: (?<berry>[^\n]+)\RТекст:\R(?<text>.+)$/su', trim( $block ), $m ) ) {
+		$items[] = $m;
+	}
+}
+
+$reviews = get_posts( [ 'post_type' => 'arctik_review', 'post_status' => 'any', 'meta_key' => '_arctik_seed', 'fields' => 'ids', 'numberposts' => -1, 'orderby' => 'ID', 'order' => 'ASC' ] );
+foreach ( array_slice( $reviews, count( $items ) ) as $extra ) {
+	wp_delete_post( $extra, true );
+}
+foreach ( $items as $i => $item ) {
+	$name    = trim( $item['name'] );
+	$post    = [
 		'post_type'   => 'arctik_review',
 		'post_status' => 'publish',
-		'post_title'  => 'Очень вкусно!',
-		'post_date'   => sprintf( '2026-05-09 12:%02d:00', $i ),
+		'post_title'  => $review_titles[ $name ] ?? 'Отзыв',
+		'post_date'   => sprintf( '%s-%s-%s 12:00:00', $item['y'], $item['m'], $item['d'] ),
 		'meta_input'  => [ '_arctik_seed' => 1 ],
-	] );
-}
-foreach ( $reviews as $review ) {
-	carbon_set_post_meta( $review, 'arctik_review_name', 'Виктория' );
+	];
+	$review  = isset( $reviews[ $i ] ) ? wp_update_post( $post + [ 'ID' => $reviews[ $i ], 'edit_date' => true ] ) : wp_insert_post( $post );
+	$product = get_page_by_path( $berries[ trim( $item['berry'] ) ] ?? '', OBJECT, 'product' );
+
+	carbon_set_post_meta( $review, 'arctik_review_name', $name );
 	carbon_set_post_meta( $review, 'arctik_review_rating', '5' );
-	carbon_set_post_meta( $review, 'arctik_review_text', $review_text );
-	carbon_set_post_meta( $review, 'arctik_review_product', $brusnika ? [ "post:product:{$brusnika->ID}" ] : [] );
+	carbon_set_post_meta( $review, 'arctik_review_text', trim( $item['text'] ) );
+	carbon_set_post_meta( $review, 'arctik_review_product', $product ? [ "post:product:{$product->ID}" ] : [] );
 }
 
 WP_CLI::success( "Главная заполнена (страница {$id})" );

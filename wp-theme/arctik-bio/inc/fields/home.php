@@ -148,7 +148,7 @@ Container::make( 'post_meta', 'Главная' )
 
 	->add_tab( 'Частые вопросы', [
 		Field::make( 'html', 'arctik_home_faq_info' )
-			->set_html( '<p>Вопросы — первый раздел страницы «Покупателям» («Общие вопросы»). Кнопка ведёт на «Покупателям», соцсети — из «Настройки сайта → Соцсети».</p>' ),
+			->set_html( '<p>Кнопка ведёт на «Покупателям», соцсети — из «Настройки сайта → Соцсети». Нет вопросов — блок не выводится.</p>' ),
 		Field::make( 'text', 'arctik_home_faq_title', 'Заголовок' )
 			->set_width( 50 ),
 		Field::make( 'text', 'arctik_home_faq_button', 'Подпись кнопки' )
@@ -158,6 +158,15 @@ Container::make( 'post_meta', 'Главная' )
 		Field::make( 'textarea', 'arctik_home_faq_aside', 'Текст над соцсетями' )
 			->set_rows( 2 )
 			->set_help_text( 'Перенос строки — как в макете' ),
+		Field::make( 'complex', 'arctik_home_faq_items', 'Вопросы' )
+			->setup_labels( [ 'plural_name' => 'Вопросы', 'singular_name' => 'вопрос' ] )
+			->set_collapsed( true )
+			->set_header_template( '<%- question %>' )
+			->add_fields( [
+				Field::make( 'text', 'question', 'Вопрос' ),
+				Field::make( 'textarea', 'answer', 'Ответ' )
+					->set_rows( 3 ),
+			] ),
 	] )
 
 	->add_tab( 'Отзывы', [

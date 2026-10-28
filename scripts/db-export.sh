@@ -53,8 +53,18 @@ if [ -z "$PASSWORD" ]; then
   chmod 600 "$OUT/admin-password.txt"
   echo "   пароль сгенерирован: $OUT/admin-password.txt"
 fi
+# wp_slash — как сохраняет пароль сама админка: wp-login.php сверяет пароль с экранированными кавычками и \ (wp_magic_quotes),
+# без этого пароль с " ' \ из WP-CLI в /wp-admin/ не подходит
 docker compose run --rm -T -e WORDPRESS_DB_NAME="$TMP_DB" -e ARCTIK_PASS="$PASSWORD" wpcli wp eval \
-  '$u = get_user_by( "login", "'"$ADMIN"'" ); if ( ! $u ) { WP_CLI::error( "нет пользователя" ); } wp_set_password( getenv( "ARCTIK_PASS" ), $u->ID );'
+  '$u = get_user_by( "login", "'"$ADMIN"'" ); if ( ! $u ) { WP_CLI::error( "нет пользователя" ); } wp_set_password( wp_slash( getenv( "ARCTIK_PASS" ) ), $u->ID );'
+# Логин на проде — свой (admin со стандартным логином перебирают боты); переименование — SQL, WP-CLI логин не меняет
+if [ -n "${PROD_ADMIN_USER:-}" ] && [ "$PROD_ADMIN_USER" != "$ADMIN" ]; then
+  [[ "$PROD_ADMIN_USER" =~ ^[A-Za-z0-9._@-]+$ ]] || { echo "PROD_ADMIN_USER: только латиница, цифры и . _ @ -"; exit 1; }
+  NICENAME="$(printf '%s' "$PROD_ADMIN_USER" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9-\n' '-')"
+  twp db query "UPDATE ${PREFIX}users SET user_login = '$PROD_ADMIN_USER', user_nicename = '$NICENAME' WHERE user_login = '$ADMIN';"
+  echo "   логин: $ADMIN → $PROD_ADMIN_USER"
+  ADMIN="$PROD_ADMIN_USER"
+fi
 if [ -n "${PROD_ADMIN_EMAIL:-}" ]; then
   twp user update "$ADMIN" --user_email="$PROD_ADMIN_EMAIL" --skip-email --quiet
   for OPTION in admin_email woocommerce_email_from_address woocommerce_stock_email_recipient; do

@@ -2,6 +2,8 @@
  * Нижняя панель покупки на мобилке ([data-js-sticky-buy]): появляется (is-visible), когда блок с кнопкой
  * «В корзину» в форме ([data-js-sticky-buy-source]) ушёл с экрана. На ≥768 панель скрыта в CSS.
  * Количество в панели и в форме синхронизировано; кнопка панели отправляет форму ([data-js-sticky-buy-form]).
+ * Секция лежит в .overlap-stack, первая секция там sticky — это свой контекст наложения, и z-index панели
+ * не поднимал её над следующими секциями (видео закрывало кнопку). Поэтому панель переносится сразу за .overlap-stack.
  */
 const VISIBLE_CLASS = 'is-visible';
 
@@ -19,6 +21,7 @@ export function initStickyBuy() {
     const form = scope.querySelector('[data-js-sticky-buy-form]');
     const source = scope.querySelector('[data-js-sticky-buy-source]');
     if (!form || !source) return;
+    bar.closest('.overlap-stack')?.after(bar);
 
     const formInput = source.querySelector('[data-js-quantity-input]');
     const barInput = bar.querySelector('[data-js-quantity-input]');

@@ -32,7 +32,6 @@ $menus = [
 		[ 'Каталог', $shop ],
 		[ 'О бренде', $about ],
 		[ 'Контакты', $contact ],
-		[ 'Где купить', $url( '/buyers/#where-to-buy' ) ],
 	] ],
 	'mobile'        => [ 'Мобильное меню', [
 		[ 'Главная', $url( '/' ) ],
@@ -43,18 +42,15 @@ $menus = [
 	] ],
 	'footer_about'  => [ 'О нас', [
 		[ 'Как работает', '#' ],
-		[ 'Где купить', $url( '/buyers/#where-to-buy' ) ],
 		[ 'О бренде', $about ],
 		[ 'Производство', '#' ],
 	] ],
 	'footer_buyers' => [ 'Покупателям', [
 		[ 'Оплата', $url( '/buyers/#help-payment' ) ],
 		[ 'Доставка', $url( '/buyers/#help-delivery' ) ],
-		[ 'Реквизиты', '#' ],
-		[ 'Партнерам', '#' ],
-		[ 'Отзывы', '#' ],
+		[ 'Реквизиты', $url( '/documents/#oferta' ) ],
+		[ 'Отзывы', $url( '/#reviews' ) ],
 		[ 'Частые вопросы', $buyers ],
-		[ 'Где купить', $url( '/buyers/#where-to-buy' ) ],
 	] ],
 	'footer_docs'   => [ 'Документы', [
 		[ 'Публичная оферта', $url( '/documents/#oferta' ) ],
@@ -98,10 +94,10 @@ $options = [
 	'arctik_disclaimer'            => 'Продукт является пищевой продукцией и не является лекарственным средством. Возможна индивидуальная непереносимость компонентов',
 	'arctik_developer_link'        => '',
 	'arctik_socials'               => [
-		[ 'network' => 'vk', 'url' => '#' ],
-		[ 'network' => 'whatsapp', 'url' => '#' ],
-		[ 'network' => 'inst', 'url' => '#' ],
-		[ 'network' => 'telegram', 'url' => '#' ],
+		[ 'network' => 'vk', 'url' => 'https://vk.ru/arcticbiomarine' ],
+		[ 'network' => 'max', 'url' => 'https://max.ru/channel_arcticbiomarine' ],
+		[ 'network' => 'inst', 'url' => 'https://www.instagram.com/arcticbiomarine' ],
+		[ 'network' => 'telegram', 'url' => 'https://t.me/arcticbiomarine' ],
 	],
 ];
 foreach ( $options as $name => $value ) {

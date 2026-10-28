@@ -20,6 +20,7 @@ Container::make( 'post_meta', 'Покупателям' )
 		Field::make( 'image', 'arctik_buyers_bg', 'Фон' )
 			->set_help_text( 'Вертикальный, от 936×1024' ),
 		Field::make( 'rich_text', 'arctik_buyers_note', 'Подпись под меню разделов' )
+			->set_settings( [ 'media_buttons' => false ] )
 			->set_rows( 3 )
 			->set_help_text( 'Одна строка, можно ссылку. Видна только на десктопе' ),
 		Field::make( 'complex', 'arctik_buyers_groups', 'Разделы' )

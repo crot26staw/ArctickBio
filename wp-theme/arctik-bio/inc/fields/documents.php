@@ -20,6 +20,7 @@ Container::make( 'post_meta', 'Документы' )
 		Field::make( 'image', 'arctik_documents_bg', 'Фон' )
 			->set_help_text( 'Вертикальный, от 936×1024' ),
 		Field::make( 'rich_text', 'arctik_documents_note', 'Подпись под меню документов' )
+			->set_settings( [ 'media_buttons' => false ] )
 			->set_rows( 3 )
 			->set_help_text( 'Одна строка, можно ссылку. Видна только на десктопе' ),
 		Field::make( 'complex', 'arctik_documents', 'Документы' )
@@ -36,6 +37,7 @@ Container::make( 'post_meta', 'Документы' )
 					->set_help_text( 'Латиницей, для ссылок вида /documents/#oferta. Пусто — document-<номер>' )
 					->set_width( 33 ),
 				Field::make( 'rich_text', 'text', 'Текст' )
+					->set_settings( [ 'media_buttons' => false ] )
 					->set_help_text( 'Разделы документа — «Заголовок 3»' ),
 			] ),
 	] );

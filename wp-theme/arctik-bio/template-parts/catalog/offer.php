@@ -8,6 +8,11 @@ defined( 'ABSPATH' ) || exit;
 $arctik_page    = (int) wc_get_page_id( 'shop' );
 $arctik_product = wc_get_product( (int) ( arctik_field( 'arctik_catalog_offer_product', $arctik_page )[0]['id'] ?? 0 ) );
 $arctik_list    = (array) arctik_field( 'arctik_catalog_offer_list', $arctik_page );
+
+// На странице самого набора баннер с ним не нужен
+if ( $arctik_product && is_singular( 'product' ) && get_queried_object_id() === $arctik_product->get_id() ) {
+	return;
+}
 ?>
 <section class="offer" data-header-theme="dark">
 	<div class="offer__content">

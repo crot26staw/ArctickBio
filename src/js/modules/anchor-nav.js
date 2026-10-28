@@ -33,6 +33,7 @@ export function initAnchorNavs() {
         if (isActive) link.setAttribute('aria-current', 'true');
         else link.removeAttribute('aria-current');
       });
+      revealLink(active.link);
     };
 
     const requestUpdate = () => {
@@ -43,4 +44,17 @@ export function initAnchorNavs() {
     window.addEventListener('resize', requestUpdate);
     update();
   });
+}
+
+// Вкладки планшета/мобилки листаются по горизонтали: активная за краем ленты — подкрутить ленту к ней
+function revealLink(link) {
+  let scroller = link.parentElement;
+  while (scroller && !/auto|scroll/.test(getComputedStyle(scroller).overflowX)) scroller = scroller.parentElement;
+  if (!scroller || scroller.scrollWidth <= scroller.clientWidth) return;
+
+  const box = scroller.getBoundingClientRect();
+  const rect = link.getBoundingClientRect();
+  if (rect.left >= box.left && rect.right <= box.right) return;
+
+  scroller.scrollTo({ left: scroller.scrollLeft + rect.left - box.left, behavior: 'smooth' });
 }

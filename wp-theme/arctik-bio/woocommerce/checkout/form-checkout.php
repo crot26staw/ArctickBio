@@ -2,7 +2,7 @@
 /**
  * Форма оформления заказа (src/partials/checkout/main.html) вместо шаблона WC. Логика — js/modules/checkout.js, сервер — inc/checkout.php.
  *
- * $error — ошибка под кнопкой оплаты при выводе страницы (разобранные товары; передаёт woocommerce/checkout/cart-errors.php).
+ * $error — ошибка (HTML) под кнопкой оплаты при выводе страницы (разобранные товары; передаёт woocommerce/checkout/cart-errors.php).
  * Способы оплаты и доставки — доступные в WC (inc/payment.php, inc/shipping.php); блок способа доставки — по его ID (pickup / courier).
  *
  * @var WC_Checkout $checkout
@@ -62,7 +62,7 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 				<div class="checkout__fields">
 					<?php
 					foreach ( [
-						[ 'billing_phone', 'tel', 'Телефон', 'tel', 'required' ],
+						[ 'billing_phone', 'tel', 'Телефон', 'tel', 'phone' ],
 						[ 'billing_email', 'email', 'Email', 'email', 'email' ],
 						[ 'billing_first_name', 'text', 'Имя', 'given-name', 'required' ],
 						[ 'billing_last_name', 'text', 'Фамилия', 'family-name', 'required' ],

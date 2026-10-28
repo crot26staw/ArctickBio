@@ -49,7 +49,8 @@ add_action( 'template_redirect', function () {
 	}
 
 	// Главная кабинета и разделы, которых в вёрстке нет (загрузки, способы оплаты…), — «Мои заказы»
-	if ( ! arctik_account_section() && ! is_wc_endpoint_url( 'view-order' ) ) {
+	// Чужой или несуществующий заказ (у WC — «Ошибка в заказе» без наших стилей) — тоже «Мои заказы»
+	if ( ( ! arctik_account_section() && ! is_wc_endpoint_url( 'view-order' ) ) || ( is_wc_endpoint_url( 'view-order' ) && ! arctik_viewed_order() ) ) {
 		wp_safe_redirect( wc_get_account_endpoint_url( 'orders' ) );
 		exit;
 	}

@@ -80,7 +80,7 @@ function arctik_phone_href( string $phone ): string {
 function arctik_socials(): array {
 	$labels = [
 		'vk'       => 'ВКонтакте',
-		'whatsapp' => 'WhatsApp',
+		'max'      => 'MAX',
 		'inst'     => 'Instagram',
 		'telegram' => 'Telegram',
 	];

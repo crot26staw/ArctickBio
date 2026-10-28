@@ -65,6 +65,17 @@ add_filter( 'woocommerce_checkout_fields', function ( array $fields ): array {
 
 add_filter( 'woocommerce_checkout_required_field_notice', fn() => 'Обязательное поле' );
 
+/**
+ * Российский номер (как isPhone() в field.js): только цифры, пробелы, скобки, дефисы и «+»; 10 цифр или 11 с 7 / 8 впереди.
+ * Проверка WC (WC_Validation::is_phone) смотрит только на символы — «123» проходил.
+ */
+function arctik_is_phone( string $phone ): bool {
+	$digits = preg_replace( '/\D/', '', $phone );
+
+	return (bool) preg_match( '/^\+?[\d\s()-]+$/', $phone )
+		&& ( 10 === strlen( $digits ) || ( 11 === strlen( $digits ) && in_array( $digits[0], [ '7', '8' ], true ) ) );
+}
+
 add_filter( 'woocommerce_checkout_posted_data', function ( array $data ): array {
 	$data['billing_country']  = 'RU';
 	$data['shipping_country'] = 'RU';
@@ -100,6 +111,9 @@ add_action( 'woocommerce_after_checkout_validation', function ( array $data, WP_
 			$errors->remove( $code );
 			$errors->add( $code, $message, $error_data );
 		}
+	}
+	if ( '' !== ( $data['billing_phone'] ?? '' ) && ! $errors->get_error_message( 'billing_phone_validation' ) && ! arctik_is_phone( (string) $data['billing_phone'] ) ) {
+		$errors->add( 'billing_phone_validation', "Введите телефон в\u{00A0}формате +7\u{00A0}900\u{00A0}000-00-00", [ 'id' => 'billing_phone' ] );
 	}
 
 	$slot = arctik_checkout_slot( $data );
@@ -179,7 +193,8 @@ add_action( 'woocommerce_checkout_order_processed', function () {
 // ---------- Разобранные товары ----------
 
 /**
- * Текст ошибки, если в корзине есть разобранные товары (нет в наличии или не хватает остатка), иначе ''.
+ * Текст ошибки (HTML), если в корзине есть разобранные товары (нет в наличии или не хватает остатка), иначе ''.
+ * «удалите товар из корзины» — ссылка, которая убирает разобранные (корзины в шапке оформления нет).
  */
 function arctik_checkout_sold_message(): string {
 	$names = [];
@@ -195,10 +210,28 @@ function arctik_checkout_sold_message(): string {
 		return '';
 	}
 
+	$url = wp_nonce_url( add_query_arg( 'arctik-remove-sold', 1, wc_get_checkout_url() ), 'arctik-remove-sold' );
+
 	return 1 === count( $names )
-		? sprintf( "%s нет в\u{00A0}наличии\u{00A0}— удалите товар из\u{00A0}корзины", $names[0] )
-		: sprintf( "%s нет в\u{00A0}наличии\u{00A0}— удалите эти товары из\u{00A0}корзины", implode( ', ', $names ) );
+		? sprintf( "%s нет в\u{00A0}наличии\u{00A0}— <a href=\"%s\">удалите товар из\u{00A0}корзины</a>", esc_html( $names[0] ), esc_url( $url ) )
+		: sprintf( "%s нет в\u{00A0}наличии\u{00A0}— <a href=\"%s\">удалите эти товары из\u{00A0}корзины</a>", esc_html( implode( ', ', $names ) ), esc_url( $url ) );
 }
+
+// Ссылка из ошибки: убрать разобранные товары и вернуться на оформление
+add_action( 'template_redirect', function () {
+	if ( empty( $_GET['arctik-remove-sold'] ) || ! WC()->cart ) {
+		return;
+	}
+	if ( wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ?? '' ) ), 'arctik-remove-sold' ) ) {
+		foreach ( WC()->cart->get_cart() as $key => $item ) {
+			if ( arctik_cart_item_is_sold( $item ) ) {
+				WC()->cart->remove_cart_item( $key );
+			}
+		}
+	}
+	wp_safe_redirect( remove_query_arg( [ 'arctik-remove-sold', '_wpnonce' ] ) );
+	exit;
+}, 5 );
 
 // Вместо проверки остатков WC (её текст — про «измените корзину») — своя ошибка; WC проверяет корзину и при отправке заказа.
 add_action( 'woocommerce_check_cart_items', function () {

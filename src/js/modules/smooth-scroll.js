@@ -20,5 +20,23 @@ export function initSmoothScroll() {
   return lenis;
 }
 
+// Переход по ссылке с якорем с другой страницы (/#reviews): браузер прыгает к разделу до того, как пины GSAP
+// добавят высоту, и раздел оказывается ниже. После загрузки (ScrollTrigger к этому времени пересчитан) — к разделу ещё раз.
+// #auth-… — экраны попапа входа (auth.js), не разделы.
+function scrollToHash() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (!id || id.startsWith('auth-')) return;
+  const target = document.getElementById(id);
+  if (!target) return;
+
+  requestAnimationFrame(() => {
+    target.scrollIntoView({ block: 'start' });
+    lenis?.resize();
+  });
+}
+
+if (document.readyState === 'complete') scrollToHash();
+else window.addEventListener('load', scrollToHash, { once: true });
+
 // Доступ к экземпляру из других модулей: getLenis()?.scrollTo(target), getLenis()?.stop() / start() (модалки)
 export const getLenis = () => lenis;

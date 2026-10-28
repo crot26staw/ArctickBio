@@ -167,6 +167,14 @@ export function initCart() {
     if (!error) return;
     error.textContent = message || '';
     error.hidden = !message;
+    if (!message) return;
+    // Отправили из нижней панели мобилки — текст под кнопкой формы за экраном: прокрутить к нему
+    const { top, bottom } = error.getBoundingClientRect();
+    if (top < 0 || bottom > window.innerHeight) {
+      const lenis = getLenis();
+      if (lenis) lenis.scrollTo(error, { offset: -window.innerHeight / 2 });
+      else error.scrollIntoView({ block: 'center' });
+    }
   };
 
   // Форма покупки на странице товара: выбранная вариация (радио формата, variation_id) или сам товар (add-to-cart).

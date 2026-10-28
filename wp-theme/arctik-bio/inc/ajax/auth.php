@@ -37,7 +37,8 @@ add_action( 'wc_ajax_arctik_login', function () {
 	], is_ssl() );
 
 	if ( is_wp_error( $user ) ) {
-		wp_send_json_error( [ 'errors' => [ 'password' => "Неверный логин или пароль" ] ] );
+		// Текст и фокус — у пароля, email подсвечивается без текста
+		wp_send_json_error( [ 'errors' => [ 'password' => "Неверный логин или пароль", 'username' => true ] ] );
 	}
 
 	wp_send_json_success();

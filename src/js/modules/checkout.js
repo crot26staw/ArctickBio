@@ -47,10 +47,12 @@ export function initCheckout() {
   // Ошибка под кнопкой оплаты: в WordPress блок итогов заменяется фрагментами — ищется каждый раз
   const generalError = () => form.querySelector('[data-js-checkout-error="general"]');
 
+  // message — текст или узлы (ошибка сервера со ссылкой «удалите товар из корзины»)
   const showGeneralError = (message) => {
     const error = generalError();
-    error.textContent = message;
-    error.hidden = !message;
+    const nodes = Array.isArray(message) ? message : [message];
+    error.replaceChildren(...nodes.filter(Boolean));
+    error.hidden = !error.textContent.trim();
   };
 
   const getShipping = () => form.querySelector('[data-js-checkout-shipping]:checked')?.dataset.jsCheckoutShipping;
@@ -129,12 +131,13 @@ export function initCheckout() {
         setFieldError(input, message);
         first ??= input;
       } else if (message) {
-        general.push(message);
+        if (general.length) general.push(' ');
+        general.push(...[...item.childNodes].map((node) => document.importNode(node, true)));
       }
     });
 
     if (!first && !general.length) general.push(FAIL_MESSAGE);
-    showGeneralError(general.join(' '));
+    showGeneralError(general);
     first?.focus();
   };
 

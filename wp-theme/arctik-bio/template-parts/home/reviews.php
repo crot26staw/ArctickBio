@@ -15,7 +15,7 @@ if ( ! $arctik_reviews ) {
 $arctik_page   = (int) get_option( 'page_on_front' );
 $arctik_button = (string) arctik_field( 'arctik_home_reviews_button', $arctik_page );
 ?>
-<section class="reviews" data-header-theme="dark" data-js-fake-glass data-js-reveal-sequence data-reveal-sequence-play>
+<section class="reviews" id="reviews" data-header-theme="dark" data-js-fake-glass data-js-reveal-sequence data-reveal-sequence-play>
 	<div class="reviews__bg-wrap" aria-hidden="true">
 		<img class="reviews__bg" data-js-fake-glass-source src="<?php echo esc_url( arctik_asset( 'images/review-bg.webp' ) ); ?>" alt="" width="1448" height="1086" loading="lazy">
 	</div>

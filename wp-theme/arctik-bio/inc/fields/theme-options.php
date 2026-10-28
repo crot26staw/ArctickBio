@@ -35,7 +35,7 @@ Container::make( 'theme_options', 'Настройки сайта' )
 				Field::make( 'select', 'network', 'Соцсеть' )
 					->set_options( [
 						'vk'       => 'ВКонтакте',
-						'whatsapp' => 'WhatsApp',
+						'max'      => 'MAX',
 						'inst'     => 'Instagram',
 						'telegram' => 'Telegram',
 					] )

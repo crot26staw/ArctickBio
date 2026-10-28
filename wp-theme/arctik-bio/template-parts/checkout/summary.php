@@ -38,5 +38,5 @@ $arctik_error    = (string) ( $args['error'] ?? '' );
 	</div>
 	<button class="btn btn--accent checkout__pay" type="submit" name="woocommerce_checkout_place_order" id="place_order" data-js-swipe>Оплатить <?php echo esc_html( arctik_checkout_total() ); ?></button>
 	<?php /* Ошибка заказа от сервера (товар закончился и т.п.) */ ?>
-	<p class="checkout__error checkout__error--pay" <?php echo $arctik_error ? '' : 'hidden'; ?> data-js-checkout-error="general"><?php echo esc_html( $arctik_error ); ?></p>
+	<p class="checkout__error checkout__error--pay" <?php echo $arctik_error ? '' : 'hidden'; ?> data-js-checkout-error="general"><?php echo wp_kses_post( $arctik_error ); ?></p>
 </div>

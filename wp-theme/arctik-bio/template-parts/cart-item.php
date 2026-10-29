@@ -2,7 +2,8 @@
 /**
  * Товар в корзине-попапе (src/partials/cart-item.html). $args: key — ключ позиции корзины, item — позиция WC()->cart.
  *
- * Название — название товара («Коллаген с брусникой»), подпись — формат вариации («30 саше»), картинка — пачка мини-карточки.
+ * Название и подпись — как у мини-карточки товара («Морской коллаген» / «с дикой брусникой»), ниже — формат вариации («30 саше»),
+ * картинка — пачка мини-карточки (макет 18920:36110).
  * Нет в наличии (или не хватает остатка) — cart-item--sold: «Разобрали» и «Удалить» вместо счётчика и цены.
  */
 
@@ -23,10 +24,10 @@ $arctik_link   = $arctik_parent->get_permalink();
 $arctik_max    = $arctik_product->get_max_purchase_quantity();
 $arctik_sold   = arctik_cart_item_is_sold( $arctik_item );
 
-// Подпись — значения атрибутов вариации («30 саше»), у простого товара — подзаголовок мини-карточки.
-$arctik_subtitle = $arctik_product->is_type( 'variation' )
-	? wc_get_formatted_variation( $arctik_product, true, false, false )
-	: arctik_product_mini_titles( $arctik_parent )[1];
+[ $arctik_title, $arctik_subtitle ] = arctik_product_mini_titles( $arctik_parent );
+
+// Формат — значения атрибутов вариации («30 саше»), у простого товара (набор) строки нет
+$arctik_format = $arctik_product->is_type( 'variation' ) ? wc_get_formatted_variation( $arctik_product, true, false, false ) : '';
 ?>
 <?php /*
 	Товар в корзине (макет 18182:42856, «Разобрали» — 18269:34323). Разметка — как в мини-корзине WooCommerce:
@@ -39,9 +40,14 @@ $arctik_subtitle = $arctik_product->is_type( 'variation' )
 	</a>
 	<div class="cart-item__body">
 		<div class="cart-item__text">
-			<a class="cart-item__title" href="<?php echo esc_url( $arctik_link ); ?>"><?php echo arctik_text( $arctik_parent->get_name() ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a>
-			<?php if ( $arctik_subtitle ) : ?>
-				<p class="cart-item__subtitle"><?php echo arctik_text( wp_strip_all_tags( $arctik_subtitle ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+			<div class="cart-item__name">
+				<a class="cart-item__title" href="<?php echo esc_url( $arctik_link ); ?>"><?php echo arctik_text( $arctik_title ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a>
+				<?php if ( $arctik_subtitle ) : ?>
+					<p class="cart-item__subtitle"><?php echo arctik_text( $arctik_subtitle ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+				<?php endif; ?>
+			</div>
+			<?php if ( $arctik_format ) : ?>
+				<p class="cart-item__format"><?php echo arctik_text( wp_strip_all_tags( $arctik_format ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 			<?php endif; ?>
 		</div>
 		<div class="cart-item__actions">

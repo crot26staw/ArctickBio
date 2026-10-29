@@ -63,15 +63,17 @@
   .quantity__btn {
     align-items: center;
     justify-content: center;
-    width: rem(16);
-    height: rem(16);
+    width: rem(20);
+    height: rem(20);
     color: var(--color-white);
     background-color: var(--color-accent);
-    border-radius: 2px;
+    border-radius: 2.5px;
 
+    // Иконка 20×22.5 (макет 18920:36110) — та же 16×18 в масштабе 1.25
     svg {
-      width: rem(16);
-      height: rem(18);
+      flex-shrink: 0;
+      width: rem(20);
+      height: rem(22.5);
     }
 
     &:disabled {
@@ -80,7 +82,7 @@
   }
 
   .quantity__input {
-    @include desc-s;
+    @include body-s;
     width: rem(18);
     color: var(--color-accent);
   }

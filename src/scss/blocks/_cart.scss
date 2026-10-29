@@ -318,25 +318,31 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     min-width: 0;
   }
 
+  // Название и вкус (как у мини-карточки), ниже формат (макет 18920:36110)
   &__text {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    white-space: nowrap;
+    gap: rem(12);
+  }
+
+  &__name {
+    display: flex;
+    flex-direction: column;
+    gap: rem(4);
   }
 
   &__title {
     @include body-m;
-    overflow: hidden;
     color: var(--color-fg);
-    text-overflow: ellipsis;
   }
 
-  &__subtitle {
+  &__subtitle,
+  &__format {
     @include body-s;
     overflow: hidden;
     color: var(--color-fg-muted);
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__actions {
@@ -349,7 +355,7 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     gap: rem(8);
     align-items: center;
-    height: rem(20);
+    height: rem(24);
     padding: 2px;
   }
 

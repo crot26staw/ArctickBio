@@ -1,5 +1,5 @@
 <!--
-  Товар в корзине (макет 18182:42856, «Разобрали» — 18269:34323). Разметка — как в мини-корзине WooCommerce:
+  Товар в корзине (макет 18182:42856, текст — 18920:36110: название и вкус мини-карточки, ниже формат; «Разобрали» — 18269:34323). Разметка — как в мини-корзине WooCommerce:
   li.woocommerce-mini-cart-item, ссылка удаления .remove_from_cart_button с data-product_id / data-cart_item_key.
   Нет в наличии — mod "cart-item--sold", вместо счётчика и цены — подпись «Разобрали» и «Удалить».
   data-price — цена за штуку (для пересчёта в js/modules/cart.js).
@@ -10,8 +10,11 @@
   </a>
   <div class="cart-item__body">
     <div class="cart-item__text">
-      <a class="cart-item__title" href="{{ link }}">{{ title }}</a>
-      <p class="cart-item__subtitle">{{ subtitle }}</p>
+      <div class="cart-item__name">
+        <a class="cart-item__title" href="{{ link }}">{{ title }}</a>
+        <p class="cart-item__subtitle">{{ subtitle }}</p>
+      </div>
+      <p class="cart-item__format">{{ format }}</p>
     </div>
     <div class="cart-item__actions">
       <div class="cart-item__controls">

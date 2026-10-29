@@ -25,9 +25,7 @@
     display: flex;
     flex: 1 0 0;
     flex-direction: column;
-    align-self: flex-end;
     min-width: 1px;
-    padding-top: rem(4);
     white-space: nowrap;
   }
 
@@ -49,7 +47,8 @@
     display: flex;
     flex-direction: row-reverse;
     gap: rem(4);
-    align-self: flex-end;
+    // Текст по центру плашки, цена — по его низу (как в макете): центр цены ниже на (31 − 13) / 2 = 9
+    margin-top: rem(18);
     // Между текстом и ценой в макете 16: gap плашки 8 + 8
     margin-left: rem(8);
     white-space: nowrap;

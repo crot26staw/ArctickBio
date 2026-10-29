@@ -36,8 +36,7 @@ carbon_set_post_meta( $page->ID, 'arctik_buyers_groups', array_map(
 	array_slice( $faq, 0, count( $sections ) )
 ) );
 
-// «Где нас купить?» пока скрыт (просьба пользователя) — поля закомментированы в inc/fields/buyers.php.
-/*
+// «Где нас купить?» — города и адреса из макета (заглушки, кроме Екатеринбурга; реальные заполняются в админке), карта — демо.
 carbon_set_post_meta( $page->ID, 'arctik_stores_title', 'Где нас купить?' );
 carbon_set_post_meta( $page->ID, 'arctik_stores_cities', [
 	[ 'name' => 'г. Екатеринбург', 'addresses' => "ул. Сакко и Ванцетти, д.48\nул. Ленина, д. 24\nул. Ленина, д. 24" ],
@@ -46,7 +45,6 @@ carbon_set_post_meta( $page->ID, 'arctik_stores_cities', [
 	[ 'name' => 'г. Санкт-Петербург', 'addresses' => 'ул. Ленина, д. 24' ],
 	[ 'name' => 'г. Тюмень', 'addresses' => 'ул. Ленина, д. 24' ],
 ] );
-carbon_set_post_meta( $page->ID, 'arctik_stores_map', arctik_seed_file( 'buyers-map.webp', 'Карта магазинов' ) );
-*/
+carbon_set_post_meta( $page->ID, 'arctik_stores_map_embed', '<iframe src="https://yandex.ru/map-widget/v1/?ll=60.597474%2C56.838011&z=12" width="560" height="400" frameborder="1" allowfullscreen="true"></iframe>' );
 
 WP_CLI::success( 'Покупателям заполнено' );

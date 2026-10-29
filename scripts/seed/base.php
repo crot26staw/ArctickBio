@@ -32,6 +32,7 @@ $menus = [
 		[ 'Каталог', $shop ],
 		[ 'О бренде', $about ],
 		[ 'Контакты', $contact ],
+		[ 'Где купить', $url( '/buyers/#where-to-buy' ) ],
 	] ],
 	'mobile'        => [ 'Мобильное меню', [
 		[ 'Главная', $url( '/' ) ],
@@ -51,6 +52,7 @@ $menus = [
 		[ 'Реквизиты', $url( '/documents/oferta/' ) ],
 		[ 'Отзывы', $url( '/#reviews' ) ],
 		[ 'Частые вопросы', $buyers ],
+		[ 'Где купить', $url( '/buyers/#where-to-buy' ) ],
 	] ],
 	'footer_docs'   => [ 'Документы', [
 		[ 'Публичная оферта', $url( '/documents/oferta/' ) ],

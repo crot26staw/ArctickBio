@@ -46,12 +46,11 @@ Container::make( 'post_meta', 'Покупателям' )
 							->set_rows( 3 ),
 					] ),
 			] ),
-	] );
+	] )
 
-// «Где нас купить?» пока скрыт (просьба пользователя): секция закомментирована в page-templates/buyers.php.
-// Вернуть — снять комментарий и поставить «)» вместо «);» выше.
-/*
 	->add_tab( 'Где нас купить?', [
+		Field::make( 'html', 'arctik_stores_info' )
+			->set_html( '<p>Нет городов — блок не выводится. Открыт первый город. На блок ведут пункты «Где купить» в шапке и подвале (/buyers/#where-to-buy).</p>' ),
 		Field::make( 'text', 'arctik_stores_title', 'Заголовок' ),
 		Field::make( 'complex', 'arctik_stores_cities', 'Города' )
 			->setup_labels( [ 'plural_name' => 'Города', 'singular_name' => 'город' ] )
@@ -64,7 +63,7 @@ Container::make( 'post_meta', 'Покупателям' )
 					->set_rows( 3 )
 					->set_help_text( 'Каждый адрес — с новой строки' ),
 			] ),
-		Field::make( 'image', 'arctik_stores_map', 'Карта' )
-			->set_help_text( 'Картинка карты, от 1958×812' ),
+		Field::make( 'textarea', 'arctik_stores_map_embed', 'Карта' )
+			->set_rows( 3 )
+			->set_help_text( 'Яндекс Карты: конструктор карт (yandex.ru/map-constructor) → «Получить код» — код iframe или script, либо в картах «Поделиться → Встроить карту» — код iframe. Можно вставить и просто ссылку. Пусто — без карты' ),
 	] );
-*/

@@ -2,13 +2,14 @@
 /**
  * «Где нас купить?» (src/partials/buyers/stores.html): города с адресами и карта — поля страницы
  * (вкладка «Где нас купить?»). Нет городов — секция не выводится; открыт первый город.
+ * Карта — Яндекс Карта в iframe (код из конструктора или «Поделиться → Встроить», arctik_yandex_map_url()).
  */
 
 defined( 'ABSPATH' ) || exit;
 
 $arctik_page  = (int) get_the_ID();
 $arctik_title = (string) arctik_field( 'arctik_stores_title', $arctik_page );
-$arctik_map   = (int) arctik_field( 'arctik_stores_map', $arctik_page );
+$arctik_map   = arctik_yandex_map_url( (string) arctik_field( 'arctik_stores_map_embed', $arctik_page ) );
 
 $arctik_cities = [];
 foreach ( (array) arctik_field( 'arctik_stores_cities', $arctik_page ) as $arctik_city ) {
@@ -61,7 +62,7 @@ if ( ! $arctik_cities ) {
 
 		<?php if ( $arctik_map ) : ?>
 			<div class="stores__map">
-				<?php echo arctik_image( $arctik_map, 'full' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<iframe class="stores__map-frame" src="<?php echo esc_url( $arctik_map ); ?>" title="Карта магазинов" loading="lazy" allowfullscreen></iframe>
 			</div>
 		<?php endif; ?>
 	</div>

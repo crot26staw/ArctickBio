@@ -26,6 +26,7 @@ foreach ( [
 	'account',
 	'seo',
 	'documents',
+	'migrations',
 	'ajax/cart',
 	'ajax/auth',
 	'ajax/delivery',

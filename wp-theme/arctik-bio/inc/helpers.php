@@ -198,3 +198,38 @@ function arctik_icon_url( string $icon ): string {
 function arctik_file_url( mixed $attachment_id ): string {
 	return $attachment_id ? (string) wp_get_attachment_url( (int) $attachment_id ) : '';
 }
+
+/**
+ * Адрес Яндекс Карты для iframe из того, что вставили в админке: код iframe («Поделиться → Встроить карту»),
+ * код script конструктора карт (api-maps.yandex.ru/services/constructor/…?um=constructor:…) или просто ссылка.
+ * Чужие адреса (не Яндекс) не пропускаются — ''.
+ */
+function arctik_yandex_map_url( string $code ): string {
+	$code = trim( html_entity_decode( $code ) );
+	if ( '' === $code ) {
+		return '';
+	}
+
+	$url = preg_match( '/\ssrc=["\']([^"\']+)["\']/i', $code, $match ) ? $match[1] : $code;
+	if ( str_starts_with( $url, '//' ) ) {
+		$url = 'https:' . $url;
+	}
+
+	$host = (string) wp_parse_url( $url, PHP_URL_HOST );
+	if ( ! preg_match( '/(^|\.)yandex\.(ru|com|by|kz|uz)$/', $host ) ) {
+		return '';
+	}
+
+	// Скрипт конструктора — та же карта в виджете для iframe
+	parse_str( (string) wp_parse_url( $url, PHP_URL_QUERY ), $query );
+	if ( str_starts_with( $host, 'api-maps.' ) ) {
+		return empty( $query['um'] ) ? '' : 'https://yandex.ru/map-widget/v1/?' . http_build_query( [ 'um' => $query['um'], 'source' => 'constructor' ] );
+	}
+
+	// Обычная ссылка на карты (yandex.ru/maps/…) — в виджет с теми же параметрами
+	if ( ! str_contains( $url, '/map-widget/' ) ) {
+		return $query ? 'https://yandex.ru/map-widget/v1/?' . http_build_query( $query ) : '';
+	}
+
+	return $url;
+}

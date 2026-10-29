@@ -48,15 +48,15 @@ $menus = [
 	'footer_buyers' => [ 'Покупателям', [
 		[ 'Оплата', $url( '/buyers/#help-payment' ) ],
 		[ 'Доставка', $url( '/buyers/#help-delivery' ) ],
-		[ 'Реквизиты', $url( '/documents/#oferta' ) ],
+		[ 'Реквизиты', $url( '/documents/oferta/' ) ],
 		[ 'Отзывы', $url( '/#reviews' ) ],
 		[ 'Частые вопросы', $buyers ],
 	] ],
 	'footer_docs'   => [ 'Документы', [
-		[ 'Публичная оферта', $url( '/documents/#oferta' ) ],
-		[ 'Политика конфиденциальности', $url( '/documents/#privacy' ) ],
-		[ 'Пользовательское соглашение', $url( '/documents/#agreement' ) ],
-		[ 'Политика Cookies', $url( '/documents/#cookie' ) ],
+		[ 'Публичная оферта', $url( '/documents/oferta/' ) ],
+		[ 'Политика конфиденциальности', $url( '/documents/privacy/' ) ],
+		[ 'Пользовательское соглашение', $url( '/documents/agreement/' ) ],
+		[ 'Политика Cookies', $url( '/documents/cookie/' ) ],
 	] ],
 ];
 

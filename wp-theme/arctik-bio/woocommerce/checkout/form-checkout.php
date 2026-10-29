@@ -15,11 +15,8 @@ $arctik_cart     = WC()->cart;
 $arctik_count    = arctik_checkout_count_text( $arctik_cart->get_cart_contents_count() );
 $arctik_terms_id = wc_terms_and_conditions_page_id();
 
-// Оферта — страница условий WC; если это «Документы» — сразу к оферте (inc/documents.php).
+// Оферта — страница условий WC (страница документа oferta, inc/documents.php).
 $arctik_terms_url = $arctik_terms_id ? get_permalink( $arctik_terms_id ) : '#';
-if ( $arctik_terms_id && 'page-templates/documents.php' === get_page_template_slug( $arctik_terms_id ) ) {
-	$arctik_terms_url .= '#oferta';
-}
 
 // Способы оплаты: выбран сохранённый в сессии или первый (в статике — СБП).
 $arctik_gateways = WC()->payment_gateways()->get_available_payment_gateways();

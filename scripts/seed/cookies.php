@@ -1,12 +1,11 @@
 <?php
 /**
  * Баннер cookie (этап Ку): тексты «Настройки сайта → Cookie» — из статики (src/partials/cookies.html).
- * Ссылки — на раздел cookie страницы «Документы» (/seed/documents.php запустить раньше).
+ * Ссылки — на политику cookie (/seed/documents.php запустить раньше).
  * Запуск: docker compose run --rm wpcli wp eval-file /seed/cookies.php
  */
 
-$documents = get_page_by_path( 'documents' );
-$cookie_url = $documents ? get_permalink( $documents ) . '#cookie' : '#';
+$cookie_url = arctik_document_url( 'cookie' );
 
 $options = [
 	'arctik_cookie_banner_text'    => 'Мы используем файлы куки для корректной и быстрой работы сайта. Ознакомиться с политикой конфиденциальности. <a href="' . esc_url( $cookie_url ) . '">Подробнее</a>',

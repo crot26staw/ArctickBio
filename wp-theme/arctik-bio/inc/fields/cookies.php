@@ -28,7 +28,7 @@ Container::make( 'theme_options', 'Cookie' )
 	->add_tab( 'Баннер', [
 		Field::make( 'rich_text', 'arctik_cookie_banner_text', 'Текст полосы внизу экрана' )
 			->set_settings( [ 'media_buttons' => false ] )
-			->set_help_text( 'Одной строкой. Ссылка «Подробнее» — на раздел cookie страницы «Документы» (/documents/#cookie)' ),
+			->set_help_text( 'Одной строкой. Ссылка «Подробнее» — на политику cookie (/documents/cookie/)' ),
 	] )
 
 	->add_tab( 'Окно настроек', array_merge(
@@ -36,7 +36,7 @@ Container::make( 'theme_options', 'Cookie' )
 			Field::make( 'text', 'arctik_cookie_title', 'Заголовок' ),
 			Field::make( 'rich_text', 'arctik_cookie_text', 'Текст' )
 				->set_settings( [ 'media_buttons' => false ] )
-				->set_help_text( 'Ссылки — например, на /documents/#cookie' ),
+				->set_help_text( 'Ссылки — например, на /documents/cookie/' ),
 		],
 		$arctik_cookie_category( 'necessary', 'Необходимые (всегда включены)' ),
 		$arctik_cookie_category( 'analytics', 'Аналитика' ),

@@ -3,6 +3,8 @@
  * верх которого последним прошёл линию ACTIVE_LINE экрана. Позиции считаются при скролле, а не заранее —
  * высота разделов меняется, когда раскрываются аккордеоны.
  * Плавный переход по ссылке делает Lenis (anchors: true), отступ под шапку — scroll-margin-top у раздела.
+ * Меню из ссылок на страницы («Документы»): текущая отмечена в разметке (aria-current="page"), здесь — только
+ * подкрутить к ней вкладки планшета/мобилки.
  */
 const ACTIVE_CLASS = 'is-active';
 const ACTIVE_LINE = 0.4; // доля высоты экрана
@@ -12,7 +14,11 @@ export function initAnchorNavs() {
     const items = [...nav.querySelectorAll('a[href^="#"]')]
       .map((link) => ({ link, target: document.querySelector(link.getAttribute('href')) }))
       .filter(({ target }) => target);
-    if (!items.length) return;
+    if (!items.length) {
+      const page = nav.querySelector('[aria-current="page"]');
+      if (page) revealLink(page, 'instant');
+      return;
+    }
 
     let current = null;
     let frame = 0;
@@ -47,7 +53,7 @@ export function initAnchorNavs() {
 }
 
 // Вкладки планшета/мобилки листаются по горизонтали: активная за краем ленты — подкрутить ленту к ней
-function revealLink(link) {
+function revealLink(link, behavior = 'smooth') {
   let scroller = link.parentElement;
   while (scroller && !/auto|scroll/.test(getComputedStyle(scroller).overflowX)) scroller = scroller.parentElement;
   if (!scroller || scroller.scrollWidth <= scroller.clientWidth) return;
@@ -56,5 +62,5 @@ function revealLink(link) {
   const rect = link.getBoundingClientRect();
   if (rect.left >= box.left && rect.right <= box.right) return;
 
-  scroller.scrollTo({ left: scroller.scrollLeft + rect.left - box.left, behavior: 'smooth' });
+  scroller.scrollTo({ left: scroller.scrollLeft + rect.left - box.left, behavior });
 }

@@ -1,15 +1,16 @@
 @use '../base' as *;
 
 // «Заказ оформлен» (order-received.html, partials/order/received.html; макет 18252:77498 → 18253:80920).
-// Белая карточка на всю высоту под шапкой (поля 20, мобилка — 10), блок 478 с галочкой; анимация — js/modules/order-success.js
+// Белая карточка на всю высоту под шапкой (поля 20, мобилка — на всю ширину), блок 478 с галочкой; анимация — js/modules/order-success.js
 .order-success {
   display: flex;
   flex: 1;
   flex-direction: column;
   padding: 0 rem(20) rem(20);
 
+  // Мобилка — карточка на всю ширину экрана, как корзина (просьба пользователя)
   @include media(mobile) {
-    padding: 0 rem(10) rem(10);
+    padding: 0;
   }
 
   &__card {
@@ -21,6 +22,10 @@
     padding: rem(40) rem(20);
     background-color: var(--color-white);
     border-radius: var(--radius-l);
+
+    @include media(mobile) {
+      border-radius: 0;
+    }
   }
 
   // Высота как в макете (252), чтобы галочка не прыгала, когда появляется текст

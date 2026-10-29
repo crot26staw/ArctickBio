@@ -1,15 +1,10 @@
 @use '../base' as *;
 
 // Статус заказа (order.html, partials/order/status.html; макет 18281:47397). Сетка карточки — .checkout__card.
+// Мобилка — карточка на всю ширину экрана, как корзина (просьба пользователя), плашки меню над ней — с полями 10
 .order-status {
   @include media(mobile) {
-    padding: rem(4) rem(10) rem(10);
-  }
-
-  .checkout__card {
-    @include media(mobile) {
-      border-radius: var(--radius-l);
-    }
+    padding-top: rem(4);
   }
 
   // Подвал на мобилке — по левому краю (макет 18264:89798), у оформления заказа — по центру

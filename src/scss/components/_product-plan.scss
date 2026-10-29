@@ -5,7 +5,9 @@
   display: flex;
   gap: rem(8);
   align-items: center;
-  width: rem(308);
+  // В макете 308 под подпись «Спеццена»; подпись длиннее («Морошка · брусника · черника») — плашка шире, а не текст под ценой
+  min-width: rem(308);
+  max-width: 100%;
   padding: rem(6) rem(12) rem(6) rem(6);
   color: var(--color-fg-light);
   background-color: rgba(255, 255, 255, 0.1);
@@ -35,6 +37,8 @@
 
   &__subtitle {
     @include body-s;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: var(--color-fg-light-soft);
     letter-spacing: 0;
   }
@@ -46,6 +50,8 @@
     flex-direction: row-reverse;
     gap: rem(4);
     align-self: flex-end;
+    // Между текстом и ценой в макете 16: gap плашки 8 + 8
+    margin-left: rem(8);
     white-space: nowrap;
 
     ins {
@@ -63,6 +69,7 @@
   &--option {
     position: relative;
     width: 100%;
+    min-width: 0;
     color: var(--color-fg);
     cursor: pointer;
     background-color: var(--color-white);
@@ -101,7 +108,9 @@
     color: var(--color-fg-muted);
   }
 
+  // Ширина списка форматов — по содержимому, лишние 8 перед ценой выталкивали его за край формы на мобилке
   &--option &__price {
+    margin-left: 0;
     color: var(--color-fg-soft);
 
     del {

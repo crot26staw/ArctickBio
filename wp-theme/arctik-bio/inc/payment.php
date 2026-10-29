@@ -74,5 +74,5 @@ if ( class_exists( 'WC_Payment_Gateway' ) ) {
 function arctik_payment_icon( string $gateway_id ): array {
 	return 'arctik_sbp' === $gateway_id
 		? [ 'icons/icn-sbp.svg', '19.4', '24', 'checkout-pay__icon--sbp' ]
-		: [ 'icons/icn-card.svg', '32', '32', '' ];
+		: [ 'icons/icn-credit.svg', '32', '32', '' ];
 }

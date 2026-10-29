@@ -7,3 +7,4 @@ wp-theme/arctik-bio/dist/
 wp-theme/arctik-bio/vendor/
 wp-theme/arctik-bio/assets/
 wp-theme/arctik-bio/hot
+.claude/settings.local.json

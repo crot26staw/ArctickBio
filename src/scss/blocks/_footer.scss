@@ -68,6 +68,13 @@ $footer-products-height-mobile: rem(90); // мини-карточка: 72 + от
     }
   }
 
+  // Реквизиты продавца — тем же мелким текстом, что копирайт
+  &__requisites {
+    font-size: rem(10);
+    line-height: rem(14);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
   &__dev {
     position: absolute;
     top: rem(251.16);

@@ -9,6 +9,7 @@ $arctik_phone      = (string) arctik_option( 'arctik_phone' );
 $arctik_email      = (string) arctik_option( 'arctik_email' );
 $arctik_address    = (string) arctik_option( 'arctik_address' );
 $arctik_copyright  = (string) arctik_option( 'arctik_copyright' );
+$arctik_requisites = (string) arctik_option( 'arctik_requisites' );
 $arctik_disclaimer = (string) arctik_option( 'arctik_disclaimer' );
 $arctik_developer  = (string) arctik_option( 'arctik_developer_link' );
 $arctik_q_title    = (string) arctik_option( 'arctik_footer_question_title' );
@@ -22,6 +23,9 @@ $arctik_products   = arctik_products();
 				<span class="logo__img"></span>
 			</a>
 			<p class="footer__copyright"><?php echo arctik_text( '© ' . wp_date( 'Y' ) . ' ' . $arctik_copyright ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+			<?php if ( $arctik_requisites ) : ?>
+				<p class="footer__requisites"><?php echo arctik_lines( $arctik_requisites ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+			<?php endif; ?>
 			<a class="footer__dev" href="<?php echo esc_url( $arctik_developer ?: '#' ); ?>" target="_blank" rel="noopener" aria-label="Разработано в Alta">
 				<img src="<?php echo esc_url( arctik_asset( 'icons/logo-alta.svg' ) ); ?>" alt="" width="120" height="16">
 			</a>

@@ -53,6 +53,9 @@ Container::make( 'theme_options', 'Настройки сайта' )
 			->set_rows( 2 ),
 		Field::make( 'text', 'arctik_copyright', 'Копирайт' )
 			->set_help_text( 'Без «©» и года — они подставляются автоматически' ),
+		Field::make( 'textarea', 'arctik_requisites', 'Реквизиты продавца (под копирайтом)' )
+			->set_rows( 3 )
+			->set_help_text( 'Каждая строка — с новой строки на сайте' ),
 		Field::make( 'textarea', 'arctik_disclaimer', 'Предупреждение внизу' )
 			->set_rows( 2 ),
 		Field::make( 'text', 'arctik_developer_link', 'Ссылка на разработчика (Alta)' )

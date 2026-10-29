@@ -2,7 +2,7 @@
 /**
  * Отзывы (src/partials/home/reviews.html): заголовок и кнопка — главная, вкладка «Отзывы» (кнопка ведёт в каталог);
  * карточки — записи «Отзывы» по дате, новые первыми. Нет отзывов — секции нет.
- * Фон — картинка темы: карточкам-стеклу нужна его заранее размытая копия (js/modules/fake-glass.js).
+ * Фон — поле вкладки «Отзывы» (пусто — картинка темы); карточкам-стеклу нужна его размытая копия (--glass-image, inc/glass.php, js/modules/fake-glass.js).
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -14,10 +14,15 @@ if ( ! $arctik_reviews ) {
 
 $arctik_page   = (int) get_option( 'page_on_front' );
 $arctik_button = (string) arctik_field( 'arctik_home_reviews_button', $arctik_page );
+$arctik_bg     = arctik_glass_bg( (int) arctik_field( 'arctik_home_reviews_bg', $arctik_page ), 16, 1440 );
 ?>
-<section class="reviews" id="reviews" data-header-theme="dark" data-js-fake-glass data-js-reveal-sequence data-reveal-sequence-play>
+<section class="reviews" id="reviews" data-header-theme="dark" data-js-fake-glass data-js-reveal-sequence data-reveal-sequence-play<?php echo $arctik_bg ? ' style="--glass-image: url(' . esc_url( $arctik_bg['glass'] ) . ')"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>>
 	<div class="reviews__bg-wrap" aria-hidden="true">
-		<img class="reviews__bg" data-js-fake-glass-source src="<?php echo esc_url( arctik_asset( 'images/review-bg.webp' ) ); ?>" alt="" width="1448" height="1086" loading="lazy">
+		<?php if ( $arctik_bg ) : ?>
+			<?php echo arctik_image( $arctik_bg['id'], 'full', [ 'class' => 'reviews__bg', 'data-js-fake-glass-source' => '', 'alt' => '', 'sizes' => '100vw', 'loading' => 'lazy' ] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+		<?php else : ?>
+			<img class="reviews__bg" data-js-fake-glass-source src="<?php echo esc_url( arctik_asset( 'images/review-bg.webp' ) ); ?>" alt="" width="1448" height="1086" loading="lazy">
+		<?php endif; ?>
 	</div>
 
 	<div class="reviews__header">

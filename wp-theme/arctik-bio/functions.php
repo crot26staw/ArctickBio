@@ -11,6 +11,7 @@ foreach ( [
 	'vite',
 	'typograph',
 	'helpers',
+	'glass',
 	'carbon-fields',
 	'post-types',
 	'woocommerce',

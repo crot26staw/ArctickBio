@@ -64,8 +64,8 @@ Container::make( 'theme_options', 'Общие блоки' )
 	] )
 
 	->add_tab( 'Регулярный приём', [
-		Field::make( 'html', 'arctik_benefits_info' )
-			->set_html( '<p>Фон блока — картинка темы (для эффекта стекла у карточек нужна её заранее размытая копия), меняется в вёрстке.</p>' ),
+		Field::make( 'image', 'arctik_benefits_bg', 'Фон' )
+			->set_help_text( 'Фото на весь блок, от 1920 px по ширине. Размытая копия для стекла карточек делается автоматически. Пусто — фон из вёрстки' ),
 		Field::make( 'textarea', 'arctik_benefits_title', 'Заголовок' )
 			->set_rows( 2 ),
 		Field::make( 'complex', 'arctik_benefits_cards', 'Карточки' )

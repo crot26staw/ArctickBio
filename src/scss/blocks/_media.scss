@@ -3,8 +3,8 @@
 // «Больше процессов производства показываем в соцсетях» (макет 18517:126635).
 // Карточки — «стекло» (blur 16px) поверх фото: fake-glass.js
 .media {
-  // Размытая копия фона (blur 16px, уменьшена вдвое)
-  --glass-image: url('../../assets/images/company-media-bg-blur.webp');
+  // Размытая копия фона (blur 16px, уменьшена вдвое). Фон из админки WP — свои копии в --media-glass(-tablet) (inc/glass.php)
+  --glass-image: var(--media-glass, url('../../assets/images/company-media-bg-blur.webp'));
 
   position: relative;
   display: flex;
@@ -18,7 +18,7 @@
 
   // Планшет: другое фото, карточки сеткой 2×2 (макет 18165:54069)
   @include media(tablet) {
-    --glass-image: url('../../assets/images/company-media-bg-tablet-blur.webp');
+    --glass-image: var(--media-glass-tablet, url('../../assets/images/company-media-bg-tablet-blur.webp'));
 
     height: rem(783);
     padding-inline: $container-padding-tablet;

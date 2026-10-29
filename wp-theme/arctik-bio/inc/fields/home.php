@@ -178,4 +178,6 @@ Container::make( 'post_meta', 'Главная' )
 			->set_width( 50 ),
 		Field::make( 'text', 'arctik_home_reviews_button', 'Подпись кнопки' )
 			->set_width( 50 ),
+		Field::make( 'image', 'arctik_home_reviews_bg', 'Фон' )
+			->set_help_text( 'Фото на весь блок, от 1920 px по ширине. Размытая копия для стекла карточек делается автоматически. Пусто — фон из вёрстки' ),
 	] );

@@ -3,6 +3,7 @@ import { initHeader } from './modules/header.js';
 import { initMobileMenu } from './modules/mobile-menu.js';
 import { initHeroCover } from './modules/hero-cover.js';
 import { initAccordions } from './modules/accordion.js';
+import { initStores } from './modules/stores.js';
 import { initDragSliders } from './modules/drag-slider.js';
 import { initFakeGlass } from './modules/fake-glass.js';
 import { initTitleReveal } from './modules/title-reveal.js';
@@ -62,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAccount();
   initOrderTracks();
   initAccordions();
+  initStores();
   initQuantities();
   initProductFormats();
   initStickyBuy();

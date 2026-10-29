@@ -73,4 +73,33 @@ add_action( 'init', function () {
 		update_post_meta( $buyers[0]->ID, '_arctik_stores_cities|name|0|0|value', 'г. Екатеринбург' );
 		update_post_meta( $buyers[0]->ID, '_arctik_stores_cities|addresses|0|0|value', 'ул. Сакко и Ванцетти, д.48' );
 	} );
+
+	// 29.10.2026: у каждого адреса своя карта (просьба пользователя) — адреса города из текстового поля (по строке)
+	// в список «адрес + карта»; карта у адресов пустая — показывается «Карта по умолчанию» (прежняя общая карта).
+	arctik_migrate( 'stores_points', function () {
+		$buyers = get_pages( [ 'meta_key' => '_wp_page_template', 'meta_value' => 'page-templates/buyers.php', 'number' => 1 ] );
+		if ( ! $buyers || ! function_exists( 'carbon_set_post_meta' ) ) {
+			return;
+		}
+
+		$id     = $buyers[0]->ID;
+		$cities = [];
+		for ( $index = 0; metadata_exists( 'post', $id, "_arctik_stores_cities|||{$index}|value" ); $index++ ) {
+			$lines = preg_split( '/\R/', (string) get_post_meta( $id, "_arctik_stores_cities|addresses|{$index}|0|value", true ) );
+
+			$cities[] = [
+				'name'   => (string) get_post_meta( $id, "_arctik_stores_cities|name|{$index}|0|value", true ),
+				'points' => array_map( fn( $address ) => [ 'address' => $address, 'map' => '' ], array_values( array_filter( array_map( 'trim', $lines ) ) ) ),
+			];
+		}
+		if ( ! $cities ) {
+			return;
+		}
+
+		global $wpdb;
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key LIKE %s", $id, $wpdb->esc_like( '_arctik_stores_cities|' ) . '%' ) );
+		clean_post_cache( $id );
+
+		carbon_set_post_meta( $id, 'arctik_stores_cities', $cities );
+	} );
 }, 20 );

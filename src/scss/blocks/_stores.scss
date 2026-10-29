@@ -132,12 +132,20 @@
     height: auto;
   }
 
-  &__addresses li {
+  // Адрес — кнопка выбора карты; выбранный — тёмный (в макете состояния нет)
+  &__address {
     @include body-m;
     display: flex;
     align-items: center;
+    width: 100%;
     min-height: rem(44);
     line-height: 1;
     color: var(--color-fg-muted);
+    text-align: left;
+    transition: color $transition;
+
+    &.is-active {
+      color: var(--color-heading);
+    }
   }
 }

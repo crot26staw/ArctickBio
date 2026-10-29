@@ -1,8 +1,8 @@
-<section class="stores" id="where-to-buy" data-header-theme="light">
+<section class="stores" id="where-to-buy" data-header-theme="light" data-js-stores>
   <h2 class="stores__title" data-js-title-reveal>Где нас купить?</h2>
 
   <div class="stores__body" data-js-fade-up-group>
-    <!-- Города: аккордеоны (js/modules/accordion.js), открыт один; список прокручивается внутри карточки -->
+    <!-- Города: аккордеоны (js/modules/accordion.js), открыт один; список прокручивается внутри карточки. Адреса — кнопки выбора карты -->
     <div class="stores__list" data-js-accordion-group data-lenis-prevent>
       <div class="store-city is-open" data-js-accordion>
         <button class="store-city__header" type="button" aria-expanded="true" aria-controls="store-city-1" data-js-accordion-toggle>
@@ -13,9 +13,9 @@
         </button>
         <div class="store-city__panel" id="store-city-1" data-js-accordion-panel>
           <ul class="store-city__addresses">
-            <li>ул. Сакко и&nbsp;Ванцетти, д.48</li>
-            <li>ул. Ленина, д. 24</li>
-            <li>ул. Ленина, д. 24</li>
+            <li><button class="store-city__address is-active" type="button" aria-pressed="true" data-js-stores-address data-map="https://yandex.ru/map-widget/v1/?ll=60.603500%2C56.833700&amp;z=16&amp;pt=60.603500%2C56.833700%2Cpm2rdm" data-js-roll>ул. Сакко и&nbsp;Ванцетти, д.48</button></li>
+            <li><button class="store-city__address" type="button" aria-pressed="false" data-js-stores-address data-map="https://yandex.ru/map-widget/v1/?ll=60.597474%2C56.842011&amp;z=16&amp;pt=60.597474%2C56.842011%2Cpm2rdm" data-js-roll>ул. Ленина, д. 24</button></li>
+            <li><button class="store-city__address" type="button" aria-pressed="false" data-js-stores-address data-map="https://yandex.ru/map-widget/v1/?ll=60.597474%2C56.846011&amp;z=16&amp;pt=60.597474%2C56.846011%2Cpm2rdm" data-js-roll>ул. Ленина, д. 24</button></li>
           </ul>
         </div>
       </div>
@@ -29,7 +29,7 @@
         </button>
         <div class="store-city__panel" id="store-city-2" data-js-accordion-panel>
           <ul class="store-city__addresses">
-            <li>ул. Ленина, д. 24</li>
+            <li><button class="store-city__address" type="button" aria-pressed="false" data-js-stores-address data-map="https://yandex.ru/map-widget/v1/?ll=37.617635%2C55.755814&amp;z=16&amp;pt=37.617635%2C55.755814%2Cpm2rdm" data-js-roll>ул. Ленина, д. 24</button></li>
           </ul>
         </div>
       </div>
@@ -43,7 +43,7 @@
         </button>
         <div class="store-city__panel" id="store-city-3" data-js-accordion-panel>
           <ul class="store-city__addresses">
-            <li>ул. Ленина, д. 24</li>
+            <li><button class="store-city__address" type="button" aria-pressed="false" data-js-stores-address data-map="https://yandex.ru/map-widget/v1/?ll=131.885485%2C43.115536&amp;z=16&amp;pt=131.885485%2C43.115536%2Cpm2rdm" data-js-roll>ул. Ленина, д. 24</button></li>
           </ul>
         </div>
       </div>
@@ -57,7 +57,7 @@
         </button>
         <div class="store-city__panel" id="store-city-4" data-js-accordion-panel>
           <ul class="store-city__addresses">
-            <li>ул. Ленина, д. 24</li>
+            <li><button class="store-city__address" type="button" aria-pressed="false" data-js-stores-address data-map="https://yandex.ru/map-widget/v1/?ll=30.315635%2C59.938951&amp;z=16&amp;pt=30.315635%2C59.938951%2Cpm2rdm" data-js-roll>ул. Ленина, д. 24</button></li>
           </ul>
         </div>
       </div>
@@ -71,15 +71,15 @@
         </button>
         <div class="store-city__panel" id="store-city-5" data-js-accordion-panel>
           <ul class="store-city__addresses">
-            <li>ул. Ленина, д. 24</li>
+            <li><button class="store-city__address" type="button" aria-pressed="false" data-js-stores-address data-map="https://yandex.ru/map-widget/v1/?ll=65.534328%2C57.153033&amp;z=16&amp;pt=65.534328%2C57.153033%2Cpm2rdm" data-js-roll>ул. Ленина, д. 24</button></li>
           </ul>
         </div>
       </div>
     </div>
 
-    <!-- Карта — Яндекс Карта в iframe (в WP — код или ссылка из конструктора карт, поле «Карта»); здесь — демо: Екатеринбург -->
+    <!-- Карта выбранного адреса — Яндекс Карта в iframe (data-map у адреса; нет — карта по умолчанию data-default-map). Адрес выбирают нажатием, у открытого города — первый (js/modules/stores.js). Здесь — демо-карты -->
     <div class="stores__map">
-      <iframe class="stores__map-frame" src="https://yandex.ru/map-widget/v1/?ll=60.597474%2C56.838011&amp;z=12" title="Карта магазинов" loading="lazy" allowfullscreen></iframe>
+      <iframe class="stores__map-frame" src="https://yandex.ru/map-widget/v1/?ll=60.603500%2C56.833700&amp;z=16&amp;pt=60.603500%2C56.833700%2Cpm2rdm" data-js-stores-map title="Карта магазинов" loading="lazy" allowfullscreen></iframe>
     </div>
   </div>
 </section>

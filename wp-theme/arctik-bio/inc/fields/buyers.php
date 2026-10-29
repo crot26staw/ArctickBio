@@ -50,7 +50,7 @@ Container::make( 'post_meta', 'Покупателям' )
 
 	->add_tab( 'Где нас купить?', [
 		Field::make( 'html', 'arctik_stores_info' )
-			->set_html( '<p>Нет городов — блок не выводится. Открыт первый город. На блок ведут пункты «Где купить» в шапке и подвале (/buyers/#where-to-buy).</p>' ),
+			->set_html( '<p>Нет городов — блок не выводится. Открыт первый город, выбран его первый адрес. У каждого адреса своя карта: нажали адрес — на карте он; у адреса без карты — карта по умолчанию. На блок ведут пункты «Где купить» в шапке и подвале (/buyers/#where-to-buy).</p>' ),
 		Field::make( 'text', 'arctik_stores_title', 'Заголовок' ),
 		Field::make( 'complex', 'arctik_stores_cities', 'Города' )
 			->setup_labels( [ 'plural_name' => 'Города', 'singular_name' => 'город' ] )
@@ -59,11 +59,19 @@ Container::make( 'post_meta', 'Покупателям' )
 			->add_fields( [
 				Field::make( 'text', 'name', 'Город' )
 					->set_help_text( 'Как на сайте: «г. Москва»' ),
-				Field::make( 'textarea', 'addresses', 'Адреса' )
-					->set_rows( 3 )
-					->set_help_text( 'Каждый адрес — с новой строки' ),
+				Field::make( 'complex', 'points', 'Адреса' )
+					->setup_labels( [ 'plural_name' => 'Адреса', 'singular_name' => 'адрес' ] )
+					->set_collapsed( true )
+					->set_header_template( '<%- address %>' )
+					->add_fields( [
+						Field::make( 'text', 'address', 'Адрес' )
+							->set_help_text( 'Как на сайте: «ул. Ленина, д. 24»' ),
+						Field::make( 'textarea', 'map', 'Карта' )
+							->set_rows( 3 )
+							->set_help_text( 'Яндекс Карты: код из конструктора карт (yandex.ru/map-constructor → «Получить код», iframe или script) или «Поделиться → Встроить карту». Пусто — карта по умолчанию' ),
+					] ),
 			] ),
-		Field::make( 'textarea', 'arctik_stores_map_embed', 'Карта' )
+		Field::make( 'textarea', 'arctik_stores_map_embed', 'Карта по умолчанию' )
 			->set_rows( 3 )
-			->set_help_text( 'Яндекс Карты: конструктор карт (yandex.ru/map-constructor) → «Получить код» — код iframe или script, либо в картах «Поделиться → Встроить карту» — код iframe. Можно вставить и просто ссылку. Пусто — без карты' ),
+			->set_help_text( 'Для адресов без своей карты. Код так же — из конструктора Яндекс Карт. Пусто — у таких адресов карты нет' ),
 	] );

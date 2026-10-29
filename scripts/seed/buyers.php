@@ -38,13 +38,19 @@ carbon_set_post_meta( $page->ID, 'arctik_buyers_groups', array_map(
 
 // «Где нас купить?» — города и адреса из макета (заглушки, кроме Екатеринбурга; реальные заполняются в админке), карта — демо.
 carbon_set_post_meta( $page->ID, 'arctik_stores_title', 'Где нас купить?' );
+// У каждого адреса своя карта (демо — точка на карте), карта по умолчанию — для адресов без своей
+$map = fn( string $ll ) => '<iframe src="https://yandex.ru/map-widget/v1/?ll=' . $ll . '&z=16&pt=' . $ll . ',pm2rdm" width="560" height="400" frameborder="1" allowfullscreen="true"></iframe>';
 carbon_set_post_meta( $page->ID, 'arctik_stores_cities', [
-	[ 'name' => 'г. Екатеринбург', 'addresses' => "ул. Сакко и Ванцетти, д.48\nул. Ленина, д. 24\nул. Ленина, д. 24" ],
-	[ 'name' => 'г. Москва', 'addresses' => 'ул. Ленина, д. 24' ],
-	[ 'name' => 'г. Владивосток', 'addresses' => 'ул. Ленина, д. 24' ],
-	[ 'name' => 'г. Санкт-Петербург', 'addresses' => 'ул. Ленина, д. 24' ],
-	[ 'name' => 'г. Тюмень', 'addresses' => 'ул. Ленина, д. 24' ],
+	[ 'name' => 'г. Екатеринбург', 'points' => [
+		[ 'address' => 'ул. Сакко и Ванцетти, д.48', 'map' => $map( '60.603500,56.833700' ) ],
+		[ 'address' => 'ул. Ленина, д. 24', 'map' => $map( '60.597474,56.842011' ) ],
+		[ 'address' => 'ул. Ленина, д. 24', 'map' => $map( '60.597474,56.846011' ) ],
+	] ],
+	[ 'name' => 'г. Москва', 'points' => [ [ 'address' => 'ул. Ленина, д. 24', 'map' => $map( '37.617635,55.755814' ) ] ] ],
+	[ 'name' => 'г. Владивосток', 'points' => [ [ 'address' => 'ул. Ленина, д. 24', 'map' => $map( '131.885485,43.115536' ) ] ] ],
+	[ 'name' => 'г. Санкт-Петербург', 'points' => [ [ 'address' => 'ул. Ленина, д. 24', 'map' => $map( '30.315635,59.938951' ) ] ] ],
+	[ 'name' => 'г. Тюмень', 'points' => [ [ 'address' => 'ул. Ленина, д. 24', 'map' => '' ] ] ],
 ] );
-carbon_set_post_meta( $page->ID, 'arctik_stores_map_embed', '<iframe src="https://yandex.ru/map-widget/v1/?ll=60.597474%2C56.838011&z=12" width="560" height="400" frameborder="1" allowfullscreen="true"></iframe>' );
+carbon_set_post_meta( $page->ID, 'arctik_stores_map_embed', $map( '60.597474,56.838011' ) );
 
 WP_CLI::success( 'Покупателям заполнено' );

@@ -60,4 +60,17 @@ add_action( 'init', function () {
 			update_post_meta( $buyers[0]->ID, '_arctik_stores_title', 'Где нас купить?' );
 		}
 	} );
+
+	// 29.10.2026: первый город блока (решение пользователя), остальные города и карту заполняют в админке.
+	// Complex Carbon Fields — сырыми ключами: _<поле>|||<n>|value и _<поле>|<подполе>|<n>|0|value
+	arctik_migrate( 'where_to_buy_city', function () {
+		$buyers = get_pages( [ 'meta_key' => '_wp_page_template', 'meta_value' => 'page-templates/buyers.php', 'number' => 1 ] );
+		if ( ! $buyers || metadata_exists( 'post', $buyers[0]->ID, '_arctik_stores_cities|||0|value' ) ) {
+			return;
+		}
+
+		update_post_meta( $buyers[0]->ID, '_arctik_stores_cities|||0|value', '_' );
+		update_post_meta( $buyers[0]->ID, '_arctik_stores_cities|name|0|0|value', 'г. Екатеринбург' );
+		update_post_meta( $buyers[0]->ID, '_arctik_stores_cities|addresses|0|0|value', 'ул. Сакко и Ванцетти, д.48' );
+	} );
 }, 20 );

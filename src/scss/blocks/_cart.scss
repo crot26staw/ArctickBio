@@ -122,6 +122,16 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     min-height: 0;
   }
 
+  // Мобилка (макет 18920:36300): прокручивается весь блок — товары, «Попробуйте также», итог карточкой в конце
+  &__content {
+    @include media(mobile) {
+      gap: rem(32);
+      padding: rem(18) rem(16);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+  }
+
   // ---------- Пустая корзина ----------
   &__empty {
     display: flex;
@@ -175,6 +185,13 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     padding: rem(18) rem(16);
     overflow-y: auto;
     overscroll-behavior: contain;
+
+    @include media(mobile) {
+      flex: none;
+      gap: rem(32);
+      padding: 0;
+      overflow: visible;
+    }
   }
 
   &__list {
@@ -225,6 +242,11 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     gap: rem(16);
     padding: rem(16) rem(16) rem(24);
     background-color: var(--color-white);
+
+    @include media(mobile) {
+      padding: rem(16);
+      border-radius: var(--radius-m);
+    }
   }
 
   &__totals {
@@ -274,6 +296,49 @@ $cart-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       background-color: rgba(34, 34, 34, 0.1);
       pointer-events: none;
     }
+  }
+
+  // ---------- Кнопка с суммой (мобилка) ----------
+  // Видна (is-visible), пока карточка итога видна не целиком; доскроллили — уезжает вниз (js/modules/cart.js)
+  &__bar {
+    display: none;
+
+    @include media(mobile) {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      display: flex;
+      padding: rem(10);
+      visibility: hidden;
+      background-color: var(--color-white);
+      border-top: 1px solid var(--color-border-muted);
+      transform: translateY(100%);
+      transition:
+        transform $cart-transition,
+        visibility 0s linear 0.4s;
+
+      &.is-visible {
+        visibility: visible;
+        transform: none;
+        transition: transform $cart-transition;
+      }
+    }
+  }
+
+  &__content[hidden] ~ &__bar {
+    display: none;
+  }
+
+  &__bar-btn {
+    @include body-m-strong;
+    flex: 1;
+    border-radius: var(--radius-m);
+  }
+
+  &__bar-total {
+    margin-left: rem(10);
   }
 
   // Есть разобранные товары, оформить нельзя (макет 18269:34349): без итога и промокода, кнопка неактивна

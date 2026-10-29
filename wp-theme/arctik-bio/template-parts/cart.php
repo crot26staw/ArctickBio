@@ -39,14 +39,15 @@ $arctik_empty = WC()->cart->is_empty();
 			</div>
 
 			<?php /* С товарами */ ?>
-			<div class="mini-cart__content" <?php echo $arctik_empty ? 'hidden' : ''; ?> data-js-cart-content>
+			<?php /* На мобилке прокручивается весь блок, итог — последняя карточка в прокрутке (макет 18920:36300) */ ?>
+			<div class="mini-cart__content" <?php echo $arctik_empty ? 'hidden' : ''; ?> data-js-cart-content data-lenis-prevent>
 				<div class="mini-cart__scroll" data-lenis-prevent>
 					<?php echo arctik_cart_part( 'list' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 
 					<?php echo arctik_cart_part( 'more' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</div>
 
-				<div class="mini-cart__summary">
+				<div class="mini-cart__summary" data-js-cart-summary>
 					<?php echo arctik_cart_part( 'totals' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 
 					<?php
@@ -60,6 +61,11 @@ $arctik_empty = WC()->cart->is_empty();
 					<p class="mini-cart__error" hidden data-js-cart-error>Удалите из&nbsp;корзины товары, которых нет в&nbsp;наличии</p>
 					<a class="btn btn--accent mini-cart__checkout checkout wc-forward" href="<?php echo esc_url( wc_get_checkout_url() ); ?>" data-js-cart-checkout data-js-swipe>Перейти к&nbsp;оформлению</a>
 				</div>
+			</div>
+
+			<?php /* Мобилка: пока итог виден не целиком — кнопка с суммой внизу (макет 18920:36300), сумма — копия «Итого» (js/modules/cart.js) */ ?>
+			<div class="mini-cart__bar" data-js-cart-bar inert>
+				<a class="btn btn--accent mini-cart__bar-btn" href="<?php echo esc_url( wc_get_checkout_url() ); ?>" data-js-cart-checkout data-js-swipe>К&nbsp;оформлению<span class="mini-cart__bar-total" data-js-cart-bar-total></span></a>
 			</div>
 		</div>
 	</div>

@@ -34,6 +34,10 @@ const formatPrice = (value) => `${String(value).replace(/\B(?=(\d{3})+(?!\d))/g,
  * ответ — фрагменты WC. Списки и итоги после ответа заменяются,
  * поэтому элементы ищутся при каждом обновлении. После добавления открывается попап с обновлённой корзиной
  * (в статике — сразу, с демо-товарами).
+ *
+ * Мобилка (макет 18920:36300): итог — последняя карточка в прокрутке; пока он виден не целиком, внизу кнопка
+ * «К оформлению» с суммой [data-js-cart-bar] (сумма — копия «Итого»), доскроллили до итога — уезжает. Одни разобранные —
+ * кнопки нет; есть разобранные — после проверки наличия прокрутка к итогу с ошибкой.
  */
 export function initCart() {
   const root = document.querySelector('[data-js-cart]');
@@ -45,6 +49,9 @@ export function initCart() {
   const content = root.querySelector('[data-js-cart-content]');
   const checkout = root.querySelector('[data-js-cart-checkout]');
   const checkoutError = root.querySelector('[data-js-cart-error]');
+  const summary = root.querySelector('[data-js-cart-summary]');
+  const bar = root.querySelector('[data-js-cart-bar]');
+  let summaryInView = true;
   const header = document.querySelector('[data-js-header]');
   const qtyTimers = new Map();
   let opener = null;
@@ -66,6 +73,8 @@ export function initCart() {
     }
     if (hasSold()) {
       checkoutError.hidden = false;
+      // Из кнопки с суммой — ошибку не видно: прокрутить к итогу
+      if (link.closest('[data-js-cart-bar]')) content.scrollTo({ top: content.scrollHeight, behavior: 'smooth' });
       return;
     }
     window.location.assign(link.href);
@@ -92,6 +101,19 @@ export function initCart() {
     });
   };
 
+  // Кнопка с суммой: есть что оформлять и итог виден не целиком (на десктопе и планшете скрыта стилями)
+  const updateBar = () => {
+    if (!bar) return;
+    const show = !content.hidden && !root.classList.contains(BLOCKED_CLASS) && !summaryInView;
+    bar.classList.toggle('is-visible', show);
+    bar.inert = !show;
+    const total = root.querySelector('[data-js-cart-total]')?.textContent || '';
+    // У swipe-кнопки две копии подписи
+    bar.querySelectorAll('[data-js-cart-bar-total]').forEach((node) => {
+      node.textContent = total;
+    });
+  };
+
   const update = () => {
     const items = [...root.querySelectorAll('[data-js-cart-item]')];
     const available = items.filter((item) => !item.classList.contains(SOLD_CLASS));
@@ -106,6 +128,7 @@ export function initCart() {
     root.classList.toggle(BLOCKED_CLASS, blocked);
     checkout.classList.toggle('is-disabled', blocked);
     checkout.setAttribute('aria-disabled', String(blocked));
+    updateBar();
   };
 
   // Новые товары из фрагментов: счётчики и ховер «Удалить»
@@ -301,6 +324,15 @@ export function initCart() {
       }
     }
   });
+
+  // На мобилке прокручивается content: итог виден целиком — кнопка с суммой уезжает (комментарий дизайнера:
+  // кнопка — пока не видна вся область итога). 0.99 — запас на дробные пиксели
+  if (bar && summary) {
+    new IntersectionObserver(([entry]) => {
+      summaryInView = entry.intersectionRatio >= 0.99;
+      updateBar();
+    }, { root: content, threshold: [0, 0.5, 0.99, 1] }).observe(summary);
+  }
 
   update();
 }

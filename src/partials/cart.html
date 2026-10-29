@@ -29,7 +29,8 @@
       </div>
 
       <!-- С товарами -->
-      <div class="mini-cart__content" data-js-cart-content>
+      <!-- На мобилке прокручивается весь блок, итог — последняя карточка в прокрутке (макет 18920:36300) -->
+      <div class="mini-cart__content" data-js-cart-content data-lenis-prevent>
         <div class="mini-cart__scroll" data-lenis-prevent>
           <ul class="mini-cart__list woocommerce-mini-cart cart_list product_list_widget" data-js-cart-list>
             <include src="partials/cart-item.html" data='{"flavor": "brusnika", "title": "Морской коллаген", "subtitle": "с&nbsp;дикой брусникой", "format": "30&nbsp;саше", "price": "1&nbsp;440&nbsp;₽", "price_value": "1440", "qty": "1", "link": "./product.html", "id": "1", "key": "a1"}'></include>
@@ -49,7 +50,7 @@
           </div>
         </div>
 
-        <div class="mini-cart__summary">
+        <div class="mini-cart__summary" data-js-cart-summary>
           <dl class="mini-cart__totals" data-js-cart-totals>
             <div class="mini-cart__row mini-cart__row--total">
               <dt>Итого</dt>
@@ -71,6 +72,11 @@
           <p class="mini-cart__error" hidden data-js-cart-error>Удалите из&nbsp;корзины товары, которых нет в&nbsp;наличии</p>
           <a class="btn btn--accent mini-cart__checkout checkout wc-forward" href="./checkout.html" data-js-cart-checkout data-js-swipe>Перейти к&nbsp;оформлению</a>
         </div>
+      </div>
+
+      <!-- Мобилка: пока итог виден не целиком — кнопка с суммой внизу (макет 18920:36300), сумма — копия «Итого» (js/modules/cart.js) -->
+      <div class="mini-cart__bar" data-js-cart-bar inert>
+        <a class="btn btn--accent mini-cart__bar-btn" href="./checkout.html" data-js-cart-checkout data-js-swipe>К&nbsp;оформлению<span class="mini-cart__bar-total" data-js-cart-bar-total></span></a>
       </div>
     </div>
   </div>

@@ -9,28 +9,28 @@
   left: 0;
   z-index: 4; // выше карточек about (3); летящий стик на время завесы поднимается над ней (5)
   width: 100%;
-  height: 300svh;
+  height: 300lvh; // lvh — экран со спрятанной адресной строкой, иначе на iOS снизу не закрыто
   pointer-events: none;
   opacity: 0; // без JS / при reduced motion завесы нет
   will-change: transform, opacity;
   // Снизу завеса растворяется от --veil-cut-start до --veil-cut-end (JS: по высоте скалы у верха product-scene) —
   // секция выходит из-под облаков, а её верхний край остаётся под ними. До перехода срез ниже завесы — она сплошная.
-  --veil-cut-start: 1000svh;
-  --veil-cut-end: 1000svh;
+  --veil-cut-start: 1000lvh;
+  --veil-cut-end: 1000lvh;
   mask-image: linear-gradient(to bottom, #000 var(--veil-cut-start), transparent var(--veil-cut-end));
 
   &__clouds {
     display: block;
     width: 100%;
     max-width: none;
-    height: 100svh;
+    height: 100lvh;
     object-fit: cover;
     object-position: top;
   }
 
   // Заходит под картинку на 1px, чтобы не было шва
   &__fill {
-    height: calc(200svh + 1px);
+    height: calc(200lvh + 1px);
     margin-top: -1px;
     background-color: var(--color-white);
   }
@@ -38,7 +38,7 @@
   // Зона, где завеса уже плотная: над ней шапка переключается на светлую тему
   &__theme {
     position: absolute;
-    top: 64svh; // картинка становится плотной с ~64% высоты
+    top: 64lvh; // картинка становится плотной с ~64% высоты
     bottom: 0;
     left: 0;
     width: 100%;

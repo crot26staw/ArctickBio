@@ -2,7 +2,7 @@
 
 .research {
   display: flex;
-  height: 100svh;
+  height: 100lvh; // закреплена (research.js): lvh — на iOS экран без адресной строки выше 100svh, снизу была полоса
   overflow: hidden;
   background-color: #e7eff1;
 
@@ -14,7 +14,7 @@
     align-items: center;
     justify-content: center;
     height: auto;
-    min-height: 100svh;
+    min-height: 100lvh;
     padding: rem(120) rem(20);
     background:
       url("data:image/svg+xml;utf8,<svg viewBox='0 0 768 1080' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(26.522 122.38 -87.024 29.212 282.03 488.03)'><stop stop-color='rgba(245,248,253,1)' offset='0'/><stop stop-color='rgba(198,218,248,1)' offset='1'/></radialGradient></defs></svg>")

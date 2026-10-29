@@ -7,12 +7,12 @@ $compound-pin: 2.5;
 // пока на него наезжает video (overlap-stack--track). Шкала анимации — от 'top top' до 'bottom 200%'
 .compound {
   position: relative;
-  height: calc(#{$compound-pin + 2} * 100svh);
+  height: calc(#{$compound-pin + 2} * 100lvh); // lvh — см. --browser-bar в _variables.scss
   background-color: var(--color-bg-light);
 
   // Без анимации — только экран наезда video
   @media (prefers-reduced-motion: reduce) {
-    height: 200svh;
+    height: 200lvh;
   }
 
   // На весь экран; композиция из макета (высота 800) — по центру по вертикали, камни прижаты к низу
@@ -22,7 +22,7 @@ $compound-pin: 2.5;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100svh;
+    height: 100lvh;
     overflow: hidden;
     // Фон — здесь, а не только у секции: sticky создаёт свой контекст наложения, и mix-blend-mode стика смешивается только с ним
     background-color: var(--color-bg-light);

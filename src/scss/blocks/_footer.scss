@@ -320,4 +320,9 @@ $footer-products-height-mobile: rem(90); // мини-карточка: 72 + от
   &__products.is-draggable &__products-track {
     @include drag-track;
   }
+
+  // Над карточкой — pointer, а не grab ленты (просьба пользователя)
+  &__products .mini-card {
+    cursor: pointer;
+  }
 }

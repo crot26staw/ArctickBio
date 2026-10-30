@@ -8,6 +8,7 @@ defined( 'ABSPATH' ) || exit;
 foreach ( [
 	'setup',
 	'cleanup',
+	'svg',
 	'vite',
 	'typograph',
 	'helpers',

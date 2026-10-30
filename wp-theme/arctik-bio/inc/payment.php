@@ -46,6 +46,49 @@ function arctik_payment_retry_url( WC_Order $order ): string {
 	);
 }
 
+/*
+ * Возврат покупателя из банка (?wc-api=alfabank_payment&action=result): плагин при включённых callback статус здесь не меняет —
+ * ждёт callback банка; не пришёл — оплаченный заказ оставался «Ожидает оплаты» / «Не удался» (найдено на тесте 30.10.2026).
+ * Подтверждаем сами, до обработчика плагина: статус — запросом в банк, номер заказа в банке (<номер>_<время>) и сумма должны совпасть
+ * с заказом из адреса (иначе чужой оплаченный orderId засчитал бы другой заказ). Дальше плагин делает свой редирект; callback
+ * потом видит оплаченный заказ и ничего не меняет.
+ */
+add_action( 'woocommerce_api_' . ARCTIK_GATEWAY, function () {
+	if ( 'result' !== ( $_GET['action'] ?? '' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		return;
+	}
+
+	$gateway = arctik_payment_gateway();
+	$order   = wc_get_order( absint( $_GET['order_id'] ?? 0 ) ); // phpcs:ignore WordPress.Security.NonceVerification
+	$md      = sanitize_text_field( wp_unslash( $_GET['orderId'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification
+
+	if ( ! $gateway || ! $order || ! $md || $order->is_paid() || ARCTIK_GATEWAY !== $order->get_payment_method() ) {
+		return;
+	}
+
+	$url      = ( 'yes' === $gateway->test_mode ? $gateway->test_url : $gateway->prod_url ) . 'getOrderStatusExtended.do';
+	$response = json_decode( (string) $gateway->_sendGatewayData(
+		http_build_query( [ 'userName' => $gateway->merchant, 'password' => $gateway->password, 'orderId' => $md ], '', '&' ),
+		$url
+	), true );
+
+	if ( ! is_array( $response ) ) {
+		return;
+	}
+
+	$response = array_merge( $response, (array) ( $response['orderStatusResultModel'] ?? [] ) );
+	$number   = preg_replace( '/_\d+$/', '', (string) ( $response['orderNumber'] ?? '' ) );
+	$paid     = in_array( (int) ( $response['orderStatus'] ?? -1 ), [ 1, 2 ], true );
+
+	if ( ! $paid || $number !== (string) $order->get_order_number() || (int) ( $response['amount'] ?? 0 ) !== (int) round( (float) $order->get_total() * 100 ) ) {
+		return;
+	}
+
+	$order->update_meta_data( ARCTIK_GATEWAY . '_orderId', $md );
+	$order->add_order_note( 'Альфа-Банк: оплата подтверждена при возврате покупателя на сайт' );
+	$order->payment_complete( sanitize_text_field( (string) ( $response['authRefNum'] ?? '' ) ) ); // «Обработка», остаток списывается
+}, 5 );
+
 // Перевод плагина не срабатывает (в .po ключ с <br/>), к тексту добавлен код банка — покупателю свой текст
 add_filter( 'woocommerce_add_error', function ( $message ) {
 	if ( is_string( $message ) && ( str_contains( $message, 'ERRORCODE#' ) || str_contains( $message, 'There was an error while processing payment' ) ) ) {

@@ -91,7 +91,6 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 						</label>
 					<?php endforeach; ?>
 				</div>
-				<?php get_template_part( 'template-parts/pay-logos', null, [ 'mod' => 'checkout__pay-logos' ] ); ?>
 			</fieldset>
 
 			<fieldset class="checkout__section checkout__section--delivery woocommerce-shipping-methods">
@@ -211,9 +210,11 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 			<?php if ( $arctik_terms_id ) : ?>
 				<input type="hidden" name="terms-field" value="1">
 			<?php endif; ?>
+			<?php // Логотипы платёжных систем: десктоп/планшет — здесь, мобилка — в подвале (макет). ?>
+			<?php get_template_part( 'template-parts/pay-logos', null, [ 'mod' => 'checkout__pay-logos' ] ); ?>
 		</aside>
 
-		<?php get_template_part( 'template-parts/checkout/footer' ); ?>
+		<?php get_template_part( 'template-parts/checkout/footer', null, [ 'pay' => true ] ); ?>
 
 		<?php wp_nonce_field( 'woocommerce-process_checkout', 'woocommerce-process-checkout-nonce' ); ?>
 	</form>

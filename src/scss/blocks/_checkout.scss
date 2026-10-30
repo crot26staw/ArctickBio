@@ -213,20 +213,6 @@
     }
   }
 
-  // Логотипы платёжных систем под способами оплаты (требование банка, макета нет); поля — как у &__options
-  &__pay-logos {
-    padding: rem(16) rem(32) 0;
-    color: var(--color-fg-muted);
-
-    @include media(tablet) {
-      padding-inline: rem(20);
-    }
-
-    @include media(mobile) {
-      padding: rem(12) rem(10) 0;
-    }
-  }
-
   &__delivery {
     display: flex;
     flex-direction: column;
@@ -566,6 +552,16 @@
     }
   }
 
+  // Логотипы платёжных систем (макет 18978:38783): под согласием; на мобилке — в подвале (&__footer-pay)
+  &__pay-logos {
+    margin-top: rem(32);
+    color: var(--color-fg-light-soft);
+
+    @include media(mobile) {
+      display: none;
+    }
+  }
+
   // ---------- Подвал ----------
   &__footer {
     @include body-s;
@@ -616,6 +612,17 @@
 
   &__support-phone {
     color: var(--color-fg-muted);
+  }
+
+  // Мобилка (макет 18978:38928): под телефоном, по центру
+  &__footer-pay {
+    display: none;
+    color: var(--color-fg-light-soft);
+
+    @include media(mobile) {
+      display: flex;
+      justify-content: center;
+    }
   }
 }
 

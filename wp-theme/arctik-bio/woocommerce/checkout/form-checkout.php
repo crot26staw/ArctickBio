@@ -72,7 +72,7 @@ $arctik_chevron       = '<svg class="checkout-target__chevron" width="20" height
 							'autocomplete' => $arctik_autocomplete,
 							'mod'          => 'field--light',
 							'value'        => $checkout->get_value( $arctik_name ),
-							'attrs'        => 'data-validate="' . $arctik_validate . '" data-message="Обязательное поле"',
+							'attrs'        => 'data-validate="' . $arctik_validate . '" data-message="Обязательное поле"' . ( 'phone' === $arctik_validate ? ' data-js-phone-mask' : '' ),
 						] );
 					}
 					?>

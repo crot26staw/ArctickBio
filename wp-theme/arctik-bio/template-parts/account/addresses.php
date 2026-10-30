@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 $arctik_fields = [
 	[ 'shipping_name', 'text', 'shipping_full_name', "Имя и&nbsp;Фамилия", 'name', 'data-validate="required" data-message="Обязательное поле"' ],
-	[ 'shipping_phone', 'tel', 'shipping_phone', 'Телефон', 'tel', 'data-validate="phone" data-optional' ],
+	[ 'shipping_phone', 'tel', 'shipping_phone', 'Телефон', 'tel', 'data-validate="phone" data-optional data-js-phone-mask' ],
 	[ 'shipping_address_1', 'text', 'shipping_address_1', 'Адрес*', 'address-line1', 'data-validate="required" data-message="Обязательное поле"' ],
 	[ 'shipping_address_2', 'text', 'shipping_address_2', 'Квартира, номер', 'address-line2', '' ],
 	[ 'shipping_country', 'text', 'shipping_country', 'Страна', 'country-name', '' ],

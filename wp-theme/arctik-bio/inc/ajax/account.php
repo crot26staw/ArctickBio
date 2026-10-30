@@ -118,7 +118,7 @@ add_action( 'wc_ajax_arctik_address_save', function () {
 		}
 	}
 	if ( '' !== $address['phone'] && ! arctik_is_phone( $address['phone'] ) ) {
-		$errors['shipping_phone'] = "Введите телефон в\u{00A0}формате +7\u{00A0}900\u{00A0}000-00-00";
+		$errors['shipping_phone'] = "Введите телефон в\u{00A0}формате +7\u{00A0}(900)-000-00-00";
 	}
 	if ( $errors ) {
 		wp_send_json_error( [ 'errors' => $errors ] );

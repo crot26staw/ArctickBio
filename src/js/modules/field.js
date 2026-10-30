@@ -28,7 +28,7 @@ const MESSAGES = {
   repeatEmpty: 'Повторите пароль',
   repeatMismatch: 'Пароли не\u00a0совпадают',
   checked: 'Подтвердите согласие',
-  phoneFormat: 'Введите телефон в\u00a0формате +7\u00a0900\u00a0000-00-00',
+  phoneFormat: 'Введите телефон в\u00a0формате +7\u00a0(900)-000-00-00',
 };
 
 function getError(input) {

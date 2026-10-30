@@ -1,5 +1,6 @@
 import { validateForm, resetForm, setFieldError } from './field.js';
 import { initSwipeButtons } from './swipe-button.js';
+import { formatPhone } from './phone-mask.js';
 
 const api = () => window.arctik?.account;
 
@@ -140,7 +141,11 @@ function initAddresses(root) {
     resetForm(form);
     form.elements.address_id.value = card?.querySelector('input[type="radio"]').value || '';
     if (card?.dataset.addressName !== undefined) {
-      Object.entries(ADDRESS_FIELDS).forEach(([name, key]) => (form.elements[name].value = card.dataset[key] || ''));
+      Object.entries(ADDRESS_FIELDS).forEach(([name, key]) => {
+        const input = form.elements[name];
+        const value = card.dataset[key] || '';
+        input.value = 'jsPhoneMask' in input.dataset ? formatPhone(value) : value;
+      });
     } else if (card) {
       form.elements.shipping_full_name.value = card.querySelector('[data-js-address-card-name]').textContent.replace(/\u00a0/g, ' ');
       form.elements.shipping_address_1.value = card.querySelector('[data-js-address-card-address]').textContent.replace(/\u00a0/g, ' ');

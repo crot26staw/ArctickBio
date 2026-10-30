@@ -103,7 +103,7 @@ function arctik_checkout_slot( array $data ): string {
 add_action( 'woocommerce_after_checkout_validation', function ( array $data, WP_Error $errors ) {
 	// Тексты проверок полей WC («Выставление счёта Телефон — неверный…») — как в field.js
 	foreach ( [
-		'billing_phone_validation' => "Введите телефон в\u{00A0}формате +7\u{00A0}900\u{00A0}000-00-00",
+		'billing_phone_validation' => "Введите телефон в\u{00A0}формате +7\u{00A0}(900)-000-00-00",
 		'billing_email_validation' => "Введите email в\u{00A0}формате name@example.com",
 	] as $code => $message ) {
 		if ( $errors->get_error_message( $code ) ) {
@@ -113,7 +113,7 @@ add_action( 'woocommerce_after_checkout_validation', function ( array $data, WP_
 		}
 	}
 	if ( '' !== ( $data['billing_phone'] ?? '' ) && ! $errors->get_error_message( 'billing_phone_validation' ) && ! arctik_is_phone( (string) $data['billing_phone'] ) ) {
-		$errors->add( 'billing_phone_validation', "Введите телефон в\u{00A0}формате +7\u{00A0}900\u{00A0}000-00-00", [ 'id' => 'billing_phone' ] );
+		$errors->add( 'billing_phone_validation', "Введите телефон в\u{00A0}формате +7\u{00A0}(900)-000-00-00", [ 'id' => 'billing_phone' ] );
 	}
 
 	$slot = arctik_checkout_slot( $data );

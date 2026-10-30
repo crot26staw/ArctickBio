@@ -18,7 +18,7 @@
       <fieldset class="checkout__section woocommerce-billing-fields">
         <legend class="checkout__subtitle">Контактные данные</legend>
         <div class="checkout__fields">
-          <include src="partials/form-field.html" data='{"id": "billing_phone", "type": "tel", "name": "billing_phone", "label": "Телефон", "autocomplete": "tel", "mod": "field--light", "attrs": "data-validate=\"phone\" data-message=\"Обязательное поле\""}'></include>
+          <include src="partials/form-field.html" data='{"id": "billing_phone", "type": "tel", "name": "billing_phone", "label": "Телефон", "autocomplete": "tel", "mod": "field--light", "attrs": "data-validate=\"phone\" data-message=\"Обязательное поле\" data-js-phone-mask"}'></include>
           <include src="partials/form-field.html" data='{"id": "billing_email", "type": "email", "name": "billing_email", "label": "Email", "autocomplete": "email", "mod": "field--light", "attrs": "data-validate=\"email\" data-message=\"Обязательное поле\""}'></include>
           <include src="partials/form-field.html" data='{"id": "billing_first_name", "type": "text", "name": "billing_first_name", "label": "Имя", "autocomplete": "given-name", "mod": "field--light", "attrs": "data-validate=\"required\" data-message=\"Обязательное поле\""}'></include>
           <include src="partials/form-field.html" data='{"id": "billing_last_name", "type": "text", "name": "billing_last_name", "label": "Фамилия", "autocomplete": "family-name", "mod": "field--light", "attrs": "data-validate=\"required\" data-message=\"Обязательное поле\""}'></include>

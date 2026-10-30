@@ -82,6 +82,19 @@
     }
   }
 
+  // Оплата не прошла (макета нет, просьба пользователя): красный круг с крестиком — icn-error.svg, кольца красные
+  &--error &__ring--1 {
+    background-color: #fbe8ea;
+  }
+
+  &--error &__ring--2 {
+    background-color: #f4c4c9;
+  }
+
+  &--error &__ring--3 {
+    background-color: #e98a94;
+  }
+
   &__check {
     position: relative;
     width: rem(44);

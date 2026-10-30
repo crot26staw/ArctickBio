@@ -60,8 +60,10 @@ function initSlider(viewport) {
 
   setScrollable();
 
+  // Пересчёт при смене размера области и ленты, не только окна: лента могла запуститься скрытой (display: none —
+  // ширина 0, «листать нечего»), например «Попробуйте также» в пустой корзине — после добавления товара она не листалась
   let resizeTimer;
-  window.addEventListener('resize', () => {
+  const observer = new ResizeObserver(() => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       draggable.applyBounds(getBounds());
@@ -71,6 +73,8 @@ function initSlider(viewport) {
       notify();
     }, 150);
   });
+  observer.observe(viewport);
+  observer.observe(track);
 }
 
 // scope — область поиска (лента «Попробуйте также» после обновления корзины фрагментами, cart.js); готовые ленты пропускаются

@@ -267,3 +267,14 @@ add_filter( 'body_class', function ( array $classes ): array {
 add_action( 'wp', function () {
 	remove_action( 'woocommerce_thankyou', 'woocommerce_order_details_table', 10 );
 } );
+
+/*
+ * «Заказ оформлен» — без проверок WC «войдите в аккаунт» / «подтвердите email»: они выводили форму WC без вёрстки
+ * (заказ на уже зарегистрированный email без входа, возврат из банка в другой сессии — найдено на тесте 30.10.2026).
+ * Данных заказа на странице нет (заголовок, текст, кнопка), ссылку с ключом заказа знает только покупатель.
+ */
+add_filter( 'woocommerce_order_received_verify_known_shoppers', '__return_false' );
+
+add_filter( 'woocommerce_order_email_verification_required', function ( $required, $order, $context ) {
+	return 'order-received' === $context ? false : $required;
+}, 10, 3 );

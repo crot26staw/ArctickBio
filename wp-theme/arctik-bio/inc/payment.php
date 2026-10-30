@@ -9,7 +9,8 @@
  * - оплата не прошла — плагин отправляет на страницу оплаты WC (order-pay), её вёрстки нет: переход на «Заказ оформлен»,
  *   там «Оплата не прошла» + «Оплатить снова» (woocommerce/checkout/thankyou.php);
  * - «Оплатить снова» — arctik_payment_retry_url(): новая платёжная страница банка сразу, без order-pay;
- * - иконка способа в форме — arctik_payment_icon().
+ * - иконка способа в форме — arctik_payment_icon();
+ * - ошибка банка при переходе к оплате — свой текст вместо «There was an error… ERRORCODE#…» плагина (код — в логе плагина).
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -44,6 +45,15 @@ function arctik_payment_retry_url( WC_Order $order ): string {
 		home_url( '/' )
 	);
 }
+
+// Перевод плагина не срабатывает (в .po ключ с <br/>), к тексту добавлен код банка — покупателю свой текст
+add_filter( 'woocommerce_add_error', function ( $message ) {
+	if ( is_string( $message ) && ( str_contains( $message, 'ERRORCODE#' ) || str_contains( $message, 'There was an error while processing payment' ) ) ) {
+		return "Не удалось перейти к\u{00A0}оплате\u{00A0}— попробуйте ещё раз через несколько минут";
+	}
+
+	return $message;
+} );
 
 add_action( 'template_redirect', function () {
 	// «Оплатить снова» — новая платёжная страница банка (generate_form плагина регистрирует заказ заново и делает редирект)

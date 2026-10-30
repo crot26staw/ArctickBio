@@ -30,7 +30,7 @@ $arctik_empty = WC()->cart->is_empty();
 		<div class="mini-cart__body widget_shopping_cart_content" data-js-cart-body>
 			<?php /* Пустая корзина */ ?>
 			<div class="mini-cart__empty" <?php echo $arctik_empty ? '' : 'hidden'; ?> data-js-cart-empty>
-				<img class="mini-cart__empty-img" src="<?php echo esc_url( arctik_asset( 'images/cart-empty.webp' ) ); ?>" alt="" width="72" height="72">
+				<img class="mini-cart__empty-img" src="<?php echo esc_url( arctik_asset( 'images/cart-empty.webp' ) ); ?>" alt="" width="72" height="72" loading="lazy">
 				<div class="mini-cart__empty-text">
 					<p class="mini-cart__empty-title woocommerce-mini-cart__empty-message">Ваша корзина пуста</p>
 					<p class="mini-cart__empty-desc">В&nbsp;вашей корзине пока нет товаров, вы&nbsp;можете зайти в&nbsp;магазин и&nbsp;купить товары</p>

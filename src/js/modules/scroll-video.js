@@ -1,4 +1,5 @@
 import { gsap, prefersReducedMotion } from './motion.js';
+import { whenNear, setLazyPoster } from './lazy-media.js';
 
 /**
  * Видео, которое проматывает скролл.
@@ -28,14 +29,19 @@ export function createVideoScrubber(video) {
   video.addEventListener('seeked', seek);
   video.addEventListener('loadedmetadata', seek);
 
+  // Грузится, только когда секция рядом с экраном (lazy-media.js; в разметке preload="none", постер — data-poster).
   // iOS Safari не грузит видео без воспроизведения: короткий play/pause (видео без звука — разрешено)
-  video
-    .play()
-    ?.then(() => {
-      video.pause();
-      seek();
-    })
-    .catch(() => {});
+  whenNear(video, () => {
+    setLazyPoster(video);
+    video.preload = 'auto';
+    video
+      .play()
+      ?.then(() => {
+        video.pause();
+        seek();
+      })
+      .catch(() => {});
+  });
 
   return (progress) => {
     target = Math.min(Math.max(progress, 0), 1);

@@ -27,7 +27,7 @@ $arctik_products   = arctik_products();
 				<p class="footer__requisites"><?php echo arctik_lines( $arctik_requisites ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 			<?php endif; ?>
 			<a class="footer__dev" href="<?php echo esc_url( $arctik_developer ?: '#' ); ?>" target="_blank" rel="noopener" aria-label="Разработано в Alta">
-				<img src="<?php echo esc_url( arctik_asset( 'icons/logo-alta.svg' ) ); ?>" alt="" width="120" height="16">
+				<img src="<?php echo esc_url( arctik_asset( 'icons/logo-alta.svg' ) ); ?>" alt="" width="120" height="16" loading="lazy">
 			</a>
 		</div>
 

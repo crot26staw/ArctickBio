@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 	<h1 class="account__title">Мои заказы</h1>
 </div>
 <div class="account__empty woocommerce-info">
-	<img class="account__empty-img" src="<?php echo esc_url( arctik_asset( 'images/cart-empty.webp' ) ); ?>" alt="" width="72" height="72">
+	<img class="account__empty-img" src="<?php echo esc_url( arctik_asset( 'images/cart-empty.webp' ) ); ?>" alt="" width="72" height="72" loading="lazy">
 	<div class="account__empty-text">
 		<p class="account__empty-title">У&nbsp;вас нет заказов</p>
 		<p class="account__empty-desc">Вы&nbsp;ещё ничего не&nbsp;покупали.<br> Самое время сделать первый заказ!</p>

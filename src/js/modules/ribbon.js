@@ -1,4 +1,5 @@
 import { gsap, prefersReducedMotion } from './motion.js';
+import { loadOnTouch } from './lazy-media.js';
 
 /**
  * Горизонтальная лента, которую проматывает обычный скролл страницы:
@@ -9,6 +10,8 @@ import { gsap, prefersReducedMotion } from './motion.js';
 const MEDIA = '(min-width: 768px)';
 
 export function initRibbons() {
+  // Мобилка / reduced motion — лента листается свайпом: картинки шагов — при первом касании (lazy-media.js)
+  document.querySelectorAll('[data-js-ribbon-track]').forEach(loadOnTouch);
   if (prefersReducedMotion()) return;
 
   document.querySelectorAll('[data-js-ribbon]').forEach((section) => {

@@ -32,6 +32,7 @@ import { initStickyBuy } from './modules/sticky-buy.js';
 import { initAnchorNavs } from './modules/anchor-nav.js';
 import { initFields } from './modules/field.js';
 import { initPhoneMasks } from './modules/phone-mask.js';
+import { initLazyMedia } from './modules/lazy-media.js';
 import { initAuth } from './modules/auth.js';
 import { initCart } from './modules/cart.js';
 import { initModals } from './modules/modal.js';
@@ -53,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initFields();
   initPhoneMasks();
+  initLazyMedia();
   initAuth();
   initCart();
   initModals();

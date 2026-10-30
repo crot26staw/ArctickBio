@@ -1,4 +1,5 @@
 import { gsap, prefersReducedMotion } from './motion.js';
+import { loadOnTouch } from './lazy-media.js';
 import { Draggable } from 'gsap/Draggable';
 import { InertiaPlugin } from 'gsap/InertiaPlugin';
 
@@ -16,6 +17,7 @@ function initSlider(viewport) {
   const track = viewport.querySelector('[data-js-drag-slider-track]');
   if (!track || viewport.dataset.dragSliderReady !== undefined) return;
   viewport.dataset.dragSliderReady = '';
+  loadOnTouch(viewport);
 
   const mobileQuery = window.matchMedia('(max-width: 767px)');
   const isAlignStart = () =>

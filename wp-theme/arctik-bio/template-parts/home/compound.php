@@ -28,7 +28,7 @@ $arctik_vitamin_mods = [ 'c', 'e', 'k', 'h', 'pp', 'a' ];
 			<?php // Сцена под заголовком: стик и витамины позиционируются от её центра, при нехватке высоты она сжимается вместе со стиком. ?>
 			<div class="compound__scene">
 				<div class="compound__sachet" aria-hidden="true" data-js-compound-sachet>
-					<video src="<?php echo esc_url( arctik_asset( 'video/stick.mp4' ) ); ?>" poster="<?php echo esc_url( arctik_asset( 'images/stick-video-poster.webp' ) ); ?>" width="600" height="1186" muted playsinline preload="auto" disablepictureinpicture data-js-compound-video></video>
+					<video src="<?php echo esc_url( arctik_asset( 'video/stick.mp4' ) ); ?>" data-poster="<?php echo esc_url( arctik_asset( 'images/stick-video-poster.webp' ) ); ?>" width="600" height="1186" muted playsinline preload="none" disablepictureinpicture data-js-compound-video></video>
 				</div>
 
 				<?php foreach ( $arctik_stats as $arctik_i => $arctik_stat ) : ?>

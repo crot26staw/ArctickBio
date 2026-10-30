@@ -28,7 +28,8 @@ function arctik_rich( ?string $html ): string {
 }
 
 /**
- * <img> из медиатеки: width/height, srcset, alt из медиатеки; ниже первого экрана — loading="lazy" (по умолчанию WP),
+ * <img> из медиатеки: width/height, srcset, alt из медиатеки. По умолчанию loading="lazy" и decoding="async" —
+ * сам WP ставит lazy не всем (картинкам вне цикла записей — нет, грузились все фото «Процесса», «Исследований» и т.п.);
  * на первом экране передавать [ 'loading' => 'eager', 'fetchpriority' => 'high' ].
  */
 function arctik_image( int $attachment_id, string $size = 'full', array $attr = [] ): string {
@@ -36,7 +37,7 @@ function arctik_image( int $attachment_id, string $size = 'full', array $attr = 
 		return '';
 	}
 
-	return wp_get_attachment_image( $attachment_id, $size, false, $attr );
+	return wp_get_attachment_image( $attachment_id, $size, false, $attr + [ 'loading' => 'lazy', 'decoding' => 'async' ] );
 }
 
 /**

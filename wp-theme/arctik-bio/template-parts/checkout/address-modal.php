@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 
 	<div class="map-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="address-title" data-js-modal-dialog>
 		<div class="map-modal__map">
-			<img class="map-modal__map-img" src="<?php echo esc_url( arctik_asset( 'images/checkout-map.webp' ) ); ?>" alt="" width="1152" height="998">
+			<img class="map-modal__map-img" src="<?php echo esc_url( arctik_asset( 'images/checkout-map.webp' ) ); ?>" alt="" width="1152" height="998" loading="lazy">
 			<img class="map-modal__pin" src="<?php echo esc_url( arctik_asset( 'icons/map-pin.svg' ) ); ?>" alt="" width="28" height="34">
 		</div>
 

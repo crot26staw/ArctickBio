@@ -72,6 +72,17 @@
     border-color: var(--color-error);
   }
 
+  // Ошибка: подпись подчёркнута цветом ошибки целиком (просьба пользователя). Текст — text-decoration,
+  // у ссылок (буквы roll — inline-grid, до них оно не доходит) — их подчёркивание фоном, тоже цветом ошибки
+  &.is-error &__label {
+    text-decoration: underline 1px var(--color-error);
+    text-underline-offset: 0.16em; // на уровне подчёркивания ссылок (низ строки, 3px от базовой линии при 13px)
+
+    a {
+      background-image: linear-gradient(var(--color-error), var(--color-error));
+    }
+  }
+
   &__label {
     @include body-s;
     flex: 1;

@@ -300,6 +300,14 @@ add_filter( 'woocommerce_cart_shipping_packages', function ( array $packages ): 
 	return $packages;
 } );
 
+// Сохранили «Настройки сайта» (доступы, город отправки, тарифы, упаковка) — сбросить кеш ставок WC в сессиях покупателей:
+// иначе ставки, посчитанные со старыми настройками (пустой список — «доставки пока нет»), живут до смены корзины.
+add_action( 'carbon_fields_theme_options_container_saved', function (): void {
+	if ( class_exists( 'WC_Cache_Helper' ) ) {
+		WC_Cache_Helper::get_transient_version( 'shipping', true );
+	}
+} );
+
 // ---------- Тексты ----------
 
 /**

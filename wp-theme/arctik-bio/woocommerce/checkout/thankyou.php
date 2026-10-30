@@ -3,7 +3,7 @@
  * «Заказ оформлен» (src/partials/order/received.html) вместо шаблона WC. Анимация — js/modules/order-success.js.
  * Шаблон страницы — page-templates/order-received.php.
  *
- * Оплата не прошла (статус «Не удался», макета нет) — тот же блок с текстом и кнопкой «Оплатить снова» (страница оплаты WC).
+ * Оплата не прошла (статус «Не удался», макета нет) — тот же блок с текстом и кнопкой «Оплатить снова» (сразу платёжная страница банка, inc/payment.php).
  * $order = false (неверная ссылка) — как у WC: просто «Заказ оформлен», без данных заказа.
  *
  * @var WC_Order|false $order
@@ -16,7 +16,7 @@ $arctik_failed = $order && $order->has_status( 'failed' );
 if ( $arctik_failed ) {
 	$arctik_title = "Оплата не\u{00A0}прошла";
 	$arctik_desc  = "Заказ сохранён\u{00A0}— попробуйте оплатить его ещё раз";
-	$arctik_link  = $order->get_checkout_payment_url();
+	$arctik_link  = arctik_payment_retry_url( $order );
 	$arctik_btn   = 'Оплатить снова';
 } else {
 	$arctik_title = 'Заказ успешно оформлен';

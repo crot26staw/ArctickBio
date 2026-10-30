@@ -75,7 +75,10 @@ $arctik_phone = (string) arctik_option( 'arctik_phone' );
 		get_template_part( 'template-parts/auth-modal' );
 	}
 
-	get_template_part( 'template-parts/cart' );
+	// Корзины WC нет у части запросов (журнал прода 29.10.2026: фатальная ошибка в cart.php) — без попапа корзины
+	if ( WC()->cart ) {
+		get_template_part( 'template-parts/cart' );
+	}
 	get_template_part( 'template-parts/cookies' );
 	?>
 </header>

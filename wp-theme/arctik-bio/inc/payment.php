@@ -62,7 +62,13 @@ add_action( 'woocommerce_api_' . ARCTIK_GATEWAY, function () {
 	$order   = wc_get_order( absint( $_GET['order_id'] ?? 0 ) ); // phpcs:ignore WordPress.Security.NonceVerification
 	$md      = sanitize_text_field( wp_unslash( $_GET['orderId'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification
 
-	if ( ! $gateway || ! $order || ! $md || $order->is_paid() || ARCTIK_GATEWAY !== $order->get_payment_method() ) {
+	// Заказа из адреса нет (адрес без order_id, заказ удалён) — плагин вызвал бы $order->update_status() у false: фатальная ошибка, 500
+	if ( ! $order ) {
+		wp_safe_redirect( home_url( '/' ) );
+		exit;
+	}
+
+	if ( ! $gateway || ! $md || $order->is_paid() || ARCTIK_GATEWAY !== $order->get_payment_method() ) {
 		return;
 	}
 

@@ -31,6 +31,8 @@ $arctik_services = array_intersect_key( ARCTIK_PICKUP_SERVICES, array_flip( ARCT
 
 		<div class="map-modal__map" data-js-pickup-map>
 			<div class="map-modal__ymap" data-js-pickup-ymap></div>
+			<?php /* Яндекс Карты не загрузились (pickup.js) */ ?>
+			<p class="map-modal__map-error" hidden data-js-pickup-map-error>Карта не&nbsp;загрузилась&nbsp;— выберите пункт выдачи из&nbsp;списка</p>
 
 			<button class="map-modal__city" type="button" data-js-pickup-city-open>
 				<span data-js-pickup-city-name><?php echo esc_html( $arctik_city['name'] ); ?></span>

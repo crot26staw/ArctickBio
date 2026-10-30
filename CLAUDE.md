@@ -198,7 +198,7 @@ src/
                    promo.js (промокод [data-js-promo]: is-filled — крестик очистки и синяя кнопка; «Применить»/Enter — демо: всегда «Промокод не найден» (is-error); в WordPress — купоны WC через cart-api.js, применённый код остаётся в поле, крестик снимает)
                    modal.js (попапы с картой на оформлении: [data-js-modal="имя"], [data-js-modal-open], [data-js-modal-close]; openModal / closeModal)
                    pickup.js (попап ПВЗ: службы — метки на карте и список «Службы выдачи», пункты, вкладки мобилки, выбор города; события pickup:choose / pickup:clear;
-                   в статике — демо-карта и демо-города, в WordPress — Яндекс Карта и пункты СДЭК из API)
+                   в статике — демо-карта и демо-города, в WordPress — Яндекс Карта и пункты СДЭК из API; Яндекс Карты не загрузились (ошибка, неверный ключ, 10 с — ymaps.js) — map-modal--no-map: вкладок нет, сразу «Списком», на месте карты подсказка, на мобилке строка города в панели)
                    address.js (попап адреса: подсказки, событие address:choose)
                    suggest.js (поле с подсказками — combobox: initSuggest({ input, list, source, onPick }); город ПВЗ, адрес курьера)
                    ymaps.js (загрузка Яндекс Карт JS API 2.1 один раз, loadYmaps(key))

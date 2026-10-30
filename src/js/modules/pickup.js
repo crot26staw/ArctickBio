@@ -29,6 +29,8 @@ const DEMO_CITIES = [
  * - Город: [data-js-pickup-city-open] открывает поле с подсказками [data-js-pickup-city] (макета нет); новый город — событие
  *   pickup:clear (выбранный пункт сбрасывается).
  * - Мобилка: вкладки [data-js-pickup-tab] (data-view у диалога), поиск по адресу [data-js-pickup-search].
+ * - Яндекс Карты не загрузились — пункт выбирается списком: map-modal--no-map (вкладок нет, на мобилке сразу «Списком»),
+ *   на месте карты — подсказка [data-js-pickup-map-error].
  * Статика — демо: карта-картинка с метками [data-js-pickup-marker], пункты в разметке, город меняет только подписи.
  * WordPress (window.arctik.pickup, есть <template data-js-pickup-point-template>): при открытии — пункты города из API СДЭК
  * (wc-ajax arctik_pickup_points), список — из шаблона, метки — на Яндекс Картах [data-js-pickup-ymap];
@@ -56,6 +58,8 @@ export function initPickup() {
   const cityName = root.querySelector('[data-js-pickup-city-name]');
   const cityEdit = cityLabel.closest('[data-js-pickup-city-open]');
   const mobile = window.matchMedia(MOBILE_QUERY);
+  const mapError = root.querySelector('[data-js-pickup-map-error]');
+  let mapFailed = false;
   const config = window.arctik?.pickup;
   const live = Boolean(config && template);
 
@@ -77,7 +81,13 @@ export function initPickup() {
   };
 
   // Метки: в статике — кнопки поверх картинки, в WordPress — Яндекс Карта (создаётся при первом открытии)
-  const map = live ? createYandexMap(root, chips, config.mapKey, (id) => selectPoint(id)) : createDemoMap(root, selectPoint);
+  const onMapFail = () => {
+    mapFailed = true;
+    root.classList.add('map-modal--no-map');
+    if (mapError) mapError.hidden = false;
+    setView('list');
+  };
+  const map = live ? createYandexMap(root, chips, config.mapKey, (id) => selectPoint(id), onMapFail) : createDemoMap(root, selectPoint);
 
   const apply = () => {
     const query = search?.value.trim().toLowerCase() ?? '';
@@ -278,9 +288,9 @@ export function initPickup() {
     closeModal();
   });
 
-  // Мобилка открывается на карте (макет 18263:87991); пункты из API — при первом открытии
+  // Мобилка открывается на карте (макет 18263:87991), без карт — списком; пункты из API — при первом открытии
   root.addEventListener('modal:open', () => {
-    setView('map');
+    setView(mapFailed ? 'list' : 'map');
     map.resize();
     if (live && !loaded) load();
   });
@@ -310,8 +320,9 @@ function createDemoMap(root, onSelect) {
 /**
  * Яндекс Карта в [data-js-pickup-ymap]: метки пунктов (ObjectManager с кластерами), иконка — data-pickup-marker у метки службы.
  * Создаётся при первом обращении (контейнер должен быть виден); вызовы до загрузки ждут её.
+ * Не загрузилась — onFail, повторно не грузится (до перезагрузки страницы пункт выбирается списком).
  */
-function createYandexMap(root, chips, apiKey, onSelect) {
+function createYandexMap(root, chips, apiKey, onSelect, onFail) {
   const container = root.querySelector('[data-js-pickup-ymap]');
   const icons = Object.fromEntries(chips.map((chip) => [chip.dataset.jsPickupChip, chip.dataset.pickupMarker]));
   let ready = null;
@@ -339,9 +350,7 @@ function createYandexMap(root, chips, apiKey, onSelect) {
       map.geoObjects.add(manager);
       return { map, manager };
     });
-    ready.catch(() => {
-      ready = null;
-    });
+    ready.catch(onFail);
     return ready;
   };
 

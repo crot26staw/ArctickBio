@@ -154,6 +154,36 @@ $map-modal-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     inset: 0;
   }
 
+  // Карты не загрузились (pickup.js): подсказка на месте карты, без меток служб и вкладок
+  &__map-error {
+    @include body-m;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: rem(40);
+    color: var(--color-fg-muted);
+    text-align: center;
+    background-color: var(--color-bg-light);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &--no-map &__services,
+  &--no-map &__tabs {
+    display: none;
+  }
+
+  // Мобилка: город выбирается на карте — без неё строка города в панели, как на десктопе
+  &--no-map &__city-edit:not([hidden]) {
+    @include media(mobile) {
+      display: flex;
+    }
+  }
+
   &__marker {
     position: absolute;
     top: var(--y);

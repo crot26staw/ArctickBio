@@ -22,6 +22,7 @@ foreach ( [
 	'cdek',
 	'shipping',
 	'payment',
+	'receipt',
 	'checkout',
 	'order',
 	'account',

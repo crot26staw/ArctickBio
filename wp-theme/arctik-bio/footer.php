@@ -84,9 +84,10 @@ $arctik_products   = arctik_products();
 					<nav class="footer__col footer__col--docs" aria-labelledby="footer-docs">
 						<p class="footer__col-title" id="footer-docs"><?php echo arctik_text( arctik_menu_name( 'footer_docs' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 						<?php arctik_menu( 'footer_docs', 'footer__menu footer__menu--docs menu', 'data-js-roll-group' ); ?>
-						<?php get_template_part( 'template-parts/pay-logos', null, [ 'mod' => 'footer__pay' ] ); ?>
 					</nav>
 				<?php endif; ?>
+
+				<?php get_template_part( 'template-parts/pay-logos', null, [ 'mod' => 'footer__pay' ] ); ?>
 			</div>
 		</div>
 	</div>

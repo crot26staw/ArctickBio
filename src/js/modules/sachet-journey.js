@@ -91,7 +91,16 @@ function initAppear(root, sachetImg) {
     .from(sachetImg, { opacity: 0, duration: APPEAR.sachetFade, ease: 'none' }, 0)
     .to({}, { duration: APPEAR.length - APPEAR.sachetDuration });
 
-  return tl.scrollTrigger;
+  // Ошибка GSAP (3.15): пересчёт ScrollTrigger при активном пине (load страницы, возврат на вкладку) переносит обёртку
+  // в body с top, замеренным при прокрутке 0, — top = текущая прокрутка, about уезжает за экран (пустой экран и чёрный hero
+  // на телефоне, видео пользователя «Баг»). Закреплённая с 'top top' обёртка в body всегда у верха экрана — возвращаем 0.
+  // Вышли из пина и зашли снова — GSAP ставит верное значение сам
+  const pinTrigger = tl.scrollTrigger;
+  ScrollTrigger.addEventListener('refresh', () => {
+    if (pinTrigger.isActive && root.parentElement === document.body) root.style.top = '0px';
+  });
+
+  return pinTrigger;
 }
 
 // Содержимое карточки поднимается из прозрачности, иконка ещё и «дозревает» (прозрачность, масштаб)
